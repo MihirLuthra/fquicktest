@@ -1,0 +1,55 @@
+To get help for a subcommand use -h|--help option on them.
+
+quicktest
+	[-h|--help]
+	[<sub_command> [<args>]]
+
+quicktest has the following subcommands:
+
+action
+	[-d|--delete <action_name>]
+	[-r|--register <action_name> <action_key>]
+	[-h|--help]
+
+boilerplate
+	[-c|--current]
+	[-d|--delete <boilerplate_name>]
+	[-g|--get <boilerplate_name>]
+	[-h|--help]
+	[-m|--modify <boilerplate_name>]
+	[-p|--path]
+	[-s|--show-all]
+	[-u|--use <file_name>]
+
+info
+	[-h|--help]
+	[-s|--show-history [history_count]]
+	[-u|--show-universal-history [history_count]]
+
+instance
+	[-c|--current]
+	[-d|--delete <instance_name>]
+	[-g|--get [instance_name]]
+	[-h|--help]
+	[-p|--path]
+	[-s|--show-all]
+
+open [relative_count]
+	[-b|--boilerplate <boilerplate_name>]
+	[-h|--help]
+	[-i|--instance <instance_name>]
+	[-n|--new]
+	[-p|--universal-pick]
+	[-s|--select]
+	[-u|--user-config <user_config_name>]
+
+user_config
+	[-c|--current]
+	[-d|--delete <user_config_file_name>]
+	[-g|--get <user_config_file_name>]
+	[-h|--help]
+	[-m|--modify <user_config_file_name>]
+	[-p|--path]
+	[-r|--replicate <user_config_file_name>]
+	[-s|--show-all]
+	[-u|--use <file_name>]
