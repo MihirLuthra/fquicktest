@@ -1,0 +1,88 @@
+#! /usr/bin/env bash
+
+
+COMMANDS_PATH="${QUICKTEST_PATH}/commands"
+SUBCMDS_PATH="${COMMANDS_PATH}/sub_commands"
+
+source "$COMMANDS_PATH"/option_parser
+
+print_quicktest_help() {
+	less 'help.txt'
+}
+
+parse_quicktest_options() {
+
+	local option_parser_retval
+
+	parse_options \
+		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
+													     \
+		'action'      , 'a'                      'S'     \
+		'boilerplate' , 'b'                      'S'     \
+		'current'     , 'c'                      'S'     \
+		'info'                                   'S'     \
+		'instance'    , 'i'                      'S'     \
+		'user_config' , 'u'                      'S'     \
+													     \
+		'-h'          , '--help'                 '0'     \
+													     \
+		';'                                              \
+		"$@"
+
+	option_parser_retval=$?
+
+	if [ $option_parser_retval -ne 0 ] ; then
+		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		return 1
+	fi
+
+}
+
+main() {
+
+	local shift_count
+	local subcmd
+	local default_options
+
+	unset OPTIONS
+	unset ARGS
+	unset ARG_CNT
+
+	if [ -n "$*" ]
+	then
+		parse_quicktest_options "$@"
+	else
+		parse_quicktest_options "$default_options"
+	fi
+
+	for option in "${!OPTIONS[@]}"
+	do
+		case "$option" in
+
+			action|boilerplate|current|info|instance|user_config)
+
+				# All subcmd here
+
+				# This contains the shift count needed to reach
+				# args of subcmds
+				shift_count=${OPTIONS[$option]}
+
+				shift $shift_count
+				subcmd=$option
+				break
+				;;
+			-h)
+				print_quicktest_help
+				;;
+		esac
+	done
+
+	if [ -n "$subcmd" ]
+	then
+		"${QTBASH}" "$SUBCMDS_PATH/$subcmd" "$@"
+	fi
+
+	return 0
+}
+
+main "$@"
