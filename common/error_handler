@@ -1,0 +1,62 @@
+#! /usr/bin/env bash
+
+# don't source the script twice
+[ -n "${__ERROR_BASH__}" ] && return 0
+readonly __ERROR_BASH__=1
+
+printf_err() {
+	for fmt in "$@"
+	do
+		printf "$fmt" >&2
+	done
+	echo >&2
+}
+
+#
+# param1:
+#  path to normalize.
+#
+# Description:
+#  Just gets the absolute path without a trailing forward slash
+#  Doesn't resolve symlinks.
+#
+# retval:
+#  1 on error
+#
+quicktest_path_normalize() {
+	local path="$1" ; shift
+	local abs_path_dir
+	local abs_path
+
+	if [ -z "${path}" ] ; then
+		printf_err "${BASH_SOURCE}: Line ${LINENO}: param1(path) is empty"
+		return 1
+	fi
+
+	abs_path="$( cd "$( dirname ${path} )" ; pwd )/$( basename ${path} )"
+
+	printf "$abs_path"
+}
+
+cprintf_err() {
+
+	local red='\033[0;31m'
+	local default_color='\033[0m'
+
+	for fmt in "$@"
+	do
+		printf "${red}${fmt}${default_color}" >&2
+	done
+	echo >&2
+}
+
+alias a_printf_err='printf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
+alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
+
+alias return_if_error='
+	if [ $? -ne 0 ] ; then
+		a_printf_err "${FUNCNAME[0]}() failed"
+		return 1
+	fi
+'
+shopt -s expand_aliases
