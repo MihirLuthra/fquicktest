@@ -1,0 +1,21 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/common"
+
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/error_handler
+
+#
+# Same as set_value_for_key but param(file)
+# gets defaulted to current_defaults file
+#
+set_in_current_defaults() {
+	local key=$1 ; shift
+	local value="$1" ; shift
+
+	set_value_for_key "$CURRENT_DEFAULTS_FILE" "$key" "$value"
+
+	return_if_error
+}
+
+set_in_current_defaults "$@"
