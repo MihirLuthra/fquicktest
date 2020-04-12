@@ -1,0 +1,40 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/common"
+
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/error_handler
+source "$DATA_INTERFACE_DIR"/common/common
+
+#
+# Same as get_value_for_key but param(file)
+# gets defaulted to the file given by key CURRENT_USER_CONFIG_FILE
+# in current_defaults file
+#
+get_from_user_config_file() {
+
+	local key="$1" ; shift
+	local user_config_file_name
+	local user_config_file_path
+	local value
+
+	user_config_file_name="$( get_from_current_defaults "CURRENT_USER_CONFIG_FILE" )"
+
+	print_if_key_is_null "CURRENT_USER_CONFIG_FILE" "$user_config_file_name" && return 1
+
+	user_config_file_path="$USER_CONFIG_FILES_DIR/$user_config_file_name"
+
+	value="$(
+		get_value_for_key "$user_config_file_path" "$key"
+	)"
+
+	return_if_error
+
+	value="$(
+		replace_quicktest_vars "$value"
+	)"
+
+	echo -n "$value"
+}
+
+get_from_user_config_file "$@"
