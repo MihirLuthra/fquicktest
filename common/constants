@@ -1,0 +1,19 @@
+#! /usr/bin/env bash
+
+# don't source the script twice
+[ -n "${__CONSTANTS__}" ] && return 0
+readonly __CONSTANTS__=1
+
+readonly QUICKTEST_CONFIG_FILE="$QUICKTEST_PATH"/quicktest.config
+
+readonly COMMANDS_DIR="$QUICKTEST_PATH"/commands
+readonly DATA_INTERFACE_DIR="$QUICKTEST_PATH"/data_interface
+readonly AWK_FILES_PATH="$DATA_INTERFACE_DIR"/awk
+readonly DATA_DIR="$QUICKTEST_PATH"/data
+readonly COMMON_DIR="$QUICKTEST_PATH"/common
+
+PATH="$DATA_INTERFACE_DIR:$PATH"
+
+readonly USER_CONFIG_FILES_DIR="$DATA_DIR"/user_config_files
+readonly BOILERPLATE_FILES_DIR="$DATA_DIR"/boilerplates
+readonly CURRENT_DEFAULTS_FILE="$DATA_DIR"/current_defaults
