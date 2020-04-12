@@ -1,0 +1,39 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/common"
+
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/error_handler
+source "$DATA_INTERFACE_DIR"/common/common
+
+#
+# Prints the value of the key on stdout
+#
+# param1:
+#  quicktest config file path
+#
+# param2:
+#  Key to get
+#
+get_value_for_key() {
+	local file=$1; shift
+	local key=$1 ; shift
+
+	[ -z "$file" ] && a_printf_err "param(file) is null" && return 1
+	[ -z "$key" ] && a_printf_err "param(key) is null" && return 1
+
+	print_if_not_file "$file" && return 1
+
+	local old_val=$key
+	key="$( first_word "$key" )"
+
+	if [ "$old_val" != "$key" ]
+	then
+		a_printf_err "key cannot contain spaces"
+		return 1
+	fi
+
+	[ -n "$key" ] && awk -v key="$key" -f "$AWK_FILES_PATH/get_value_for_key.awk" "$file"
+}
+
+get_value_for_key "$@"
