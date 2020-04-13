@@ -4,12 +4,28 @@
 [ -n "${__ERROR_BASH__}" ] && return 0
 readonly __ERROR_BASH__=1
 
+echo_err() {
+	>&2 echo "$@"
+}
+
+cecho_err() {
+
+	local red='\033[0;31m'
+	local default_color='\033[0m'
+
+	echo_err "$red$@$default_color"
+}
+
 printf_err() {
-	for fmt in "$@"
-	do
-		printf "$fmt" >&2
-	done
-	echo >&2
+	>&2 printf "$@"
+}
+
+cprintf_err() {
+
+	local red='\033[0;31m'
+	local default_color='\033[0m'
+
+	printf_err "$red$@$default_color"
 }
 
 #
@@ -29,7 +45,7 @@ quicktest_path_normalize() {
 	local abs_path
 
 	if [ -z "${path}" ] ; then
-		printf_err "${BASH_SOURCE}: Line ${LINENO}: param1(path) is empty"
+		echo_err "${BASH_SOURCE}: Line ${LINENO}: param1(path) is empty"
 		return 1
 	fi
 
@@ -38,24 +54,14 @@ quicktest_path_normalize() {
 	printf "$abs_path"
 }
 
-cprintf_err() {
-
-	local red='\033[0;31m'
-	local default_color='\033[0m'
-
-	for fmt in "$@"
-	do
-		printf "${red}${fmt}${default_color}" >&2
-	done
-	echo >&2
-}
-
+alias a_echo_err='echo_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
+alias a_cecho_err='cecho_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
 alias a_printf_err='printf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
 alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
 
 alias return_if_error='
 	if [ $? -ne 0 ] ; then
-		a_printf_err "${FUNCNAME[0]}() failed"
+		a_echo_err "${FUNCNAME[0]}() failed"
 		return 1
 	fi
 '
