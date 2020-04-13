@@ -3,11 +3,23 @@
 
 SCRIPTS_PATH="${QUICKTEST_PATH}/scripts"
 SUBCMDS_PATH="${SCRIPTS_PATH}/sub_commands"
+COMMON_PATH="$QUICKTEST_PATH/common"
 
+source "$COMMON_PATH"/error_handler
 source "$SCRIPTS_PATH"/option_parser
 
 print_quicktest_help() {
 	less 'help.txt'
+}
+
+print_usage() {
+
+	printf_err "%s\n"               \
+	'usage:'                        \
+	'quicktest'                     \
+	'    [-h|--help]'               \
+	'    [<sub_command> [<args>]]'
+
 }
 
 parse_quicktest_options() {
@@ -33,6 +45,7 @@ parse_quicktest_options() {
 
 	if [ $option_parser_retval -ne 0 ] ; then
 		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		print_usage
 		return 1
 	fi
 
