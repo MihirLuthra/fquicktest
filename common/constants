@@ -17,3 +17,9 @@ PATH="$DATA_INTERFACE_DIR:$PATH"
 readonly USER_CONFIG_FILES_DIR="$DATA_DIR"/user_config_files
 readonly BOILERPLATE_FILES_DIR="$DATA_DIR"/boilerplates
 readonly CURRENT_DEFAULTS_FILE="$DATA_DIR"/current_defaults
+
+readonly RED='\033[0;31m'
+readonly DEFAULT_COLOR='\033[0m'
+
+readonly BOLD="$(tput bold)"
+readonly OFF_BOLD="$(tput sgr0)"
