@@ -2,9 +2,10 @@
 
 COMMON_PATH="$QUICKTEST_PATH/common"
 
+set -e
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/error_handler
-source "$DATA_INTERFACE_DIR"/common/common
+set +e
 
 #
 # Same as set_value_for_key but param(file)

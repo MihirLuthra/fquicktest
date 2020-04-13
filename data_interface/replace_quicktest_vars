@@ -2,8 +2,10 @@
 
 COMMON_PATH="$QUICKTEST_PATH/common"
 
+set -e
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/error_handler
+set +e
 
 #
 # Description:

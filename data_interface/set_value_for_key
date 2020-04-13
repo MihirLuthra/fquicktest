@@ -2,9 +2,11 @@
 
 COMMON_PATH="$QUICKTEST_PATH/common"
 
+set -e
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/error_handler
-source "$DATA_INTERFACE_DIR"/common/common
+source "$COMMON_PATH"/utility_funcs
+set +e
 
 #
 # Description:
@@ -27,8 +29,8 @@ set_value_for_key() {
 	local key="$1" ; shift
 	local value="$1" ; shift
 
-	[ -z "$file" ] && a_echo_err "param(file) is null" && return 1
-	[ -z "$key" ] && a_echo_err "param(key) is null" && return 1
+	[ -z "$file" ]  && a_echo_err "param(file) is null" && return 1
+	[ -z "$key" ]   && a_echo_err "param(key) is null" && return 1
 	[ -z "$value" ] && a_echo_err "param(value) is null" && return 1
 
 	exists_but_not_file "$file" && return 1
