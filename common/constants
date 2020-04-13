@@ -6,7 +6,7 @@ readonly __CONSTANTS__=1
 
 readonly QUICKTEST_CONFIG_FILE="$QUICKTEST_PATH"/quicktest.config
 
-readonly COMMANDS_DIR="$QUICKTEST_PATH"/commands
+readonly SCRIPTS_DIR="$QUICKTEST_PATH"/scripts
 readonly DATA_INTERFACE_DIR="$QUICKTEST_PATH"/data_interface
 readonly AWK_FILES_PATH="$DATA_INTERFACE_DIR"/awk
 readonly DATA_DIR="$QUICKTEST_PATH"/data

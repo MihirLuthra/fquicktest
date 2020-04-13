@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
 
 
-COMMANDS_PATH="${QUICKTEST_PATH}/commands"
-SUBCMDS_PATH="${COMMANDS_PATH}/sub_commands"
+SCRIPTS_PATH="${QUICKTEST_PATH}/scripts"
+SUBCMDS_PATH="${SCRIPTS_PATH}/sub_commands"
 
-source "$COMMANDS_PATH"/option_parser
+source "$SCRIPTS_PATH"/option_parser
 
 print_quicktest_help() {
 	less 'help.txt'
