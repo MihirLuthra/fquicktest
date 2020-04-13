@@ -54,7 +54,7 @@ some_key_is_active == "1" && $1 == ">" {
 }
 
 END {
-	if (key_removing_done == "1") {
+	if (key_removing_done == "1" || continued_statements == "1") {
 		exit 0
 	}
 
