@@ -27,9 +27,9 @@ set_value_for_key() {
 	local key="$1" ; shift
 	local value="$1" ; shift
 
-	[ -z "$file" ] && a_printf_err "param(file) is null" && return 1
-	[ -z "$key" ] && a_printf_err "param(key) is null" && return 1
-	[ -z "$value" ] && a_printf_err "param(value) is null" && return 1
+	[ -z "$file" ] && a_echo_err "param(file) is null" && return 1
+	[ -z "$key" ] && a_echo_err "param(key) is null" && return 1
+	[ -z "$value" ] && a_echo_err "param(value) is null" && return 1
 
 	exists_but_not_file "$file" && return 1
 
@@ -42,7 +42,7 @@ set_value_for_key() {
 
 	if [ "$old_val" != "$key" ]
 	then
-		a_printf_err "key cannot contain spaces"
+		a_echo_err "key cannot contain spaces"
 		return 1
 	fi
 
@@ -56,7 +56,7 @@ set_value_for_key() {
 
 	if [ $? -ne 0 ] ; then
 		rm "$temp_file" 2> /dev/null
-		a_printf_err "${FUNCNAME[0]}() failed"
+		a_echo_err "${FUNCNAME[0]}() failed"
 		return 1
 	fi
 
