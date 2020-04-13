@@ -66,3 +66,33 @@ alias return_if_error='
 	fi
 '
 shopt -s expand_aliases
+
+print_if_key_is_null() {
+	if [ -z "$2" ]
+	then
+		a_echo_err "key $1 is empty"
+		return 0
+	fi
+
+	return 1
+}
+
+print_if_not_file() {
+	if [ ! -f "$1" ]
+	then
+		a_echo_err "$1 : No such file"
+		return 0
+	fi
+
+	return 1
+}
+
+exists_but_not_file() {
+	if [ ! -f "$1" ] && [ -e "$1" ]
+	then
+		a_echo_err "$1 exists but isn't a file"
+		return 0
+	fi
+
+	return 1
+}

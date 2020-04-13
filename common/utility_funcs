@@ -1,0 +1,28 @@
+#! /usr/bin/env bash
+
+# don't source the script twice
+[ -n "${__UTILITY_FUNCS__}" ] && return 0
+readonly __UTILITY_FUNCS__=1
+
+# trims leading and trailing spaces
+# also if more than one blank exists, it trims it to single blank
+trim_blanks() {
+	awk '{$1=$1}1' <<<"$1"
+}
+
+trim_leading_and_trailing_blanks() {
+
+	awk '{
+		# trim leading spaces
+		sub(/^ +/, "", $0)
+		sub(/^\t+/, "", $0)
+
+		# trim trailing spaces
+		sub(/ +$/, "", $0)
+		sub(/\t+$/, "", $0)
+	}1' <<<"$1"
+}
+
+first_word() {
+	awk '{print $1}' <<<"$1"
+}
