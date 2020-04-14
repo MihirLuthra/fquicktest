@@ -4,6 +4,10 @@
 [ -n "${__UTILITY_FUNCS__}" ] && return 0
 readonly __UTILITY_FUNCS__=1
 
+COMMON_PATH="$QUICKTEST_PATH/"common
+source "$COMMON_PATH"/error_handler
+
+
 # trims leading and trailing spaces
 # also if more than one blank exists, it trims it to single blank
 trim_blanks() {
@@ -25,4 +29,95 @@ trim_leading_and_trailing_blanks() {
 
 first_word() {
 	awk '{print $1}' <<<"$1"
+}
+
+bold_echo() {
+	echo -n "$BOLD"
+	echo "$@"
+	echo -n "$OFF_BOLD"
+}
+
+bold_printf() {
+	printf "$BOLD"
+	printf "$@"
+	printf "$OFF_BOLD"
+}
+
+#
+# param1: header
+#   This is the heading of fzf search
+#
+# param2: from_dir
+#   The directory where fzf search needs to be done
+#
+# param3... : all args following from here are exluded dirs
+#
+# Description:
+#   This will construct a find command that goes through
+#   the dir and all it's sub files/dirs and shows it in
+#   order of %c (stat).
+#
+fzf_search() {
+	local header=$1 ; shift
+	local from_dir=$1 ; shift
+	# rest of the args are excluded dirs
+
+	local temp_file="$(mktemp /tmp/fquicktest.fzf_searchXXXXX)"
+
+	local cmd
+
+	cmd="cd \"$from_dir\" ;"
+
+	cmd="$cmd find * -type f"
+
+	for dir in "$@"
+	do
+		cmd="$cmd -not -path \"$dir/*\""
+	done
+
+	cmd="$cmd -exec stat -f '%c %N' {} \;"
+
+	echo "$cmd | sort -r | awk '{\$1=\"\"}1' | awk '{print \$1}' | fzf --reverse --height=40% --cycle --header=\"$header\"" > "$temp_file"
+
+	"$QTBASH" "$temp_file"
+
+	rm "$temp_file"
+}
+
+#
+# Description:
+#  This is used when we maybe overwriting a file.
+#  This checks if a path exists and if it is a file,
+#  user is asked if file should be overwritten or not.
+#
+# retval:
+#  0  : can write to path
+#  1  : don't write to path
+#
+# param1:
+#  path to be checked
+#
+prompt_if_overwrite() {
+	local path=$1
+
+	exists_but_not_file "$path" && return 1
+	[ ! -f "$path" ] && return 0
+
+	printf "%s\n" \
+			"The file ${path} already exists." \
+			"Should we overwrite it?"
+
+	select user_answer in 'Yes' 'No'
+	do
+		case "${user_answer}" in
+			'Yes')
+				return 0
+				;;
+			'No')
+				return 1
+				;;
+		esac
+	done
+
+	return 0
 }
