@@ -1,19 +1,17 @@
 #! /usr/bin/env bash
 
 # don't source the script twice
-[ -n "${__ERROR_BASH__}" ] && return 0
-readonly __ERROR_BASH__=1
+[ -n "${__ERROR_HANDLER__}" ] && return 0
+readonly __ERROR_HANDLER__=1
 
 echo_err() {
 	>&2 echo "$@"
 }
 
 cecho_err() {
-
-	local red='\033[0;31m'
-	local default_color='\033[0m'
-
+	echo_err -n "$RED"
 	echo_err "$red$@$default_color"
+	echo_err -n "$DEFAULT_COLOR"
 }
 
 printf_err() {
@@ -21,11 +19,9 @@ printf_err() {
 }
 
 cprintf_err() {
-
-	local red='\033[0;31m'
-	local default_color='\033[0m'
-
-	printf_err "$red$@$default_color"
+	printf_err "$RED"
+	printf_err "$@"
+	printf_err "$DEFAULT_COLOR"
 }
 
 #
@@ -59,12 +55,10 @@ alias a_cecho_err='cecho_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line
 alias a_printf_err='printf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
 alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
 
-alias return_if_error='
-	if [ $? -ne 0 ] ; then
-		a_echo_err "${FUNCNAME[0]}() failed"
-		return 1
-	fi
-'
+alias return_if_error='[ $? -ne 0 ] && a_echo_err "${FUNCNAME[0]}() failed" && return 1'
+
+alias return_error='{ a_echo_err "${FUNCNAME[0]}() failed" && return 1; }'
+
 shopt -s expand_aliases
 
 print_if_key_is_null() {
