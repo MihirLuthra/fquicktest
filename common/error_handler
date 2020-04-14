@@ -55,7 +55,12 @@ alias a_cecho_err='cecho_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line
 alias a_printf_err='printf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
 alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
 
-alias return_if_error='[ $? -ne 0 ] && a_echo_err "${FUNCNAME[0]}() failed" && return 1'
+alias return_if_error='
+	if [ $? -ne 0 ] ; then
+		printf_err "${FUNCNAME[0]}() failed"
+		return 1
+	fi
+'
 
 alias return_error='{ a_echo_err "${FUNCNAME[0]}() failed" && return 1; }'
 
