@@ -76,3 +76,9 @@ some_key_is_active == "1" && $1 == ">" {
 		some_key_is_active="1"
 	}
 }
+
+END {
+	if (key_found != "1") {
+		exit 1
+	}
+}

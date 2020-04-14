@@ -35,7 +35,13 @@ get_value_for_key() {
 		return 1
 	fi
 
-	awk -v key="$key" -f "$AWK_FILES_PATH/get_value_for_key.awk" "$file"
+	awk -v key="$key" -f "$AWK_FILES_PATH/get_value_for_key.awk" "$file" \
+		|| \
+		{
+			a_echo_err "Key $key not found"
+			return_error
+		}
+
 }
 
 get_value_for_key "$@"
