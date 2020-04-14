@@ -4,19 +4,22 @@
 [ -n "${__CONSTANTS__}" ] && return 0
 readonly __CONSTANTS__=1
 
-readonly QUICKTEST_CONFIG_FILE="$QUICKTEST_PATH"/quicktest.config
+readonly QUICKTEST_CONFIG_FILE="$QUICKTEST_PATH/quicktest.config"
 
-readonly SCRIPTS_DIR="$QUICKTEST_PATH"/scripts
-readonly DATA_INTERFACE_DIR="$QUICKTEST_PATH"/data_interface
-readonly AWK_FILES_PATH="$DATA_INTERFACE_DIR"/awk
-readonly DATA_DIR="$QUICKTEST_PATH"/data
-readonly COMMON_DIR="$QUICKTEST_PATH"/common
+readonly SCRIPTS_DIR="$QUICKTEST_PATH/scripts"
+readonly DATA_INTERFACE_DIR="$QUICKTEST_PATH/data_interface"
+readonly AWK_FILES_PATH="$DATA_INTERFACE_DIR/awk"
+readonly DATA_DIR="$QUICKTEST_PATH/data"
+readonly COMMON_DIR="$QUICKTEST_PATH/common"
 
 PATH="$DATA_INTERFACE_DIR:$PATH"
 
-readonly USER_CONFIG_FILES_DIR="$DATA_DIR"/user_config_files
-readonly BOILERPLATE_FILES_DIR="$DATA_DIR"/boilerplates
-readonly CURRENT_DEFAULTS_FILE="$DATA_DIR"/current_defaults
+readonly USER_CONFIG_FILES_DIR="$DATA_DIR/user_config_files"
+readonly BOILERPLATE_FILES_DIR="$DATA_DIR/boilerplates"
+readonly CURRENT_DEFAULTS_FILE="$DATA_DIR/current_defaults"
+readonly INSTANCES_DIR="$DATA_DIR/instances"
+readonly OUTPUT_DIR="$INSTANCES_DIR/outputs"
+readonly TEST_DIR="$INSTANCES_DIR/test"
 
 readonly RED='\033[0;31m'
 readonly DEFAULT_COLOR='\033[0m'
