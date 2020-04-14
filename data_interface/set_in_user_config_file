@@ -18,9 +18,9 @@ set_in_user_config_file() {
 	local user_config_file_name
 	local user_config_file_path
 
-	user_config_file_name="$( get_from_current_defaults "CURRENT_USER_CONFIG_FILE" )"
+	user_config_file_name="$( get_from_current_defaults "$USER_CONFIG_FILE_KEY" )"
 
-	print_if_key_is_null "CURRENT_USER_CONFIG_FILE" "$user_config_file_name" && return 1
+	print_if_key_is_null "$USER_CONFIG_FILE_KEY" "$user_config_file_name" && return 1
 
 	user_config_file_path="$USER_CONFIG_FILES_DIR/$user_config_file_name"
 
