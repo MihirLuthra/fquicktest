@@ -1,0 +1,48 @@
+open [relative_count [-g|--global]]
+	[-b|--boilerplate [<boilerplate_name>]]
+	[-h|--help]
+	[-i|--instance [<instance_name>]]
+	[-n|--new]
+	[-u|--user-config [<user_config_name>]]
+
+[relative_count [-g|--global]]:
+	This is an argument to `open` which is the relative
+	count to the previously opened instances.
+	For example, if this option is 2, it would mean
+	the second last instance that was opened.
+	[-g|--global]: Without this option, open would
+	only keep track of current tty. If instance was opened
+	in otehr terminal tab it won't be considered here without -g.
+
+-b|--boilerplate [<boilerplate_name>]:
+	With this you can specify the boilerplate to be used
+	for the current open operation. Without this the boilerplate
+	as per the user config file gets used.
+	The arg [<boilerplate_name>] is optional as if it wasn't
+	specified, a serarch menu will open for you to select from
+	all boilerplates.
+	Boilerplates are only significant if -n|--new is used
+	because that causes the actually writing of boilerplate
+	to instance file.
+
+-h|--help:
+	Provides help
+
+-i|--instance [<instance_name>]:
+	With this you can specify the instance to be opened.
+	Without this option, the instance would be opened as
+	per [relative_count [-g|--global]] arg to open.
+	The arg [<instance_name>] is optional as if it wasn't
+	specified, a serarch menu will open for you to select from
+	all instances.
+
+-n|--new:
+	Causes the boilerplate to be written to the instance.
+
+-u|--user-config [<user_config_name>]:
+	With this you can specify the user config file to be used
+	for current operation. During the next operation, the same
+	would be used automatically until changed again.
+	The arg [<user_config_name>] is optional as if it wasn't
+	specified, a serarch menu will open for you to select from
+	all user configs.
