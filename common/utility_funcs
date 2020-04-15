@@ -7,6 +7,35 @@ readonly __UTILITY_FUNCS__=1
 COMMON_PATH="$QUICKTEST_PATH/"common
 source "$COMMON_PATH"/error_handler
 
+full_path() {
+	# no way to detect if stdin is not empty
+	# so using timeout; (ifne isn't available on macOS)
+	read -t 2 path \
+		|| \
+		{
+			a_echo_err "read timeout"
+			return_error
+		}
+
+	if [ -z "$path" ]
+	then
+		a_echo_err "param(path) is null"
+		return_error
+	fi
+
+	local abs_path
+
+	abs_path="$( cd "$( dirname ${path} )" ; pwd )/$( basename ${path} )"
+
+	printf "$abs_path"
+}
+
+is_num() {
+	case "$1" in
+	''|*[!0-9]*) return 1 ;;
+	*) return 0 ;;
+	esac
+}
 
 # trims leading and trailing spaces
 # also if more than one blank exists, it trims it to single blank
@@ -44,6 +73,43 @@ bold_printf() {
 }
 
 #
+# param1: from_dir
+#   The directory where fzf search needs to be done
+#
+# param2... : all args following from here are exluded dirs
+#
+# Description:
+#   This will construct a find command that goes through
+#   the dir and all it's sub files/dirs and shows it in
+#   order of %c (stat).
+#
+find_by_ctime() {
+	local from_dir=$1 ; shift
+	# rest of the args are excluded dirs
+
+	local temp_file="$(mktemp /tmp/fquicktest.utility_funcs.find_by_ctimeXXXXX)"
+
+	local cmd
+
+	cmd="cd \"$from_dir\" ;"
+
+	cmd="$cmd find * -type f"
+
+	for dir in "$@"
+	do
+		cmd="$cmd -not -path \"$dir/*\""
+	done
+
+	cmd="$cmd -exec stat -f '%c %N' {} \;"
+
+	echo "$cmd | sort -r | awk '{\$1=\"\"}1' | awk '{\$1=\$1}1'" > "$temp_file"
+
+	"$QTBASH" "$temp_file"
+
+	rm "$temp_file"
+}
+
+#
 # param1: header
 #   This is the heading of fzf search
 #
@@ -55,7 +121,7 @@ bold_printf() {
 # Description:
 #   This will construct a find command that goes through
 #   the dir and all it's sub files/dirs and shows it in
-#   order of %c (stat).
+#   order of %c (stat) and display all of it in fzf search.
 #
 fzf_search() {
 	local header=$1 ; shift
@@ -77,7 +143,7 @@ fzf_search() {
 
 	cmd="$cmd -exec stat -f '%c %N' {} \;"
 
-	echo "$cmd | sort -r | awk '{\$1=\"\"}1' | awk '{print \$1}' | fzf --reverse --height=40% --cycle --header=\"$header\"" > "$temp_file"
+	echo "$cmd | sort -r | awk '{\$1=\"\"}1' | awk '{\$1=\$1}1' | fzf --reverse --height=40% --cycle --header=\"$header\"" > "$temp_file"
 
 	"$QTBASH" "$temp_file"
 
