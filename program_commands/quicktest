@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+SCRIPTS_PATH="$QUICKTEST_PATH"/scripts
+
+"${QTBASH}" "$SCRIPTS_PATH"/main "$@"
