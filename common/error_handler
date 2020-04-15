@@ -57,19 +57,21 @@ alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): 
 
 alias return_if_error='
 	if [ $? -ne 0 ] ; then
-		printf_err "${FUNCNAME[0]}() failed"
+		a_echo_err "${FUNCNAME[0]}() failed"
 		return 1
 	fi
 '
 
 alias return_error='{ a_echo_err "${FUNCNAME[0]}() failed" && return 1; }'
 
-shopt -s expand_aliases
 
 print_if_key_is_null() {
+	local line=$1 ; shift
+	local file_path=$1 ; shift
+
 	if [ -z "$2" ]
 	then
-		a_echo_err "key $1 is empty"
+		echo_err "$file_path: Line $line: " "key $1 is empty"
 		return 0
 	fi
 
@@ -77,9 +79,12 @@ print_if_key_is_null() {
 }
 
 print_if_not_file() {
+	local line=$1 ; shift
+	local file_path=$1 ; shift
+
 	if [ ! -f "$1" ]
 	then
-		a_echo_err "$1 : No such file"
+		echo_err "$file_path: Line $line: " "$1 : No such file"
 		return 0
 	fi
 
@@ -87,11 +92,20 @@ print_if_not_file() {
 }
 
 exists_but_not_file() {
+	local line=$1 ; shift
+	local file_path=$1 ; shift
+
 	if [ ! -f "$1" ] && [ -e "$1" ]
 	then
-		a_echo_err "$1 exists but isn't a file"
+		echo_err "$file_path: Line $line: " "$1 exists but isn't a file"
 		return 0
 	fi
 
 	return 1
 }
+
+alias print_if_key_is_null='print_if_key_is_null "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+alias print_if_not_file='print_if_not_file "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+alias exists_but_not_file='exists_but_not_file "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+
+shopt -s expand_aliases
