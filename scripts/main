@@ -1,15 +1,19 @@
 #! /usr/bin/env bash
 
 
-SCRIPTS_PATH="${QUICKTEST_PATH}/scripts"
-SUBCMDS_PATH="${SCRIPTS_PATH}/sub_commands"
-COMMON_PATH="$QUICKTEST_PATH/common"
+COMMON_PATH="$QUICKTEST_PATH"/common
 
+set -e
 source "$COMMON_PATH"/error_handler
-source "$SCRIPTS_PATH"/option_parser
+source "$COMMON_PATH"/constants
+source "$SCRIPTS_DIR"/option_parser
+set +e
+
+SUBCMDS_PATH="$SCRIPTS_DIR"/sub_commands
+
 
 print_quicktest_help() {
-	less 'help.txt'
+	less "$( dirname "$BASH_SOURCE" )/help.txt"
 }
 
 print_usage() {
@@ -32,8 +36,9 @@ parse_quicktest_options() {
 		'action'      , 'a'                      'S'     \
 		'boilerplate' , 'b'                      'S'     \
 		'current'     , 'c'                      'S'     \
-		'info'                                   'S'     \
+		'info'        , 'in'                     'S'     \
 		'instance'    , 'i'                      'S'     \
+		'open'        , 'o'                      'S'     \
 		'user_config' , 'u'                      'S'     \
 													     \
 		'-h'          , '--help'                 '0'     \
@@ -46,7 +51,7 @@ parse_quicktest_options() {
 	if [ $option_parser_retval -ne 0 ] ; then
 		option_parser_error_msg $option_parser_retval 'OPTIONS'
 		print_usage
-		return 1
+		return_error
 	fi
 
 }
@@ -57,22 +62,18 @@ main() {
 	local subcmd
 	local default_options
 
-	unset OPTIONS
-	unset ARGS
-	unset ARG_CNT
-
 	if [ -n "$*" ]
 	then
-		parse_quicktest_options "$@"
+		parse_quicktest_options "$@" || return_error
 	else
-		parse_quicktest_options "$default_options"
+		parse_quicktest_options "$default_options" || return_error
 	fi
 
 	for option in "${!OPTIONS[@]}"
 	do
 		case "$option" in
 
-			action|boilerplate|current|info|instance|user_config)
+			action|boilerplate|current|info|instance|open|user_config)
 
 				# All subcmd here
 
@@ -92,7 +93,7 @@ main() {
 
 	if [ -n "$subcmd" ]
 	then
-		"${QTBASH}" "$SUBCMDS_PATH/$subcmd" "$@"
+		"${QTBASH}" "$SUBCMDS_PATH/$subcmd/$subcmd" "$@" || return_error
 	fi
 
 	return 0
