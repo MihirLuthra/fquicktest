@@ -1,0 +1,260 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/"common
+
+set -e
+source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/utility_funcs
+source "$COMMON_PATH"/data_interface_utility_funcs
+
+source "$SCRIPTS_DIR"/option_parser
+set +e
+
+print_usage() {
+
+	printf_err "%s\n"                             \
+	'quicktest open'                              \
+	'	 [relative_count [-g|--global]]'          \
+    '    [-b|--boilerplate [<boilerplate_name>]]' \
+    '    [-h|--help]'                             \
+    '    [-i|--instance [<instance_name>]]'       \
+    '    [-n|--new]'                              \
+    '    [-u|--user-config [<user_config_name>]]'
+
+}
+
+parse_quicktest_options() {
+
+	local option_parser_retval
+
+	parse_options \
+		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
+		                                                 \
+		'-b' , '--boilerplate'   '-1'  \
+		'-h' , '--help'          '0'   \
+		'-i' , '--instance'      '-1'  \
+		'-n' , '--new'           '0'   \
+		'-u' , '--user-config'   '-1'  \
+													     \
+		';'                                              \
+		"$@"
+
+	option_parser_retval=$?
+
+	if [ $option_parser_retval -ne 0 ] ; then
+		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		print_usage
+		return_error
+	fi
+
+}
+
+#
+# Description:
+#   Sets $FILE_TO_OPEN_KEY in current defaults. This is done
+#   so that replace_quicktest_vars is able to replace ___FILE_TO_OPEN___.
+#
+#   The file is then touched to modify its timestamps and also so
+#   that it exists in case it didn't exist before.
+#
+#   Way to open is fetched fron user config file and stored in a variable.
+#   The variable is passed to bash -c to get executed.
+#
+# param1: file to open
+#
+open_file() {
+	local file=$1 ; shift
+	local open
+
+	set_in_current_defaults "$FILE_TO_OPEN_KEY" "$file" || return_error
+	
+	open="$(get_from_user_config_file "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
+	
+	"${QTBASH}" -c "$open" || return_error
+}
+
+#
+# Description:
+#   Would check if ARGS[-b,?] contains anything. If not would
+#   provide user a fzf search menu to search for the desired boilerplate.
+#   In either case, it would be checked if boilerplate is a file and
+#   if it is, its full path would be echoed.
+#
+option_boilerplate() {
+	local boilerplate
+	local boilerplate_full_path
+
+	if [ ${ARG_CNT[-b]:-0} -eq 1 ]
+	then
+		boilerplate=${ARGS[-b,0]}	
+	else
+		boilerplate="$( fzf_search "SELECT BOILERPLATE(-b):" "$BOILERPLATE_FILES_DIR" )"
+		[ -z "$boilerplate" ] && return_error
+	fi
+
+	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
+	print_if_not_file "$boilerplate_full_path" && return_error
+
+	touch "$boilerplate_full_path"
+
+	echo -n "$boilerplate_full_path"
+}
+
+#
+# Description:
+#   Would check if ARGS[-u,?] contains anything. If not would
+#   provide user a fzf search menu to search for the desired user config.
+#   In either case, it would be checked if user config is a file and
+#   if it is, its full path would be echoed.
+#
+option_user_config() {
+	local user_config
+	local user_config_full_path
+
+	if [ ${ARG_CNT[-u]:-0} -eq 1 ]
+	then
+		user_config=${ARGS[-u,0]}	
+	else
+		user_config="$( fzf_search "SELECT USER CONFIG(-u)" "$USER_CONFIG_FILES_DIR" )"
+		[ -z "$user_config" ] && return_error
+	fi
+
+	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
+	print_if_not_file "$user_config_full_path" && return_error
+
+	set_in_current_defaults "$USER_CONFIG_FILE_KEY" "$user_config" || return_error
+
+	touch "$user_config_full_path"
+
+	echo -n "$user_config_full_path"
+}
+
+#
+# Description:
+#   Would check if ARGS[-i,?] contains anything. If not would
+#   provide user a fzf search menu to search for the desired instance.
+#   If the instance doesn't exist, it would be created with all directories
+#   in between.
+#   At the end, intance's full path would be echoed.
+#
+option_instance() {
+	local instance
+	local instance_full_path
+
+	if [ ${ARG_CNT[-i]:-0} -eq 1 ]
+	then
+		instance=${ARGS[-i,0]}	
+	else
+		instance="$( fzf_search "SELECT INSTANCE(-i):" "$INSTANCES_DIR" "${OUTPUT_DIR##*/}" )"
+		[ -z "$instance" ] && return_error
+	fi
+
+	instance_full_path="$INSTANCES_DIR/$instance"
+
+	exists_but_not_file "$instance_full_path" && return_error
+	
+	set_in_current_defaults "$INSTANCE_KEY" "$instance" || return_error
+	
+	local dir="$( dirname "$file" )"
+	mkdir -p "$dir"
+
+	touch "$instance_full_path"
+
+	echo -n "$instance_full_path"
+}
+
+instance_by_relative_cnt() {
+	local instance
+	local instance_full_path
+	local cnt=${ARGS[self,0]}
+
+
+	if ! is_num "$cnt"
+	then
+		a_echo_err "$cnt: invalid relative count"
+		return_error
+	fi
+
+	instance="$( find_by_ctime "$INSTANCES_DIR" "${OUTPUT_DIR##*/}" | sed -n "$cnt"p )"
+
+	[ -z "$instance" ] && return_error
+
+	instance_full_path="$INSTANCES_DIR/$instance"
+
+	exists_but_not_file "$instance_full_path" && return_error
+	
+	set_in_current_defaults "$INSTANCE_KEY" "$instance" || return_error
+	
+	local dir="$( dirname "$file" )"
+	mkdir -p "$dir"
+
+	touch "$instance_full_path"
+
+	echo -n "$instance_full_path"
+}
+
+option_help() {
+	less "$( dirname $BASH_SOURCE )/help.txt"
+}
+
+write_boilerplate_to_instance() {
+	local boilerplate_path=$1 ; shift
+	local instance_path=$1 ; shift
+
+	prompt_if_overwrite "$instance_path" || return_error
+
+	replace_quicktest_vars "$( < "$boilerplate_path" )" > "$instance_path" || return_error
+}
+
+open() {
+
+	local boilerplate_full_path
+	local user_config_full_path
+	local instance_full_path
+
+	parse_quicktest_options "$@" || return_error
+
+	if [ -n "${OPTIONS[-h]}" ]
+	then
+		option_help
+		return 0
+	fi
+	
+	if [ -n "${OPTIONS[-u]}" ]
+	then
+		user_config_full_path="$(option_user_config)" || return_error
+	else
+		user_config_full_path="$(current_user_config)" || return_error
+	fi
+
+	if [ -n "${OPTIONS[-i]}" ]
+	then
+		instance_full_path="$(option_instance)" || return_error
+	else
+		if [ -n "${ARGS[self,0]}" ]
+		then
+			instance_full_path="$(instance_by_relative_cnt)" || return_error
+		else
+			instance_full_path="$(current_instance)" || return_error
+		fi
+	fi
+	
+	if [ -n "${OPTIONS[-n]}" ]
+	then
+		if [ -n "${OPTIONS[-b]}" ]
+		then
+			boilerplate_full_path="$(option_boilerplate)" || return_error
+		else
+			boilerplate_full_path="$(current_boilerplate)" || return_error
+		fi
+
+		write_boilerplate_to_instance "$boilerplate_full_path" "$instance_full_path" || return_error
+	fi
+
+	open_file "$instance_full_path" || return_error
+
+	return 0
+}
+
+open "$@"
