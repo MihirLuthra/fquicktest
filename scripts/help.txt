@@ -12,39 +12,39 @@ action
 	[-h|--help]
 
 boilerplate
-	[-c|--current]
 	[-d|--delete <boilerplate_name>]
 	[-g|--get <boilerplate_name>]
 	[-h|--help]
 	[-m|--modify <boilerplate_name>]
 	[-p|--path]
 	[-s|--show-all]
-	[-u|--use <file_name>]
+
+current
+	[-a|--all]
+	[-b|--boilerplate]
+	[-i|--instance]
+	[-u|--user-config]
 
 info
+	[-g|--show-global-history [history_count]]
 	[-h|--help]
 	[-s|--show-history [history_count]]
-	[-u|--show-universal-history [history_count]]
 
 instance
-	[-c|--current]
 	[-d|--delete <instance_name>]
 	[-g|--get [instance_name]]
 	[-h|--help]
 	[-p|--path]
 	[-s|--show-all]
 
-open [relative_count]
+open [relative_count [-g|--global]]
 	[-b|--boilerplate <boilerplate_name>]
 	[-h|--help]
-	[-i|--instance <instance_name>]
+	[-i|--instance [<instance_name>]]
 	[-n|--new]
-	[-p|--universal-pick]
-	[-s|--select]
 	[-u|--user-config <user_config_name>]
 
 user_config
-	[-c|--current]
 	[-d|--delete <user_config_file_name>]
 	[-g|--get <user_config_file_name>]
 	[-h|--help]
@@ -52,4 +52,4 @@ user_config
 	[-p|--path]
 	[-r|--replicate <user_config_file_name>]
 	[-s|--show-all]
-	[-u|--use <file_name>]
+	[-u|--upload <file_name>]
