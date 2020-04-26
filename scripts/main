@@ -36,7 +36,6 @@ parse_quicktest_options() {
 		'action'      , 'a'                      'S'     \
 		'boilerplate' , 'b'                      'S'     \
 		'current'     , 'c'                      'S'     \
-		'info'        , 'in'                     'S'     \
 		'instance'    , 'i'                      'S'     \
 		'open'        , 'o'                      'S'     \
 		'user_config' , 'u'                      'S'     \
@@ -73,7 +72,7 @@ main() {
 	do
 		case "$option" in
 
-			action|boilerplate|current|info|instance|open|user_config)
+			action|boilerplate|current|instance|open|user_config)
 
 				# All subcmd here
 

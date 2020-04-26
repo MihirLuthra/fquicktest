@@ -25,11 +25,6 @@ current
 	[-i|--instance]
 	[-u|--user-config]
 
-info
-	[-g|--show-global-history [history_count]]
-	[-h|--help]
-	[-s|--show-history [history_count]]
-
 instance
 	[-d|--delete <instance_name>]
 	[-g|--get [instance_name]]
