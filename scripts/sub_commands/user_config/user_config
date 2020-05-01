@@ -1,0 +1,78 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/"common
+
+set -e
+source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/utility_funcs
+source "$COMMON_PATH"/data_interface_utility_funcs
+
+source "$SCRIPTS_DIR"/option_parser
+set +e
+
+print_usage() {
+
+	printf_err "%s\n"                                 \
+	'quicktest user_config'                           \
+	'	[-c|--current]'                               \
+	'	[--create-uc-boilerplate <boilerplate_name>]' \
+	'	[-d|--delete <user_config_file_name>]'        \
+	'	[-h|--help]'                                  \
+	'	[-m|--modify [<user_config_file_name>]]'      \
+	'	[-n|--new <user_config_file_name> '           \
+	'		[-b|--boilerplate <boilerplate_name>] | [-r|--replicate <user_config_file_name>]]' \
+	'	[-p|--path]'                                  \
+	'	[-s|--show-all]'
+
+}
+
+parse_quicktest_options() {
+
+	local option_parser_retval
+
+	parse_options \
+		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--'     \
+		                                                     \
+		'b'  , '--boilerplate'            '1'                \
+		'-c' , '--current'                '0'                \
+		       '--create-uc-boilerplate'  '1'                \
+		'-d' , '--delete'                 '1'                \
+		'-h' , '--help'                   '0'                \
+		'-m' , '--modify'                 '-1'               \
+		'-n' , '--new'                    '1'                \
+		'-p' , '--path'                   '0'                \
+		'-r' , '--replicate'              '1'                \
+		'-s' , '--show-all'               '0'                \
+		                                                     \
+		';'                                                  \
+		"$@"
+
+	option_parser_retval=$?
+
+	if [ $option_parser_retval -ne 0 ] ; then
+		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		print_usage
+		return_error
+	fi
+
+}
+
+option_help() {
+	less "$( dirname $BASH_SOURCE )/help.txt"
+}
+
+user_config() {
+
+	parse_quicktest_options "$@" || return_error
+
+	if [ -n "${OPTIONS[-h]}" ]
+	then
+		option_help
+		return 0
+	fi
+	
+	return 0
+}
+
+user_config "$@"
