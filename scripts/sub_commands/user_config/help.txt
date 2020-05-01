@@ -1,0 +1,43 @@
+user_config
+	[-c|--current]
+	[--create-uc-boilerplate <boilerplate_name>]
+	[-d|--delete <user_config_file_name>]
+	[-h|--help]
+	[-m|--modify [<user_config_file_name>]]
+	[-n|--new <user_config_file_name> 
+		[-b|--boilerplate <boilerplate_name>] | [-r|--replicate <user_config_file_name>]]
+	[-p|--path]
+	[-s|--show-all]
+
+
+[-c|--current]:
+	Returns the name of the current user config file.
+
+[--create-uc-boilerplate <boilerplate_name>]:
+	Creates a boilerplate file that can be used with -n|--new option
+	to fill new user config files with some initial contents.
+
+[-d|--delete <user_config_file_name>]:
+	Deletes the specified user config file.
+
+[-h|--help]:
+	Displays help in less.
+
+[-m|--modify [<user_config_file_name>]]:
+	This would open the current user config file for modification
+	by default and if arg is passed, it would open that user config file.
+
+[-n|--new <user_config_file_name>
+	[-b|--boilerplate <boilerplate_name>] | [-r|--replicate <user_config_file_name>]]:
+	This would cause creation of new user config file with the default user config
+	boilerplate code (which can be set by --create-uc-boilerplate).
+	[-b|--boilerplate] would cause it to use some different user config boilerplate
+	as per the argument.
+	[-r|--replicate <user_config_file_name>] would cause the new user config file to
+	be a copy of the specified existing user config file.
+
+[-p|--path]:
+	This returns the path to user config file.
+
+[-s|--show-all]:
+	List all user config files.
