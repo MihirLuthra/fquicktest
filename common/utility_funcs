@@ -187,3 +187,27 @@ prompt_if_overwrite() {
 
 	return 0
 }
+
+#
+# Description:
+#   Sets $FILE_TO_OPEN_KEY in current defaults. This is done
+#   so that replace_quicktest_vars is able to replace ___FILE_TO_OPEN___.
+#
+#   The file is then touched to modify its timestamps and also so
+#   that it exists in case it didn't exist before.
+#
+#   Way to open is fetched fron user config file and stored in a variable.
+#   The variable is passed to bash -c to get executed.
+#
+# param1: file to open
+#
+open_file() {
+	local file=$1 ; shift
+	local open
+
+	set_in_current_defaults "$FILE_TO_OPEN_KEY" "$file" || return_error
+
+	open="$(get_from_user_config_file "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
+
+	"${QTBASH}" -c "$open" || return_error
+}
