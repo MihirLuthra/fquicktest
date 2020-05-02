@@ -34,15 +34,13 @@ parse_quicktest_options() {
 	parse_options \
 		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--'     \
 		                                                     \
-		'b'  , '--boilerplate'            '1'                \
 		'-c' , '--current'                '0'                \
 		       '--create-uc-boilerplate'  '1'                \
 		'-d' , '--delete'                 '1'                \
 		'-h' , '--help'                   '0'                \
 		'-m' , '--modify'                 '-1'               \
-		'-n' , '--new'                    '1'                \
+		'-n' , '--new'                    'S'                \
 		'-p' , '--path'                   '0'                \
-		'-r' , '--replicate'              '1'                \
 		'-s' , '--show-all'               '0'                \
 		                                                     \
 		';'                                                  \
@@ -62,6 +60,34 @@ option_help() {
 	less "$( dirname $BASH_SOURCE )/help.txt"
 }
 
+option_new() {
+
+	parse_options \
+		, 'OPTIONS_n' 'ARG_CNT_n' 'ARGS_n' 'self' "${OPTIONS[-n]}" ';' '--' \
+		                                \
+		'-b' , '--boilerplate'   '1'    \
+		'-r' , '--replicate'     '1'    \
+		                                \
+		';'                             \
+		"$@"
+
+	option_parser_retval=$?
+
+	if [ -z "${ARGS_n[self,0]}" ]
+	then
+		printf_err "Insufficient args for -n\n"
+		print_usage
+		return_error
+	fi
+
+	if [ $option_parser_retval -ne 0 ] ; then
+		option_parser_error_msg $option_parser_retval 'OPTIONS_n'
+		print_usage
+		return_error
+	fi
+
+}
+
 user_config() {
 
 	parse_quicktest_options "$@" || return_error
@@ -71,7 +97,12 @@ user_config() {
 		option_help
 		return 0
 	fi
-	
+
+	if [ -n "${OPTIONS[-n]}" ]
+	then
+		option_new "$@"
+	fi
+
 	return 0
 }
 
