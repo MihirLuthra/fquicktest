@@ -19,7 +19,9 @@ get_from_user_config_file() {
 	local user_config_file_path
 	local value
 
-	user_config_file_name="$( get_from_current_defaults "$USER_CONFIG_FILE_KEY" )"
+	user_config_file_name="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "$USER_CONFIG_FILE_KEY" )"
+
+	return_if_error
 
 	print_if_key_is_null "$USER_CONFIG_FILE_KEY" "$user_config_file_name" && return 1
 
