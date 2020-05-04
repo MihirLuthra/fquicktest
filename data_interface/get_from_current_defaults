@@ -16,15 +16,7 @@ get_from_current_defaults() {
 	local key="$1" ; shift
 	local value
 
-	value="$(
-		get_value_for_key "$CURRENT_DEFAULTS_FILE" "$key"
-	)"
-
-	return_if_error
-
-	value="$(
-		replace_quicktest_vars "$value"
-	)"
+	value="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "$key" )"
 
 	return_if_error
 
