@@ -21,7 +21,7 @@ current_user_config_path() {
 	echo -n "$user_config_full_path"
 }
 
-current_boilerplate() {
+current_boilerplate_path() {
 	local boilerplate
 	local boilerplate_full_path
 

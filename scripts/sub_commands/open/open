@@ -222,7 +222,7 @@ open() {
 		then
 			boilerplate_full_path="$(option_boilerplate)" || return_error
 		else
-			boilerplate_full_path="$(current_boilerplate)" || return_error
+			boilerplate_full_path="$(current_boilerplate_path)" || return_error
 		fi
 
 		write_boilerplate_to_instance "$boilerplate_full_path" "$instance_full_path" || return_error
