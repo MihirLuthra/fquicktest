@@ -15,7 +15,7 @@ print_usage() {
 
 	printf_err "%s\n"                             \
 	'quicktest open'                              \
-	'	 [relative_count [-g|--global]]'          \
+	'    [relative_count [-g|--global]]'          \
     '    [-b|--boilerplate [<boilerplate_name>]]' \
     '    [-h|--help]'                             \
     '    [-i|--instance [<instance_name>]]'       \
@@ -31,11 +31,11 @@ parse_quicktest_options() {
 	parse_options \
 		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
 		                                                 \
-		'-b' , '--boilerplate'   '-1'  \
-		'-h' , '--help'          '0'   \
-		'-i' , '--instance'      '-1'  \
-		'-n' , '--new'           '0'   \
-		'-u' , '--user-config'   '-1'  \
+		'-b' , '--boilerplate'   '-1'                    \
+		'-h' , '--help'          '0'                     \
+		'-i' , '--instance'      '-1'                    \
+		'-n' , '--new'           '0'                     \
+		'-u' , '--user-config'   '-1'                    \
 													     \
 		';'                                              \
 		"$@"
@@ -63,7 +63,7 @@ option_boilerplate() {
 
 	if [ ${ARG_CNT[-b]:-0} -eq 1 ]
 	then
-		boilerplate=${ARGS[-b,0]}	
+		boilerplate=${ARGS[-b,0]}
 	else
 		boilerplate="$( fzf_search "SELECT BOILERPLATE(-b):" "$BOILERPLATE_FILES_DIR" )"
 		[ -z "$boilerplate" ] && return_error
@@ -90,7 +90,7 @@ option_user_config() {
 
 	if [ ${ARG_CNT[-u]:-0} -eq 1 ]
 	then
-		user_config=${ARGS[-u,0]}	
+		user_config=${ARGS[-u,0]}
 	else
 		user_config="$( fzf_search "SELECT USER CONFIG(-u)" "$USER_CONFIG_FILES_DIR" )"
 		[ -z "$user_config" ] && return_error
@@ -120,7 +120,7 @@ option_instance() {
 
 	if [ ${ARG_CNT[-i]:-0} -eq 1 ]
 	then
-		instance=${ARGS[-i,0]}	
+		instance=${ARGS[-i,0]}
 	else
 		instance="$( fzf_search "SELECT INSTANCE(-i):" "$INSTANCES_DIR" "${OUTPUT_DIR##*/}" )"
 		[ -z "$instance" ] && return_error
@@ -129,9 +129,9 @@ option_instance() {
 	instance_full_path="$INSTANCES_DIR/$instance"
 
 	exists_but_not_file "$instance_full_path" && return_error
-	
+
 	set_in_current_defaults "$INSTANCE_KEY" "$instance" || return_error
-	
+
 	local dir="$( dirname "$file" )"
 	mkdir -p "$dir"
 
@@ -159,9 +159,9 @@ instance_by_relative_cnt() {
 	instance_full_path="$INSTANCES_DIR/$instance"
 
 	exists_but_not_file "$instance_full_path" && return_error
-	
+
 	set_in_current_defaults "$INSTANCE_KEY" "$instance" || return_error
-	
+
 	local dir="$( dirname "$file" )"
 	mkdir -p "$dir"
 
@@ -196,7 +196,7 @@ open() {
 		option_help
 		return 0
 	fi
-	
+
 	if [ -n "${OPTIONS[-u]}" ]
 	then
 		user_config_full_path="$(option_user_config)" || return_error
@@ -215,7 +215,7 @@ open() {
 			instance_full_path="$(current_instance_path)" || return_error
 		fi
 	fi
-	
+
 	if [ -n "${OPTIONS[-n]}" ]
 	then
 		if [ -n "${OPTIONS[-b]}" ]
