@@ -7,29 +7,6 @@ readonly __UTILITY_FUNCS__=1
 COMMON_PATH="$QUICKTEST_PATH/"common
 source "$COMMON_PATH"/error_handler
 
-full_path() {
-	# no way to detect if stdin is not empty
-	# so using timeout; (ifne isn't available on macOS)
-	read -t 2 path \
-		|| \
-		{
-			a_echo_err "read timeout"
-			return_error
-		}
-
-	if [ -z "$path" ]
-	then
-		a_echo_err "param(path) is null"
-		return_error
-	fi
-
-	local abs_path
-
-	abs_path="$( cd "$( dirname ${path} )" ; pwd )/$( basename ${path} )"
-
-	printf "$abs_path"
-}
-
 is_num() {
 	case "$1" in
 	''|*[!0-9]*) return 1 ;;
