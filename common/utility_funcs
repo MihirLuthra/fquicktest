@@ -51,7 +51,7 @@ bold_printf() {
 
 #
 # param1: from_dir
-#   The directory where fzf search needs to be done
+#   The directory where the search needs to be done
 #
 # param2... : all args following from here are exluded dirs
 #
