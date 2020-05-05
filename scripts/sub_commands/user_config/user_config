@@ -13,17 +13,15 @@ set +e
 
 print_usage() {
 
-	printf_err "%s\n"                                 \
-	'quicktest user_config'                           \
-	'	[-c|--current]'                               \
-	'	[--create-uc-boilerplate <boilerplate_name>]' \
-	'	[-d|--delete <user_config_file_name>]'        \
-	'	[-h|--help]'                                  \
-	'	[-m|--modify [<user_config_file_name>]]'      \
-	'	[-n|--new <user_config_file_name> '           \
-	'		[-b|--boilerplate <boilerplate_name>] | [-r|--replicate <user_config_file_name>]]' \
-	'	[-p|--path]'                                  \
-	'	[-s|--show-all]'
+	printf_err "%s\n"                                  \
+	'quicktest user_config'                            \
+	'    [-c|--current]'                               \
+	'    [-d|--delete <user_config_file_name>]'        \
+	'    [-h|--help]'                                  \
+	'    [-m|--modify [<user_config_file_name>]]'      \
+	'    [-n|--new <user_config_file_name>]'           \
+	'    [-p|--path]'                                  \
+	'    [-s|--show-all]'
 
 }
 
@@ -35,11 +33,10 @@ parse_quicktest_options() {
 		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--'     \
 		                                                     \
 		'-c' , '--current'                '0'                \
-		       '--create-uc-boilerplate'  '1'                \
-		'-d' , '--delete'                 '1'                \
+		'-d' , '--delete'                 '-1'               \
 		'-h' , '--help'                   '0'                \
 		'-m' , '--modify'                 '-1'               \
-		'-n' , '--new'                    'S'                \
+		'-n' , '--new'                    '1'                \
 		'-p' , '--path'                   '0'                \
 		'-s' , '--show-all'               '0'                \
 		                                                     \
@@ -56,52 +53,118 @@ parse_quicktest_options() {
 
 }
 
+option_current() {
+	local user_config
+
+	user_config="$(get_from_current_defaults "$USER_CONFIG_FILE_KEY")" || return_error
+
+	echo "$user_config"
+}
+
+option_delete() {
+	local user_config_full_path
+	local user_config
+
+	user_config=${ARGS[-d,0]}
+
+	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
+	then
+		user_config=${ARGS[-d,0]}
+	else
+		user_config="$( fzf_search "SELECT USER CONFIG(-u)" "$USER_CONFIG_FILES_DIR" )"
+		[ -z "$user_config" ] && return_error
+	fi
+
+	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
+
+	print_if_not_file "$user_config_full_path" && return_error
+
+	rm -i "$user_config_full_path" || return_error
+}
+
+option_path() {
+	echo "$(current_user_config)"
+}
+
 option_help() {
 	less "$( dirname $BASH_SOURCE )/help.txt"
 }
 
-option_new() {
+option_modify() {
+	local user_config_full_path
+	local user_config
 
-	parse_options \
-		, 'OPTIONS_n' 'ARG_CNT_n' 'ARGS_n' 'self' "${OPTIONS[-n]}" ';' '--' \
-		                                \
-		'-b' , '--boilerplate'   '1'    \
-		'-r' , '--replicate'     '1'    \
-		                                \
-		';'                             \
-		"$@"
+	user_config=${ARGS[-m,0]}
 
-	option_parser_retval=$?
-
-	if [ -z "${ARGS_n[self,0]}" ]
+	if [ ${ARG_CNT[-m]:-0} -eq 1 ]
 	then
-		printf_err "Insufficient args for -n\n"
-		print_usage
-		return_error
+		user_config=${ARGS[-m,0]}
+	else
+		user_config="$( fzf_search "SELECT USER CONFIG(-u)" "$USER_CONFIG_FILES_DIR" )"
+		[ -z "$user_config" ] && return_error
 	fi
 
-	if [ $option_parser_retval -ne 0 ] ; then
-		option_parser_error_msg $option_parser_retval 'OPTIONS_n'
-		print_usage
-		return_error
-	fi
+	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
 
+	print_if_not_file "$user_config_full_path" && return_error
+
+	touch "$user_config_full_path"
+
+	open_file "$user_config_full_path" || return_error
+}
+
+option_new() {
+	local user_config
+	local user_config_full_path
+
+	user_config=${ARGS[-n,0]}
+	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
+
+	exists_but_not_file "$user_config_full_path" && return_error
+
+	touch "$user_config_full_path"
+
+	open_file "$user_config_full_path" || return_error
+}
+
+option_path() {
+	echo "$(current_user_config)"
+}
+
+option_show_all() {
+	find_by_ctime "$USER_CONFIG_FILES_DIR"
 }
 
 user_config() {
 
 	parse_quicktest_options "$@" || return_error
 
-	if [ -n "${OPTIONS[-h]}" ]
-	then
-		option_help
-		return 0
-	fi
-
-	if [ -n "${OPTIONS[-n]}" ]
-	then
-		option_new "$@"
-	fi
+	for option in "${!OPTIONS[@]}"
+	do
+		case "$option" in
+			-c)
+				option_current || return_error
+				;;
+			-d)
+				option_delete || return_error
+				;;
+			-h)
+				option_help || return_error
+				;;
+			-m)
+				option_modify || return_error
+				;;
+			-n)
+				option_new || return_error
+				;;
+			-p)
+				option_path || return_error
+				;;
+			-s)
+				option_show_all || return_error
+				;;
+		esac
+	done
 
 	return 0
 }
