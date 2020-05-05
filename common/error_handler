@@ -65,7 +65,7 @@ alias return_if_error='
 alias return_error='{ a_echo_err "${FUNCNAME[0]}() failed" && return 1; }'
 
 
-print_if_key_is_null() {
+f_print_if_key_is_null() {
 	local line=$1 ; shift
 	local file_path=$1 ; shift
 
@@ -78,7 +78,7 @@ print_if_key_is_null() {
 	return 1
 }
 
-print_if_not_file() {
+f_print_if_not_file() {
 	local line=$1 ; shift
 	local file_path=$1 ; shift
 
@@ -91,7 +91,7 @@ print_if_not_file() {
 	return 1
 }
 
-exists_but_not_file() {
+f_exists_but_not_file() {
 	local line=$1 ; shift
 	local file_path=$1 ; shift
 
@@ -104,8 +104,8 @@ exists_but_not_file() {
 	return 1
 }
 
-alias print_if_key_is_null='print_if_key_is_null "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
-alias print_if_not_file='print_if_not_file "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
-alias exists_but_not_file='exists_but_not_file "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+alias print_if_key_is_null='f_print_if_key_is_null "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+alias print_if_not_file='f_print_if_not_file "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+alias exists_but_not_file='f_exists_but_not_file "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
 
 shopt -s expand_aliases
