@@ -34,7 +34,7 @@ current_boilerplate_path() {
 	echo -n "$boilerplate_full_path"
 }
 
-current_instance() {
+current_instance_path() {
 	local instance
 	local instance_full_path
 
