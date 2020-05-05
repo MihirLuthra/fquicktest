@@ -82,10 +82,6 @@ option_delete() {
 	rm -i "$user_config_full_path" || return_error
 }
 
-option_path() {
-	echo "$(current_user_config)"
-}
-
 option_help() {
 	less "$( dirname $BASH_SOURCE )/help.txt"
 }
@@ -128,7 +124,7 @@ option_new() {
 }
 
 option_path() {
-	echo "$(current_user_config)"
+	echo "$(current_user_config_path)"
 }
 
 option_show_all() {

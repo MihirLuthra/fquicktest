@@ -8,7 +8,7 @@ COMMON_PATH="$QUICKTEST_PATH/"common
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/error_handler
 
-current_user_config() {
+current_user_config_path() {
 	local user_config
 	local user_config_full_path
 

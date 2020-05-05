@@ -201,7 +201,7 @@ open() {
 	then
 		user_config_full_path="$(option_user_config)" || return_error
 	else
-		user_config_full_path="$(current_user_config)" || return_error
+		user_config_full_path="$(current_user_config_path)" || return_error
 	fi
 
 	if [ -n "${OPTIONS[-i]}" ]
