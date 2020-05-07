@@ -1,0 +1,28 @@
+instance
+	[-c|--current]
+	[-d|--delete [<instance_name>]]
+	[-g|--get [<instance_name>] [at_path]]
+	[-h|--help]
+	[-p|--path]
+	[-s|--show-all]
+
+
+[-c|--current]:
+	Prints name of the last used instance.
+
+[-d|--delete [<instance_name>]]:
+	Deletes the specified instance. If no arg is specified,
+	fzf search menu is opened.
+
+[-g|--get <at_path> [<instance_name>]]:
+	Copies the instance to the given path.
+	If instance name isn't specified, fzf search opens.
+
+[-h|--help]:
+	Opens help for instance in less.
+
+[-p|--path]:
+	Prints path to current instance.
+
+[-s|--show-all]:
+	Lists all instances.
