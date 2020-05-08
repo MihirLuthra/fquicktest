@@ -1,5 +1,12 @@
 #! /usr/bin/env bash
 
+#
+# TODO:
+#  add --get option
+#  update current boilerplate on deletion
+#
+#
+
 COMMON_PATH="$QUICKTEST_PATH/"common
 
 set -e
@@ -12,7 +19,6 @@ source "$SCRIPTS_DIR"/option_parser
 set +e
 
 print_usage() {
-
 	printf_err "%s\n"                                  \
 	'quicktest boilerplate'                            \
 	'    [-c|--current]'                               \
@@ -22,11 +28,9 @@ print_usage() {
 	'    [-n|--new <boilerplate_name>]'                \
 	'    [-p|--path]'                                  \
 	'    [-s|--show-all]'
-
 }
 
 parse_boilerplate_options() {
-
 	local option_parser_retval
 
 	parse_options \
@@ -50,7 +54,6 @@ parse_boilerplate_options() {
 		print_usage
 		return_error
 	fi
-
 }
 
 option_current() {
@@ -71,7 +74,7 @@ option_delete() {
 	then
 		boilerplate=${ARGS[-d,0]}
 	else
-		boilerplate="$( fzf_search "SELECT BOILERPLATE(-b)" "$BOILERPLATE_FILES_DIR" )"
+		boilerplate="$( fzf_search "SELECT BOILERPLATE(-d)" "$BOILERPLATE_FILES_DIR" )"
 		[ -z "$boilerplate" ] && return_error
 	fi
 
@@ -96,7 +99,7 @@ option_modify() {
 	then
 		boilerplate=${ARGS[-m,0]}
 	else
-		boilerplate="$( fzf_search "SELECT BOILERPLATE(-b)" "$BOILERPLATE_FILES_DIR" )"
+		boilerplate="$( fzf_search "SELECT BOILERPLATE(-m)" "$BOILERPLATE_FILES_DIR" )"
 		[ -z "$boilerplate" ] && return_error
 	fi
 
@@ -124,7 +127,11 @@ option_new() {
 }
 
 option_path() {
-	echo "$(current_boilerplate_path)"
+	local boilerplate_full_path
+
+	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$(option_current)"
+
+	printf "%s\n" "$boilerplate_full_path"
 }
 
 option_show_all() {
