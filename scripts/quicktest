@@ -1,16 +1,17 @@
 #! /usr/bin/env bash
 
-
 COMMON_PATH="$QUICKTEST_PATH"/common
 
 set -e
 source "$COMMON_PATH"/error_handler
 source "$COMMON_PATH"/constants
 source "$SCRIPTS_DIR"/option_parser
-set +e
 
+# GLOBALS
 SUBCMDS_PATH="$SCRIPTS_DIR"/sub_commands
-
+CURRENT_DIR="$( dirname "$BASH_SOURCE" )"
+QTC_FILE="$CURRENT_DIR"/quicktest.qtc
+set +e
 
 print_quicktest_help() {
 	less "$( dirname "$BASH_SOURCE" )/help.txt"
@@ -60,12 +61,13 @@ quicktest() {
 	local subcmd
 	local default_options
 
-	if [ -n "$*" ]
+	if [ -z "$*" ]
 	then
-		parse_quicktest_options "$@" || return_error
-	else
-		parse_quicktest_options "$default_options" || return_error
+		default_options="$( get_value_for_key "$QTC_FILE" "$DEFAULT_ARGS_KEY" )" || return_error
+		eval set -- $default_options
 	fi
+
+	parse_quicktest_options "$@" || return_error
 
 	for option in "${!OPTIONS[@]}"
 	do
