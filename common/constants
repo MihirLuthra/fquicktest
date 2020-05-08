@@ -11,7 +11,7 @@ readonly DATA_INTERFACE_DIR="$QUICKTEST_PATH/data_interface"
 readonly AWK_FILES_PATH="$DATA_INTERFACE_DIR/awk"
 readonly DATA_DIR="$QUICKTEST_PATH/data"
 readonly COMMON_DIR="$QUICKTEST_PATH/common"
-readonly REGISTERED_COMMANDS_DIR="$QUICKTEST_PATH/resgistered_commands"
+readonly USER_COMMANDS_DIR="$QUICKTEST_PATH/resgistered_commands"
 
 PATH="$DATA_INTERFACE_DIR:$PATH"
 
@@ -23,7 +23,7 @@ readonly CURRENT_DEFAULTS_FILE="$USER_DATA_DIR/current_defaults"
 readonly INSTANCES_DIR="$USER_DATA_DIR/instances"
 readonly OUTPUT_DIR="$INSTANCES_DIR/outputs"
 readonly TEST_DIR="$INSTANCES_DIR/test"
-readonly REGISTER_COMMAND_TEMPLATE="$PROGRAM_DATA_DIR/register_command_template"
+readonly USER_COMMAND_TEMPLATE="$PROGRAM_DATA_DIR/user_command_template"
 
 readonly FILE_TO_OPEN_KEY='FILE_TO_OPEN'
 readonly HOW_TO_OPEN_EDITOR_KEY='HOW_TO_OPEN_EDITOR'
