@@ -24,7 +24,7 @@ print_usage() {
 
 }
 
-parse_quicktest_options() {
+parse_open_options() {
 
 	local option_parser_retval
 
@@ -189,7 +189,7 @@ open() {
 	local user_config_full_path
 	local instance_full_path
 
-	parse_quicktest_options "$@" || return_error
+	parse_open_options "$@" || return_error
 
 	if [ -n "${OPTIONS[-h]}" ]
 	then
