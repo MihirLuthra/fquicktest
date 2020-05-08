@@ -25,7 +25,7 @@ print_usage() {
 
 }
 
-parse_quicktest_options() {
+parse_user_config_options() {
 
 	local option_parser_retval
 
@@ -133,7 +133,7 @@ option_show_all() {
 
 user_config() {
 
-	parse_quicktest_options "$@" || return_error
+	parse_user_config_options "$@" || return_error
 
 	for option in "${!OPTIONS[@]}"
 	do
