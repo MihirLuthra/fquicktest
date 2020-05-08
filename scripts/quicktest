@@ -55,7 +55,7 @@ parse_quicktest_options() {
 
 }
 
-main() {
+quicktest() {
 
 	local shift_count
 	local subcmd
@@ -98,4 +98,4 @@ main() {
 	return 0
 }
 
-main "$@"
+quicktest "$@"

@@ -2,4 +2,4 @@
 
 SCRIPTS_PATH="$QUICKTEST_PATH"/scripts
 
-"${QTBASH}" "$SCRIPTS_PATH"/main "$@"
+"${QTBASH}" "$SCRIPTS_PATH"/quicktest "$@"
