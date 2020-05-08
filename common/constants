@@ -11,6 +11,7 @@ readonly DATA_INTERFACE_DIR="$QUICKTEST_PATH/data_interface"
 readonly AWK_FILES_PATH="$DATA_INTERFACE_DIR/awk"
 readonly DATA_DIR="$QUICKTEST_PATH/data"
 readonly COMMON_DIR="$QUICKTEST_PATH/common"
+readonly REGISTERED_COMMANDS_DIR="$QUICKTEST_PATH/resgistered_commands"
 
 PATH="$DATA_INTERFACE_DIR:$PATH"
 
