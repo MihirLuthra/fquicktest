@@ -1,0 +1,153 @@
+#! /usr/bin/env bash
+
+#
+# TODO: update instance on deletion
+# consider creating a common function
+#
+
+COMMON_PATH="$QUICKTEST_PATH/"common
+
+set -e
+source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/utility_funcs
+
+source "$DATA_INTERFACE_DIR"/utility_funcs
+
+source "$SCRIPTS_DIR"/option_parser
+set +e
+
+print_usage() {
+	printf_err "%s\n"                             \
+	'quicktest instance'                          \
+	'    [-c|--current]'                          \
+	'    [-d|--delete [<instance_name>]]'         \
+	'    [-g|--get <at_path> [<instance_name>]]'  \
+	'    [-h|--help]'                             \
+	'    [-p|--path]'                             \
+	'    [-s|--show-all]'
+}
+
+parse_instance_options() {
+	local option_parser_retval
+
+	parse_options \
+		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
+		                                                 \
+		'-c' , '--current'       '0'                     \
+		'-d' , '--delete'        '-1'                    \
+		'-g' , '--get'           '1 -1'                  \
+		'-h' , '--help'          '0'                     \
+		'-p' , '--path'          '0'                     \
+		'-s' , '--show-all'      '0'                     \
+													     \
+		';'                                              \
+		"$@"
+
+	option_parser_retval=$?
+
+	if [ $option_parser_retval -ne 0 ] ; then
+		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		print_usage
+		return_error
+	fi
+}
+
+option_current() {
+	local instance
+
+	instance="$( get_from_current_defaults "$INSTANCE_KEY" )" || return_error
+
+	printf "%s\n" "$instance"
+}
+
+option_delete() {
+	local instance
+	local instance_full_path
+
+	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
+	then
+		instance=${ARGS[-d,0]}
+	else
+		instance="$( fzf_search "SELECT INSTANCE(-d)" "$INSTANCES_DIR" )"
+		[ -z "$instance" ] && return_error
+	fi
+
+	instance_full_path="$INSTANCES_DIR/$instance"
+
+	print_if_not_file "$instance_full_path" && return_error
+
+	rm -i "$instance_full_path" || return_error
+}
+
+option_get() {
+	local at_path
+	local instance
+	local instance_full_path
+
+	at_path=${ARGS[-g,0]}
+
+	mkdir -p "$( dirname "$at_path" )" || return_error
+
+	if [ ${ARG_CNT[-g]:-0} -eq 2 ]
+	then
+		instance=${ARGS[-g,1]}
+	else
+		instance="$( fzf_search "SELECT INSTANCE(-g)" "$INSTANCES_DIR" )"
+		[ -z "$instance" ] && return_error
+	fi
+
+	instance_full_path="$INSTANCES_DIR/$instance"
+
+	print_if_not_file "$instance_full_path" && return_error
+
+	cp "$instance_full_path" "$at_path" || return_error
+}
+
+option_help() {
+	less "$( dirname $BASH_SOURCE )/help.txt"
+}
+
+option_path() {
+	local instance_full_path
+
+	instance_full_path="$INSTANCES_DIR/$(option_current)"
+
+	printf "%s\n" "$instance_full_path"
+}
+
+option_show_all() {
+	find_by_ctime "$INSTANCES_DIR"
+}
+
+instance() {
+	parse_instance_options "$@" || return_error
+
+	for option in "${!OPTIONS[@]}"
+	do
+		case "$option" in
+			-c)
+				option_current || return_error
+				;;
+			-d)
+				option_delete || return_error
+				;;
+			-g)
+				option_get || return_error
+				;;
+			-h)
+				option_help
+				;;
+			-p)
+				option_path
+				;;
+			-s)
+				option_show_all
+				;;
+		esac
+	done
+
+	return 0
+}
+
+instance "$@"
