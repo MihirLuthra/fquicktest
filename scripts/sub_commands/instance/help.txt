@@ -1,7 +1,7 @@
 instance
 	[-c|--current]
 	[-d|--delete [<instance_name>]]
-	[-g|--get [<instance_name>] [at_path]]
+	[-g|--get <at_path> [<instance_name>]]:
 	[-h|--help]
 	[-p|--path]
 	[-s|--show-all]
