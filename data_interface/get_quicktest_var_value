@@ -44,7 +44,7 @@ get_quicktest_var_value() {
 
 	return_if_error
 
-	echo -n "$value"
+	printf "%s" "$value"
 }
 
 get_quicktest_var_value "$@"

@@ -37,7 +37,7 @@ replace_quicktest_vars() {
 
 	return_if_error
 
-	echo -n "$updated_input"
+	printf "%s" "$updated_input"
 }
 
 replace_quicktest_vars "$@"

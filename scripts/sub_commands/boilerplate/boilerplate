@@ -61,7 +61,7 @@ option_current() {
 
 	boilerplate="$(get_from_user_config_file "$BOILERPLATE_KEY")" || return_error
 
-	echo "$boilerplate"
+	printf "%s\n" "$boilerplate"
 }
 
 option_delete() {

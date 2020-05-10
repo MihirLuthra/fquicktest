@@ -74,7 +74,7 @@ option_boilerplate() {
 
 	touch "$boilerplate_full_path"
 
-	echo -n "$boilerplate_full_path"
+	printf "%s" "$boilerplate_full_path"
 }
 
 #
@@ -103,7 +103,7 @@ option_user_config() {
 
 	touch "$user_config_full_path"
 
-	echo -n "$user_config_full_path"
+	printf "%s" "$user_config_full_path"
 }
 
 #
@@ -137,7 +137,7 @@ option_instance() {
 
 	touch "$instance_full_path"
 
-	echo -n "$instance_full_path"
+	printf "%s" "$instance_full_path"
 }
 
 instance_by_relative_cnt() {
@@ -167,7 +167,7 @@ instance_by_relative_cnt() {
 
 	touch "$instance_full_path"
 
-	echo -n "$instance_full_path"
+	printf "%s" "$instance_full_path"
 }
 
 option_help() {

@@ -58,7 +58,7 @@ option_current() {
 
 	user_config="$(get_from_current_defaults "$USER_CONFIG_FILE_KEY")" || return_error
 
-	echo "$user_config"
+	printf "%s\n" "$user_config"
 }
 
 option_delete() {
@@ -124,7 +124,7 @@ option_new() {
 }
 
 option_path() {
-	echo "$(current_user_config_path)"
+	printf "%s\n" "$(current_user_config_path)"
 }
 
 option_show_all() {

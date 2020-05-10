@@ -37,7 +37,7 @@ get_from_user_config_file() {
 		replace_quicktest_vars "$value"
 	)"
 
-	echo -n "$value"
+	printf "%s" "$value"
 }
 
 get_from_user_config_file "$@"

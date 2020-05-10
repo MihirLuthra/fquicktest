@@ -18,7 +18,7 @@ current_user_config_path() {
 
 	print_if_not_file "$user_config_full_path" && return_error
 
-	echo -n "$user_config_full_path"
+	printf "%s" "$user_config_full_path"
 }
 
 current_boilerplate_path() {
@@ -31,7 +31,7 @@ current_boilerplate_path() {
 
 	print_if_not_file "$boilerplate_full_path" && return_error
 
-	echo -n "$boilerplate_full_path"
+	printf "%s" "$boilerplate_full_path"
 }
 
 current_instance_path() {
@@ -44,5 +44,5 @@ current_instance_path() {
 
 	print_if_not_file "$instance_full_path" && return_error
 
-	echo -n "$instance_full_path"
+	printf "%s" "$instance_full_path"
 }

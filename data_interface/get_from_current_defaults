@@ -20,7 +20,7 @@ get_from_current_defaults() {
 
 	return_if_error
 
-	echo -n "$value"
+	printf "%s" "$value"
 }
 
 get_from_current_defaults "$@"

@@ -54,8 +54,6 @@ self_actions() {
 
 	action="$( replace_quicktest_vars "$action" )" || return_error
 
-	echo $action
-
 	"$QTBASH" -c "$action"
 }
 
