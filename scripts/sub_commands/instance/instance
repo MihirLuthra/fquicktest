@@ -40,7 +40,7 @@ parse_instance_options() {
 		'-h' , '--help'          '0'                     \
 		'-p' , '--path'          '0'                     \
 		'-s' , '--show-all'      '0'                     \
-													     \
+		                                                 \
 		';'                                              \
 		"$@"
 

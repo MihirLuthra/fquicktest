@@ -16,11 +16,11 @@ print_usage() {
 	printf_err "%s\n"                             \
 	'quicktest open'                              \
 	'    [relative_count [-g|--global]]'          \
-    '    [-b|--boilerplate [<boilerplate_name>]]' \
-    '    [-h|--help]'                             \
-    '    [-i|--instance [<instance_name>]]'       \
-    '    [-n|--new]'                              \
-    '    [-u|--user-config [<user_config_name>]]'
+	'    [-b|--boilerplate [<boilerplate_name>]]' \
+	'    [-h|--help]'                             \
+	'    [-i|--instance [<instance_name>]]'       \
+	'    [-n|--new]'                              \
+	'    [-u|--user-config [<user_config_name>]]'
 
 }
 
@@ -36,7 +36,7 @@ parse_open_options() {
 		'-i' , '--instance'      '-1'                    \
 		'-n' , '--new'           '0'                     \
 		'-u' , '--user-config'   '-1'                    \
-													     \
+		                                                 \
 		';'                                              \
 		"$@"
 

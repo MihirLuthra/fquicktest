@@ -31,7 +31,7 @@ parse_action_options() {
 		'-h' , '--help'          '0'                     \
 		'-r' , '--register'      '1 1'                   \
 		'-s' , '--show-all'      '0'                     \
-													     \
+		                                                 \
 		';'                                              \
 		"$@"
 
