@@ -103,6 +103,11 @@ option_register() {
 		"$contents"            \
 		> "$new_action_path"   \
 		|| return_error
+
+	chmod +x "$new_action_path" || {
+		rm -rf "$new_action_path"
+		return_error
+	}
 }
 
 option_show_all() {
