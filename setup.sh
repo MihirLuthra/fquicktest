@@ -30,15 +30,15 @@ fi
 actions_for_zsh() {
 	QUICKTEST_PATH="$( dirname "$0:A" )"
 	
-	echo "${QUICKTEST_PATH}/to_source.sh" >> "$HOME/.zlogin"
-	echo "${QUICKTEST_PATH}/to_source.sh" >> "$HOME/.zshrc"
+	echo "source ${QUICKTEST_PATH}/to_source.sh" >> "$HOME/.zlogin"
+	echo "source ${QUICKTEST_PATH}/to_source.sh" >> "$HOME/.zshrc"
 }
 
 actions_for_bash() {
 	QUICKTEST_PATH="$( cd "$( dirname "${BASH_SOURCE}" )" && pwd )"
 	
-	echo "${QUICKTEST_PATH}/to_source.sh" >> "$HOME/.bashrc"
-	echo "${QUICKTEST_PATH}/to_source.sh" >> "$HOME/.bash_profile"
+	echo "source ${QUICKTEST_PATH}/to_source.sh" >> "$HOME/.bashrc"
+	echo "source ${QUICKTEST_PATH}/to_source.sh" >> "$HOME/.bash_profile"
 }
 
 if is_bashv4; then
