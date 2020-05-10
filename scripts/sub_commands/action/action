@@ -1,0 +1,142 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/"common
+
+set -e
+source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/utility_funcs
+
+source "$DATA_INTERFACE_DIR"/utility_funcs
+
+source "$SCRIPTS_DIR"/option_parser
+set +e
+
+print_usage() {
+	printf_err "%s\n"                                \
+	'quicktest action [<key_for_action>]'            \
+	'    [-d|--delete <action_name>]'                \
+	'    [-h|--help]'                                \
+	'    [-r|--register <action_name> <action_key>]' \
+	'    [-s|--show-all]'
+}
+
+parse_action_options() {
+	local option_parser_retval
+
+	parse_options \
+		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
+		                                                 \
+		'-d' , '--delete'        '-1'                    \
+		'-h' , '--help'          '0'                     \
+		'-r' , '--register'      '1 1'                   \
+		'-s' , '--show-all'      '0'                     \
+													     \
+		';'                                              \
+		"$@"
+
+	option_parser_retval=$?
+
+	if [ $option_parser_retval -ne 0 ] ; then
+		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		print_usage
+		return_error
+	fi
+}
+
+self_actions() {
+	local action_key
+	local action
+
+	action_key=${ARGS[self,0]}
+
+	action="$( get_from_user_config_file "$action_key" )" || return_error
+
+	action="$( replace_quicktest_vars "$action" )" || return_error
+
+	echo $action
+
+	"$QTBASH" -c "$action"
+}
+
+option_delete() {
+	local action
+	local action_full_path
+
+	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
+	then
+		action=${ARGS[-d,0]}
+	else
+		action="$( fzf_search "SELECT ACTION(-d)" "$USER_COMMANDS_DIR" )"
+		[ -z "$action" ] && return_error
+	fi
+
+	action_full_path="$USER_COMMANDS_DIR/$action"
+
+	print_if_not_file "$action_full_path" && return_error
+
+	rm -i "$action_full_path" || return_error
+}
+
+option_help() {
+	less "$( dirname $BASH_SOURCE )/help.txt"
+}
+
+option_register() {
+	local action_name
+	local action_key
+	local new_action_path
+	local contents
+
+	action_name=${ARGS[-r,0]}
+	action_key=${ARGS[-r,1]}
+
+	new_action_path="$USER_COMMANDS_DIR/$action_name"
+
+	prompt_if_overwrite "$new_action_path" || return_error
+
+	contents="$( < $USER_COMMAND_TEMPLATE )"
+
+	replace                    \
+		"$ACTION_KEY_REPLACEE" \
+		"$action_key"          \
+		"$contents"            \
+		> "$new_action_path"   \
+		|| return_error
+}
+
+option_show_all() {
+	find_by_ctime "$USER_COMMANDS_DIR"
+}
+
+action() {
+	parse_action_options "$@" || return_error
+
+	if [ "${ARG_CNT[self]:-0}" -ne 0 ]
+	then
+		self_actions || return_error
+		return 0
+	fi
+
+	for option in "${!OPTIONS[@]}"
+	do
+		case "$option" in
+			-d)
+				option_delete || return_error
+				;;
+			-h)
+				option_help
+				;;
+			-r)
+				option_register || return_error
+				;;
+			-s)
+				option_show_all
+				;;
+		esac
+	done
+
+	return 0
+}
+
+action "$@"
