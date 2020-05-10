@@ -188,3 +188,48 @@ open_file() {
 
 	"${QTBASH}" -c "$open" || return_error
 }
+
+replace_first() {
+	local replacee=$1 ; shift
+	local replacement=$1 ; shift
+	local text=$1
+
+	awk -v replacee="$replacee"        \
+		-v replacement="$replacement"  \
+	'
+	BEGIN { exit_status = 1 }
+
+	# MAIN
+	{
+		if (exit_status && sub(replacee, replacement) == 1) {
+			exit_status = 0
+		}
+
+		print
+	}
+
+	END { exit exit_status }
+	' <<<"$text"
+}
+
+replace() {
+	local replacee=$1 ; shift
+	local replacement=$1 ; shift
+	local text=$1
+
+	awk -v replacee="$replacee"        \
+		-v replacement="$replacement"  \
+	'
+	BEGIN { exit_status = 1 }
+
+	# MAIN
+	{
+		if (gsub(replacee, replacement)) {
+			exit_status = 0
+		}
+		print
+	}
+
+	END { exit exit_status }
+	' <<<"$text"
+}
