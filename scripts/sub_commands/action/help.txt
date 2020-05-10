@@ -1,0 +1,25 @@
+action [<key_for_action>]
+	[-d|--delete <action_name>]
+	[-h|--help]
+	[-r|--register <action_name> <action_key>]
+	[-s|--show-all]
+
+[<key_for_action>]:
+	Would execute the commands corresponding to
+	the <key_for_action> in user config file.
+
+[-d|--delete [<action_name>]]:
+	Deletes the specified action. If no arg,
+	fzf search menu opens for selection.
+
+[-r|--register <action_name> <action_key>]:
+	Adds an executable with name <action_name>
+	to registered_commands thereby making it visible
+	in user's PATH. This executable will run commands
+	corresponding to <action_key>.
+
+[-h|--help]:
+	Display help for action.
+
+[-s|--show-all]:
+	Lists all regustered commands.
