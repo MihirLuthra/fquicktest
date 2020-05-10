@@ -233,3 +233,17 @@ replace() {
 	END { exit exit_status }
 	' <<<"$text"
 }
+
+is_bashv4() {
+	if [ -n "$BASH_VERSINFO" ]
+	then
+		if [ $BASH_VERSINFO -lt 4 ]
+		then
+			return 1
+		fi
+
+		return 0
+	fi
+
+	return 1
+}
