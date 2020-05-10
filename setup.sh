@@ -18,6 +18,8 @@ is_zsh() {
 	test -n "${ZSH_VERSION}"
 }
 
+shell_name=${SHELL##*/}
+
 if [ -z "${shell_name}" ]; then
 	echo '${SHELL##*/} is null' >&2
 elif ! is_zsh && ! is_bashv4 ; then
