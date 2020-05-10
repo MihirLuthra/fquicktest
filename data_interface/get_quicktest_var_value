@@ -31,14 +31,14 @@ get_quicktest_var_value() {
 	local value
 
 	case "$var" in
-		'___QUICKTEST_PATH___')
-			value="$QUICKTEST_PATH"
+		'___FILE_TO_OPEN___')
+			value="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "FILE_TO_OPEN" )"
 			;;
 		'___INSTANCE___')
 			value="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "INSTANCE" )"
 			;;
-		'___FILE_TO_OPEN___')
-			value="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "FILE_TO_OPEN" )"
+		'___QUICKTEST_PATH___')
+			value="$QUICKTEST_PATH"
 			;;
 	esac
 
