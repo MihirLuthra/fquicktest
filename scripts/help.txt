@@ -6,45 +6,41 @@ quicktest
 
 quicktest has the following subcommands:
 
-action
+action [<key_for_action>]
 	[-d|--delete <action_name>]
-	[-r|--register <action_name> <action_key>]
 	[-h|--help]
+	[-r|--register <action_name> <action_key>]
+	[-s|--show-all]
 
 boilerplate
-	[-d|--delete <boilerplate_name>]
-	[-g|--get <boilerplate_name>]
+	[-c|--current]
+	[-d|--delete <user_config_file_name>]
 	[-h|--help]
-	[-m|--modify <boilerplate_name>]
+	[-m|--modify [<user_config_file_name>]]
+	[-n|--new <user_config_file_name>]
 	[-p|--path]
 	[-s|--show-all]
-
-current
-	[-a|--all]
-	[-b|--boilerplate]
-	[-i|--instance]
-	[-u|--user-config]
 
 instance
-	[-d|--delete <instance_name>]
-	[-g|--get [instance_name]]
+	[-c|--current]
+	[-d|--delete [<instance_name>]]
+	[-g|--get <at_path> [<instance_name>]]:
 	[-h|--help]
 	[-p|--path]
 	[-s|--show-all]
 
-open [relative_count [-g|--global]]
-	[-b|--boilerplate <boilerplate_name>]
+open [relative_count]
+	[-b|--boilerplate [<boilerplate_name>]]
 	[-h|--help]
 	[-i|--instance [<instance_name>]]
 	[-n|--new]
-	[-u|--user-config <user_config_name>]
+	[-u|--user-config [<user_config_name>]]
 
 user_config
+	[-c|--current]
 	[-d|--delete <user_config_file_name>]
-	[-g|--get <user_config_file_name>]
 	[-h|--help]
-	[-m|--modify <user_config_file_name>]
+	[-m|--modify [<user_config_file_name>]]
+	[-n|--new <user_config_file_name>]
 	[-p|--path]
-	[-r|--replicate <user_config_file_name>]
 	[-s|--show-all]
-	[-u|--upload <file_name>]
