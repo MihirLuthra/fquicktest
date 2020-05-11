@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 # don't source the script twice
-[ -n "${__UTILITY_FUNCS__}" ] && return 0
+[ -n "$__UTILITY_FUNCS__" ] && return 0
 readonly __UTILITY_FUNCS__=1
 
 COMMON_PATH="$QUICKTEST_PATH/"common
@@ -147,12 +147,12 @@ prompt_if_overwrite() {
 	[ ! -f "$path" ] && return 0
 
 	printf "%s\n" \
-			"The file ${path} already exists." \
+			"The file $path already exists." \
 			"Should we overwrite it?"
 
 	select user_answer in 'Yes' 'No'
 	do
-		case "${user_answer}" in
+		case "$user_answer" in
 			'Yes')
 				return 0
 				;;
@@ -186,7 +186,7 @@ open_file() {
 
 	open="$(get_from_user_config_file "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
 
-	"${QTBASH}" -c "$open" || return_error
+	"$QTBASH" -c "$open" || return_error
 }
 
 replace_first() {

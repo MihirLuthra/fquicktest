@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 # don't source the script twice
-[ -n "${__ERROR_HANDLER__}" ] && return 0
+[ -n "$__ERROR_HANDLER__" ] && return 0
 readonly __ERROR_HANDLER__=1
 
 echo_err() {
@@ -40,12 +40,12 @@ quicktest_path_normalize() {
 	local abs_path_dir
 	local abs_path
 
-	if [ -z "${path}" ] ; then
-		echo_err "${BASH_SOURCE}: Line ${LINENO}: param1(path) is empty"
+	if [ -z "$path" ] ; then
+		echo_err "$BASH_SOURCE: Line $LINENO: param1(path) is empty"
 		return 1
 	fi
 
-	abs_path="$( cd "$( dirname ${path} )" ; pwd )/$( basename ${path} )"
+	abs_path="$( cd "$( dirname $path )" ; pwd )/$( basename $path )"
 
 	printf "$abs_path"
 }

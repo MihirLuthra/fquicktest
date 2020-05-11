@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-[ -n "${__OPTION_PARSER__}" ] && return 0
+[ -n "$__OPTION_PARSER__" ] && return 0
 readonly __OPTION_PARSER__=1
 
 #

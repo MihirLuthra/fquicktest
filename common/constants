@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 # don't source the script twice
-[ -n "${__CONSTANTS__}" ] && return 0
+[ -n "$__CONSTANTS__" ] && return 0
 readonly __CONSTANTS__=1
 
 readonly QUICKTEST_CONFIG_FILE="$QUICKTEST_PATH/quicktest.config"

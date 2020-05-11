@@ -15,12 +15,12 @@ is_bashv4() {
 }
 
 is_zsh() {
-	test -n "${ZSH_VERSION}"
+	test -n "$ZSH_VERSION"
 }
 
 shell_name=${SHELL##*/}
 
-if [ -z "${shell_name}" ]; then
+if [ -z "$shell_name" ]; then
 	echo '${SHELL##*/} is null' >&2
 elif ! is_zsh && ! is_bashv4 ; then
 	>&2 printf "%s\n"                                                    \
@@ -36,15 +36,15 @@ fi
 actions_for_zsh() {
 	QUICKTEST_PATH="$( dirname "$0:A" )"
 
-	echo "source \"${QUICKTEST_PATH}/to_source.sh\"" >> "$HOME/.zlogin"
-	echo "source \"${QUICKTEST_PATH}/to_source.sh\"" >> "$HOME/.zshrc"
+	echo "source \"$QUICKTEST_PATH/to_source.sh\"" >> "$HOME/.zlogin"
+	echo "source \"$QUICKTEST_PATH/to_source.sh\"" >> "$HOME/.zshrc"
 }
 
 actions_for_bash() {
-	QUICKTEST_PATH="$( cd "$( dirname "${BASH_SOURCE}" )" && pwd )"
+	QUICKTEST_PATH="$( cd "$( dirname "$BASH_SOURCE" )" && pwd )"
 
-	echo "source \"${QUICKTEST_PATH}/to_source.sh\"" >> "$HOME/.bashrc"
-	echo "source \"${QUICKTEST_PATH}/to_source.sh\"" >> "$HOME/.bash_profile"
+	echo "source \"$QUICKTEST_PATH/to_source.sh\"" >> "$HOME/.bashrc"
+	echo "source \"$QUICKTEST_PATH/to_source.sh\"" >> "$HOME/.bash_profile"
 }
 
 if is_bashv4; then

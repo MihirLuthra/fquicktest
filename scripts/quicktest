@@ -93,7 +93,7 @@ quicktest() {
 
 	if [ -n "$subcmd" ]
 	then
-		"${QTBASH}" "$SUBCMDS_PATH/$subcmd/$subcmd" "$@" || return_error
+		"$QTBASH" "$SUBCMDS_PATH/$subcmd/$subcmd" "$@" || return_error
 	fi
 
 	return 0
