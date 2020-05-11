@@ -95,36 +95,12 @@ find_by_ctime() {
 #
 # param3... : all args following from here are exluded dirs
 #
-# Description:
-#   This will construct a find command that goes through
-#   the dir and all it's sub files/dirs and shows it in
-#   order of %c (stat) and display all of it in fzf search.
-#
 fzf_search() {
 	local header=$1 ; shift
 	local from_dir=$1 ; shift
 	# rest of the args are excluded dirs
 
-	local temp_file="$(mktemp /tmp/fquicktest.fzf_searchXXXXX)"
-
-	local cmd
-
-	cmd="cd \"$from_dir\" ;"
-
-	cmd="$cmd find * -type f"
-
-	for dir in "$@"
-	do
-		cmd="$cmd -not -path \"$dir/*\""
-	done
-
-	cmd="$cmd -exec stat -f '%c %N' {} \;"
-
-	echo "$cmd | sort -r | awk '{\$1=\"\"}1' | awk '{\$1=\$1}1' | fzf --reverse --height=40% --cycle --header=\"$header\"" > "$temp_file"
-
-	"$QTBASH" "$temp_file"
-
-	rm "$temp_file"
+	find_by_ctime "$from_dir" "$@" |  fzf --reverse --height=40% --cycle --header="$header"
 }
 
 #
