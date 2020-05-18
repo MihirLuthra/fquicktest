@@ -25,8 +25,9 @@ readonly CURRENT_DEFAULTS_FILE="$USER_DATA_DIR/current_defaults"
 readonly USER_COMMAND_TEMPLATE="$PROGRAM_DATA_DIR/user_command_template"
 
 readonly INSTANCES_DIR="$USER_DATA_DIR/instances"
-readonly OUTPUT_DIR="$INSTANCES_DIR/outputs"
 readonly TEST_DIR="$INSTANCES_DIR/test"
+
+readonly OUTPUT_DIR="$USER_DATA_DIR/outputs"
 
 readonly USER_COMMANDS_DIR="$COMMANDS_DIR/user_commands"
 readonly PROGRAM_COMMANDS_DIR="$COMMANDS_DIR/program_commands"
