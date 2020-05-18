@@ -53,30 +53,40 @@ bold_printf() {
 # param1: from_dir
 #   The directory where the search needs to be done
 #
-# Description:
-#   This will construct a find command that goes through
-#   the dir and all it's sub files/dirs and shows it in
-#   order of %c (stat).
-#
 find_by_ctime() {
-	local from_dir=$1 ; shift
+local from_dir=$1 ; shift
 	# rest of the args are excluded dirs
 
-	local temp_file="$(mktemp /tmp/fquicktest.utility_funcs.find_by_ctimeXXXXX)"
+	local flag
+	local fmt
 
-	local cmd
+	# FIXME: Currently the script uses a
+	# terrible way to distunguish between
+	# GNU and BSD stat. Would be preferred if
+	# some portable way could be found for find_by_ctime()
+	if [ "$(uname)" == 'Linux' ]
+	then
+		flag='-c'
+		fmt='%Y %N'
+	else
+		flag='-f'
+		fmt='%c %N'
+	fi
 
-	cmd="cd \"$from_dir\" ;"
+	cd "$from_dir" && 2>&1 compgen -G "*" > /dev/null && {
 
-	cmd="$cmd find * -type f"
+		find * -type f -print0         \
+		| xargs -0 stat "$flag" "$fmt" \
+		| sort -r                      \
+		| awk '{$1=""}1'               \
+		| awk '{$1=$1}1' 2> /dev/null
 
-	cmd="$cmd -exec stat -f '%c %N' {} \;"
+		return_if_error
 
-	echo "$cmd | sort -r | awk '{\$1=\"\"}1' | awk '{\$1=\$1}1'" > "$temp_file"
-
-	"$QTBASH" "$temp_file"
-
-	rm "$temp_file"
+	} || {
+		a_echo_err "Directory is empty"
+		return_error
+	}
 }
 
 #
@@ -89,8 +99,11 @@ find_by_ctime() {
 fzf_search() {
 	local header=$1 ; shift
 	local from_dir=$1 ; shift
+	local contents
 
-	find_by_ctime "$from_dir" |  fzf --reverse --height=40% --cycle --header="$header"
+	contents="$( find_by_ctime "$from_dir" )" || return_error
+
+	echo "$contents" | fzf --reverse --height=40% --cycle --header="$header"
 }
 
 #
@@ -112,7 +125,7 @@ prompt_if_overwrite() {
 	exists_but_not_file "$path" && return 1
 	[ ! -f "$path" ] && return 0
 
-	printf "%s\n" \
+	printf "%s\n"                            \
 			"The file $path already exists." \
 			"Should we overwrite it?"
 
