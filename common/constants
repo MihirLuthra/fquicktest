@@ -22,6 +22,8 @@ readonly PROGRAM_FUNC_DIR="$PROGRAM_DATA_DIR/func"
 readonly USER_FUNC_DIR="$USER_DATA_DIR/func"
 readonly FUNC_TEMPLATE="$PROGRAM_DATA_DIR/func_template"
 
+readonly ALIAS_FILE_PATH="$USER_DATA_DIR/alias_file"
+
 readonly USER_CONFIG_FILES_DIR="$USER_DATA_DIR/user_config_files"
 readonly BOILERPLATE_FILES_DIR="$USER_DATA_DIR/boilerplates"
 readonly CURRENT_DEFAULTS_FILE="$USER_DATA_DIR/current_defaults"
