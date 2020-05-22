@@ -161,7 +161,7 @@ open_file() {
 	local file=$1 ; shift
 	local open
 
-	touch "$file"
+	touch "$file" || return_error
 
 	set_in_current_defaults "$FILE_TO_OPEN_KEY" "$file" || return_error
 
