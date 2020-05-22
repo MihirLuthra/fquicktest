@@ -161,6 +161,8 @@ open_file() {
 	local file=$1 ; shift
 	local open
 
+	touch "$file"
+
 	set_in_current_defaults "$FILE_TO_OPEN_KEY" "$file" || return_error
 
 	open="$(get_from_user_config_file "$HOW_TO_OPEN_EDITOR_KEY")" || return_error

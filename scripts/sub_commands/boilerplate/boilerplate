@@ -107,8 +107,6 @@ option_modify() {
 
 	print_if_not_file "$boilerplate_full_path" && return_error
 
-	touch "$boilerplate_full_path"
-
 	open_file "$boilerplate_full_path" || return_error
 }
 
@@ -120,8 +118,6 @@ option_new() {
 	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
 
 	exists_but_not_file "$boilerplate_full_path" && return_error
-
-	touch "$boilerplate_full_path"
 
 	open_file "$boilerplate_full_path" || return_error
 }

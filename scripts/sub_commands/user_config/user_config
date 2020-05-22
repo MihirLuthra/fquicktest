@@ -104,8 +104,6 @@ option_modify() {
 
 	print_if_not_file "$user_config_full_path" && return_error
 
-	touch "$user_config_full_path"
-
 	open_file "$user_config_full_path" || return_error
 }
 
@@ -117,8 +115,6 @@ option_new() {
 	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
 
 	exists_but_not_file "$user_config_full_path" && return_error
-
-	touch "$user_config_full_path"
 
 	open_file "$user_config_full_path" || return_error
 }
