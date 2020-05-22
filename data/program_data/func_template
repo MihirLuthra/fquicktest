@@ -1,0 +1,15 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH"/common
+
+set -e
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/error_handler
+source "$SCRIPTS_DIR"/option_parser
+set +e
+
+___FUNC_NAME___() {
+
+}
+
+___FUNC_NAME___ "$@"
