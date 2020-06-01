@@ -53,7 +53,66 @@ void qtc::ConfigFile::print_key_val(std::ostream &out, std::string key, std::str
  */
 std::string qtc::ConfigFile::out_block_parse()
 {
-	return "";
+	bool next_is_block_start = false;
+	bool next_is_equal_to = false;
+	unsigned char ch;
+	std::string key;
+
+	file_reader >> std::noskipws;
+
+	auto is_char_invalid = [](char c) -> bool {
+		return (!std::isalnum(c) && c != '_' && c != '-');
+	};
+
+	while (file_reader >> ch) {
+
+		if (ch == '\n') err_line_no++;
+
+		if (ch == block_start) {
+			if (!next_is_block_start) {
+				if (!key.empty()) {
+					throw qtc::MissingEqualTo();
+				} else {
+					throw qtc::BlockWithoutAKey();
+				}
+			}
+
+			next_is_block_start = false;
+
+			return key;
+		} else if (ch == '=') {
+			next_is_equal_to = false;
+			next_is_block_start = true;
+
+			if (key.empty()) {
+				throw qtc::EqualToWithoutAKey();
+			}
+		} else if (next_is_equal_to && !tab_or_space(ch)) {
+			throw qtc::MissingEqualTo();
+		} else if (next_is_block_start && !std::isspace(ch)) {
+			// this occurs after =
+			throw qtc::TrailingCharsAfterEqualTo();
+		} else if (!key.empty() && tab_or_space(ch) && !next_is_block_start) {
+			// This cond is if a tab/space is used after the key
+			next_is_equal_to = true;
+		} else if (std::isspace(ch)) {
+			continue;
+		} else if (is_char_invalid(ch)) {
+			// chars except 0-9, A-Z, a-z, _ and - are invalid.
+			throw qtc::InvalidCharacter(ch);
+		} else {
+			// this is key's char, add it.
+			key += ch;
+		}
+	}
+
+	if (next_is_block_start) {
+		throw qtc::NoValueFoundForKey(key);
+	} else if (next_is_equal_to || !key.empty()) {
+		throw qtc::MissingEqualTo();
+	}
+
+	return key;
 }
 
 /*
@@ -70,7 +129,28 @@ std::string qtc::ConfigFile::out_block_parse()
  */
 std::string qtc::ConfigFile::in_block_parse()
 {
-	return "";
+	bool ignore_next = false;
+	unsigned char ch;
+	std::string value;
+
+	file_reader >> std::noskipws;
+
+	while (file_reader >> ch) {
+		if (ch == '\n') err_line_no++;
+		if (!ignore_next) {
+			if (ch == block_end) {
+				return value;
+			} else if (ch == ignore_next_char) {
+				ignore_next = true;
+			}	
+
+			value += ch;
+		} else {
+			ignore_next = false;
+		}
+	}
+
+	throw qtc::UnterminatedBlock();
 }
 
 
