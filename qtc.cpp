@@ -278,11 +278,60 @@ std::string qtc::ConfigFile::get_value_for_key(std::string key)
 
 void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, std::ostream &out)
 {
+	try {
+		open_file();
+	} catch(...) {
+		throw;
+	}
+
+	if (!out) {
+		throw qtc::InvalidOutputStream();
+	}
+
+	try {
+		auto key_vals = import_to_map();
+
+		for (auto &pair : key_vals) {
+			if (pair.first == key) {
+				print_key_val(out, key, new_value);
+			} else {
+				print_key_val(out, pair.first, pair.second);
+			}
+
+			out << std::endl;
+		}
+	} catch (...) {
+		throw;
+	}
+
 }
 
 void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 {
+	try {
+		open_file();
+	} catch(...) {
+		throw;
+	}
+
+	if (!out) {
+		throw qtc::InvalidOutputStream();
+	}
+
+	try {
+		auto key_vals = import_to_map();
+
+		for (auto &pair : key_vals) {
+			if (pair.first != key) {
+				print_key_val(out, pair.first, pair.second);
+				out << std::endl;
+			}
+		}
+	} catch (...) {
+		throw;
+	}
 }
+
 
 std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map()
 {
