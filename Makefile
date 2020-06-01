@@ -21,8 +21,8 @@ $(LIB): $(OBJS)
 .PHONY: clean test
 
 clean:
-	(cd tests && make clean) || exit 1
 	rm *.a *.o
+	(cd tests && make clean) || exit 1
 
 test: all
 	(cd tests && make && make run) || exit 1
