@@ -170,7 +170,52 @@ std::string qtc::ConfigFile::in_block_parse()
  */
 std::string qtc::ConfigFile::in_block_parse_and_strip_blanks()
 {
-	return "";
+	bool ignore_next = false;
+	bool skip_leading_spaces = true;
+	std::string spaces, value;
+	char ch;
+
+	file_reader >> std::noskipws;
+
+	while (file_reader >> ch) {
+		if (ch == '\n') err_line_no++;
+		if (!ignore_next) {
+			if (ch == block_end) {
+				return value;
+			} else if (ch == ignore_next_char) {
+				ignore_next = true;
+				continue;
+			} else if (ch == '\n') {
+				if (skip_leading_spaces) {
+					// blank line
+					continue;
+				}
+
+				skip_leading_spaces = true;
+				spaces = "\n";
+				continue;
+			}
+		} else {
+			ignore_next = false;
+		}
+
+		if (skip_leading_spaces && tab_or_space(ch)) {
+			continue;
+		}
+
+		skip_leading_spaces = false;
+
+		if (std::isspace(ch)) {
+			spaces += ch;
+			continue;
+		}
+
+		value += spaces;
+		spaces = "";
+		value += ch;
+	}
+	
+	throw qtc::UnterminatedBlock();
 }
 
 /*
