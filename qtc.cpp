@@ -19,7 +19,6 @@ void qtc::ConfigFile::open_file()
 		}
 	}
 }
-
 void qtc::ConfigFile::print_key_val(std::ostream &out, std::string key, std::string value)
 {
 	out << key << " = {\n";
@@ -142,7 +141,7 @@ std::string qtc::ConfigFile::in_block_parse()
 				return value;
 			} else if (ch == ignore_next_char) {
 				ignore_next = true;
-			}	
+			}
 
 			value += ch;
 		} else {
@@ -214,7 +213,7 @@ std::string qtc::ConfigFile::in_block_parse_and_strip_blanks()
 		spaces = "";
 		value += ch;
 	}
-	
+
 	throw qtc::UnterminatedBlock();
 }
 
@@ -230,7 +229,7 @@ std::string qtc::ConfigFile::in_block_parse_and_strip_blanks()
  *	InvalidCharacter
  *	MissingEqualTo
  *	TrailingCharsAfterEqualTo
- *	UnterminatedBlock 
+ *	UnterminatedBlock
  *
  * param1:
  * 	key whose value should be returned.
@@ -278,6 +277,8 @@ std::string qtc::ConfigFile::get_value_for_key(std::string key)
 
 void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, std::ostream &out)
 {
+	bool key_exists = false;
+
 	try {
 		open_file();
 	} catch(...) {
@@ -294,11 +295,16 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, 
 		for (auto &pair : key_vals) {
 			if (pair.first == key) {
 				print_key_val(out, key, new_value);
+				key_exists = true;
 			} else {
 				print_key_val(out, pair.first, pair.second);
 			}
 
 			out << std::endl;
+		}
+
+		if (!key_exists) {
+			print_key_val(out, key, new_value);
 		}
 	} catch (...) {
 		throw;
