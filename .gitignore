@@ -1,2 +1,8 @@
 *.o
 *.a
+
+#
+# for_testing_set_value_for_key.qtc would be changed every
+# time make test is run
+#
+tests/sample_qtc_files/for_testing_set_value_for_key.qtc
