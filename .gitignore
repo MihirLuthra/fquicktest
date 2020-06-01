@@ -1,5 +1,6 @@
 *.o
 *.a
+*.out
 
 #
 # for_testing_set_value_for_key.qtc would be changed every
