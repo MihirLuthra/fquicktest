@@ -240,7 +240,40 @@ std::string qtc::ConfigFile::in_block_parse_and_strip_blanks()
  */
 std::string qtc::ConfigFile::get_value_for_key(std::string key)
 {
-	return "";
+	bool key_found = false;
+	std::string cur_key;
+
+	try {
+		open_file();
+	} catch(...) {
+		throw;
+	}
+
+	// necessay cuz if some other func calls out_block_parse()
+	// it may leave file_reader to EOF
+	file_reader.seekg(0, std::ios::beg);
+	err_line_no = 1;
+
+	try {
+		while (file_reader.peek() != EOF) {
+			cur_key = out_block_parse();
+			key_found = key == cur_key ? true : false;
+
+			if (cur_key.empty()) {
+				// no more keys left to read
+				break;
+			}
+			if (!key_found) {
+				in_block_parse();
+			} else {
+				return in_block_parse_and_strip_blanks();
+			}
+		}
+	} catch (...) {
+		throw;
+	}
+
+	throw qtc::KeyNotFound(key);
 }
 
 void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, std::ostream &out)
