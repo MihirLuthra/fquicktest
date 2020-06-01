@@ -1,0 +1,15 @@
+HOW_TO_OPEN_EDITOR = {
+	vim [FILE_TO_OPEN]
+}
+
+BOILERPLATE = {
+	general.cpp
+}
+
+COMPILE = {
+	g++ [INSTANCE] -o [OUTPUT_PATH]
+}
+
+EXECUTE = {
+	[OUTPUT_PATH]
+}
