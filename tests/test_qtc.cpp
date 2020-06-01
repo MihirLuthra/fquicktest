@@ -120,10 +120,6 @@ std::tuple<std::string, bool> get_value_for_key_and_expect_value(std::string fil
  * It runs tests for all the files in sample_qtc_files/
  */
 namespace sample_qtc_files {
-
-	const std::string set_value_for_key_tmp_file = "/tmp/set_value_for_key.qtc";
-	const std::string remove_key_tmp_file = "/tmp/set_value_for_key.qtc";
-
 	void run_tests();
 	void run_tests_for_exception_checks();
 	void run_tests_for_import_to_map();
@@ -327,12 +323,18 @@ void sample_qtc_files::run_tests_for_set_value_for_key()
 	std::string key = "KEY";
 
 	bool test_result = true;
+	char *set_value_for_key_tmp_file = std::tmpnam(nullptr);
+
+	if (set_value_for_key_tmp_file == nullptr) {
+		EXCEPTION_NA("Failed to create temporary file name");
+		return;
+	}
 
 	qtc::ConfigFile file(file_name);
 	std::ofstream out_file(set_value_for_key_tmp_file);
 
 	if (!out_file) {
-		P_ERR("Failed to open %s", set_value_for_key_tmp_file.c_str());
+		P_ERR("Failed to open %s", set_value_for_key_tmp_file);
 		return;
 	}
 
@@ -377,12 +379,25 @@ void sample_qtc_files::run_tests_for_remove_key()
 	std::string key = "KEY";
 
 	bool test_result = true;
+	char * set_value_for_key_tmp_file = std::tmpnam(nullptr);
+
+	if (set_value_for_key_tmp_file == nullptr) {
+		EXCEPTION_NA("Failed to create temporary file name");
+		return;
+	}
+
+	char * remove_key_tmp_file = std::tmpnam(nullptr);
+
+	if (remove_key_tmp_file == nullptr) {
+		EXCEPTION_NA("Failed to create temporary file name");
+		return;
+	}
 
 	qtc::ConfigFile file(file_name);
 	std::ofstream out_file(set_value_for_key_tmp_file);
 
 	if (!out_file) {
-		P_ERR("Failed to open %s", set_value_for_key_tmp_file.c_str());
+		P_ERR("Failed to open %s", set_value_for_key_tmp_file);
 		return;
 	}
 
@@ -404,7 +419,7 @@ void sample_qtc_files::run_tests_for_remove_key()
 	out_file.open(remove_key_tmp_file);
 
 	if (!out_file) {
-		P_ERR("Failed to open %s", remove_key_tmp_file.c_str());
+		P_ERR("Failed to open %s", remove_key_tmp_file);
 		return;
 	}
 
