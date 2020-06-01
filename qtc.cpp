@@ -287,5 +287,33 @@ void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map()
 {
 	std::unordered_map<std::string, std::string> imported_map;
+	std::string key, value;
+
+	try {
+		open_file();
+	} catch(...) {
+		throw;
+	}
+
+	file_reader.seekg(0, std::ios::beg);
+	err_line_no = 1;
+
+	try {
+		while (file_reader.peek() != EOF) {
+			key = out_block_parse();
+
+			if (key.empty()) {
+				// no more keys left to read
+				break;
+			}
+
+			value = in_block_parse_and_strip_blanks();
+
+			imported_map.insert({key, value});
+		}
+	} catch (...) {
+		throw;
+	}
+
 	return imported_map;
 }
