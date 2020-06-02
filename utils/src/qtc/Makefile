@@ -22,7 +22,7 @@ $(LIB): $(OBJS)
 
 clean:
 	rm *.a *.o
-	(cd tests && make clean) || exit 1
+	(cd tests && make clean)
 
 test: all
 	(cd tests && make && make run) || exit 1
