@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <ctime>
+#include <error/error.hpp>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -28,14 +29,6 @@ namespace fs = std::filesystem;
 
 #define EXCEPTION_NA(fmt) \
 	printf(CYAN "%s: Line %d: " fmt "\n" RESET, __FILE__, __LINE__)
-
-#define P_ERR(fmt, ...) \
-	fprintf(stderr, BRIGHT_RED "%s: Line %d: " fmt "\n" RESET, __FILE__, __LINE__, __VA_ARGS__)
-
-#define P_ERR_NA(fmt, ...) \
-	fprintf(stderr, BRIGHT_RED "%s: Line %d: " fmt "\n" RESET, __FILE__, __LINE__)
-
-
 
 void print_test_results(bool test_result, std::string file_name)
 {
@@ -326,7 +319,7 @@ void sample_qtc_files::run_tests_for_set_value_for_key()
 	char *set_value_for_key_tmp_file = std::tmpnam(nullptr);
 
 	if (set_value_for_key_tmp_file == nullptr) {
-		EXCEPTION_NA("Failed to create temporary file name");
+		P_ERR_NA("Failed to create temporary file name");
 		return;
 	}
 
@@ -382,14 +375,14 @@ void sample_qtc_files::run_tests_for_remove_key()
 	char * set_value_for_key_tmp_file = std::tmpnam(nullptr);
 
 	if (set_value_for_key_tmp_file == nullptr) {
-		EXCEPTION_NA("Failed to create temporary file name");
+		P_ERR_NA("Failed to create temporary file name");
 		return;
 	}
 
 	char * remove_key_tmp_file = std::tmpnam(nullptr);
 
 	if (remove_key_tmp_file == nullptr) {
-		EXCEPTION_NA("Failed to create temporary file name");
+		P_ERR_NA("Failed to create temporary file name");
 		return;
 	}
 
