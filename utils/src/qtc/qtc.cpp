@@ -2,6 +2,9 @@
 #include <unordered_map>
 
 #include "qtc.hpp"
+#include <quicktest_identifier/quicktest_identifier.hpp>
+
+namespace qi = quicktest_identifier;
 
 const char block_start = '{', block_end = '}', ignore_next_char = '\\';
 
@@ -59,10 +62,6 @@ std::string qtc::ConfigFile::out_block_parse()
 
 	file_reader >> std::noskipws;
 
-	auto is_char_invalid = [](char c) -> bool {
-		return (!std::isalnum(c) && c != '_' && c != '-');
-	};
-
 	while (file_reader >> ch) {
 
 		if (ch == '\n') err_line_no++;
@@ -96,7 +95,7 @@ std::string qtc::ConfigFile::out_block_parse()
 			next_is_equal_to = true;
 		} else if (std::isspace(ch)) {
 			continue;
-		} else if (is_char_invalid(ch)) {
+		} else if (qi::is_invalid(ch)) {
 			// chars except 0-9, A-Z, a-z, _ and - are invalid.
 			throw qtc::InvalidCharacter(ch);
 		} else {
