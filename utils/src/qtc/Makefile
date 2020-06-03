@@ -1,7 +1,8 @@
 CC = g++
 AR = ar crs
 
-CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors
+IFLAGS = -I../
+CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors $(IFLAGS)
 
 LIB = libqtc.a
 
