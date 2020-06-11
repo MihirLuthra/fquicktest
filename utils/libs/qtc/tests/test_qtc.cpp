@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <ctime>
-#include <error/error.hpp>
+#include <error/error.h>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
