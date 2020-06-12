@@ -5,15 +5,16 @@ CFLAGS = -O3 -Wall -Wextra -DNDEBUG -pedantic $(IFLAGS)
 
 BIN_DIR = ../../bin
 
-SRC = getctime.c
-BIN = getctime
+NAME = getctime
+SRC = $(NAME).c
+BIN = $(NAME)
 
-all:: $(BIN)
+all: $(BIN_DIR)/$(BIN)
 
-$(BIN) : $(SRC)
-	$(CC) $(CFLAGS) $< -o $(BIN_DIR)/$(BIN)
+$(BIN_DIR)/$(BIN) : $(SRC)
+	$(CC) $(CFLAGS) $< -o $@
 
 .PHONY: clean
 
 clean:
-	rm $(BIN_DIR)/$(BIN)
+	rm $(BIN_DIR)/$(BIN) *.out
