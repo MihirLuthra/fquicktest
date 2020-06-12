@@ -7,9 +7,9 @@ NAME = is_identifier_valid
 SRC = $(NAME).cpp
 BIN = ../../../bin/$(NAME)
 
-all: $(BIN)
+.PHONY: all clean
 
-.PHONY: clean
+all: $(BIN)
 
 $(BIN): $(SRC)
 	$(CC) $(CFLAGS) $< -o $@

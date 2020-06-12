@@ -5,6 +5,8 @@ CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors $(IFLAGS)
 
 LIB = libpreprocess.so
 
+.PHONY: all clean test
+
 all: $(LIB)
 
 SRCS = preprocess.cpp
@@ -18,10 +20,9 @@ $(OBJS):
 $(LIB): $(OBJS)
 	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS)
 
-.PHONY: clean test
 
 clean:
-	rm *.a *.o *.out
+	rm *.o *.so
 	#(cd tests && make clean)
 
 #test: all

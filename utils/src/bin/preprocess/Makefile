@@ -10,13 +10,14 @@ NAME = preprocess
 SRC = $(NAME).cpp
 BIN = $(NAME)
 
+.PHONY: all clean libs
+
 all:: $(BIN)
 
 $(BIN) : $(SRC) libs
 	$(CC) $(CFLAGS) $< -o $(BIN_DIR)/$(BIN)
 	cp $(BIN_DIR)/$(BIN) $(NAME).out
 
-.PHONY: clean libs
 
 clean:
 	rm $(BIN_DIR)/$(BIN) *.out
