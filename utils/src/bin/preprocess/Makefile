@@ -4,7 +4,7 @@ LFLAGS = -L../../libs/preprocess -L../../libs/qtc -lpreprocess -lqtc
 IFLAGS = -I../../libs
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic -DNDEBUG $(LFLAGS) $(IFLAGS)
 
-BIN_DIR = ../../bin
+BIN_DIR = ../../../bin
 
 NAME = preprocess
 SRC = $(NAME).cpp

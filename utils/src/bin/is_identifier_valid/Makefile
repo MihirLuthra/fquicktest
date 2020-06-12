@@ -1,11 +1,11 @@
 CC = g++
 
-IFLAGS = -I../
+IFLAGS = -I../../libs
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic $(IFLAGS)
 
 NAME = is_identifier_valid
 SRC = $(NAME).cpp
-BIN = ../../bin/$(NAME)
+BIN = ../../../bin/$(NAME)
 
 all: $(BIN)
 

@@ -3,7 +3,7 @@ CC = gcc
 IFLAGS = -I../../libs/
 CFLAGS = -O3 -Wall -Wextra -DNDEBUG -pedantic $(IFLAGS)
 
-BIN_DIR = ../../bin
+BIN_DIR = ../../../bin
 
 NAME = getctime
 SRC = $(NAME).c
