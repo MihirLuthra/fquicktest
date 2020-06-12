@@ -12,7 +12,7 @@ BIN = $(NAME)
 
 .PHONY: all clean 
 
-all:: $(BIN)
+all: $(BIN)
 
 $(BIN) : $(SRC)
 	$(CC) $(CFLAGS) $< -o $(BIN_DIR)/$(BIN)
