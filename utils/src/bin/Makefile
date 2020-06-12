@@ -1,0 +1,13 @@
+SUBDIR=                 \
+    getctime            \
+	is_identifier_valid \
+	qtc                 \
+	preprocess 
+
+.PHONY: all clean
+
+all: all_subdir
+
+clean: all_subdir_clean
+
+include ../Mk/subdir_iterator.mk
