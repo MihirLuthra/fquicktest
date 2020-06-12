@@ -13,6 +13,9 @@ readonly DATA_DIR="$QUICKTEST_PATH/data"
 readonly COMMON_DIR="$QUICKTEST_PATH/common"
 readonly COMMANDS_DIR="$QUICKTEST_PATH/commands"
 
+readonly UTILS_BIN_DIR="$QUICKTEST_PATH/utils/bin"
+
+PATH="$UTILS_BIN_DIR:$PATH"
 PATH="$DATA_INTERFACE_DIR:$PATH"
 
 readonly USER_DATA_DIR="$DATA_DIR/user_data"
