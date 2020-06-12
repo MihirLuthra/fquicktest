@@ -1,6 +1,6 @@
 CC = g++
 
-LFLAGS = -L../../libs/preprocess -L../../libs/qtc -lpreprocess -lqtc
+LFLAGS = -L../../../libs -lpreprocess -lqtc
 IFLAGS = -I../../libs
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic -DNDEBUG $(LFLAGS) $(IFLAGS)
 

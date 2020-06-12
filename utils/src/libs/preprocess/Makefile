@@ -3,6 +3,7 @@ CC = g++
 IFLAGS = -I../
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors $(IFLAGS)
 
+LIB_DIR = ../../../libs
 LIB = libpreprocess.so
 
 .PHONY: all clean test
@@ -18,11 +19,10 @@ $(OBJS):
 	$(CC) $(CFLAGS) -c $<
 
 $(LIB): $(OBJS)
-	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS)
-
+	$(CC) $(CFLAGS) -fPIC -shared -o $(LIB_DIR)/$@ $(OBJS)
 
 clean:
-	rm *.o *.so
+	rm *.o *.so $(LIB_DIR)/$(LIB)
 	#(cd tests && make clean)
 
 #test: all
