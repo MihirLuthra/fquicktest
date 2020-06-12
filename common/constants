@@ -29,7 +29,7 @@ readonly ALIAS_FILE_PATH="$USER_DATA_DIR/alias_file"
 
 readonly USER_CONFIG_FILES_DIR="$USER_DATA_DIR/user_config_files"
 readonly BOILERPLATE_FILES_DIR="$USER_DATA_DIR/boilerplates"
-readonly CURRENT_DEFAULTS_FILE="$USER_DATA_DIR/current_defaults"
+readonly CURRENT_DEFAULTS_FILE="$USER_DATA_DIR/current_defaults.qtc"
 
 readonly USER_COMMAND_TEMPLATE="$PROGRAM_DATA_DIR/user_command_template"
 
