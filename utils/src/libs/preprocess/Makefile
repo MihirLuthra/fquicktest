@@ -4,7 +4,7 @@ IFLAGS = -I../
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors $(IFLAGS)
 
 LIB_DIR = ../../../libs
-LIB = libpreprocess.so
+LIB = $(LIB_DIR)/libpreprocess.so
 
 .PHONY: all clean test
 
@@ -19,10 +19,10 @@ $(OBJS):
 	$(CC) $(CFLAGS) -c $<
 
 $(LIB): $(OBJS)
-	$(CC) $(CFLAGS) -fPIC -shared -o $(LIB_DIR)/$@ $(OBJS)
+	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS)
 
 clean:
-	rm *.o *.so $(LIB_DIR)/$(LIB)
+	rm *.o *.so $(LIB)
 	#(cd tests && make clean)
 
 #test: all

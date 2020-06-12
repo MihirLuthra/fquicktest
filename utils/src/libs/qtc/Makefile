@@ -5,7 +5,7 @@ IFLAGS = -I../
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors $(IFLAGS)
 
 LIB_DIR = ../../../libs
-LIB = libqtc.a
+LIB = $(LIB_DIR)/libqtc.a
 
 .PHONY: all clean test
 
@@ -20,10 +20,10 @@ $(OBJS):
 	$(CC) $(CFLAGS) -c $<
 
 $(LIB): $(OBJS)
-	$(AR) $(LIB_DIR)/$@ $(OBJS)
+	$(AR) $@ $(OBJS)
 
 clean:
-	rm *.a *.o $(LIB_DIR)/$(LIB)
+	rm *.a *.o $(LIB)
 
 test: all
 	(cd tests && make && make run) || exit 1
