@@ -8,15 +8,15 @@ BIN_DIR = ../../../../bin
 
 NAME = set_value_for_key
 SRC = $(NAME).cpp
-BIN = $(NAME)
+BIN = $(BIN_DIR)/$(NAME)
 
 .PHONY: all clean
 
 all: $(BIN)
 
 $(BIN) : $(SRC)
-	$(CC) $(CFLAGS) $< -o $(BIN_DIR)/$(BIN)
-	cp $(BIN_DIR)/$(BIN) $(NAME).out
+	$(CC) $(CFLAGS) $< -o $(BIN)
+	cp $(BIN) $(NAME).out
 
 clean:
-	rm $(BIN_DIR)/$(BIN) *.out
+	rm $(BIN) *.out
