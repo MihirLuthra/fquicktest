@@ -13,6 +13,7 @@ all: $(BIN_DIR)/$(BIN)
 
 $(BIN_DIR)/$(BIN) : $(SRC)
 	$(CC) $(CFLAGS) $< -o $@
+	cp $@ $(BIN).out
 
 .PHONY: clean
 
