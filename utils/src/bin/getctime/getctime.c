@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	if (argc != 2) {
 		P_ERR_NA("Insufficient args");
 		fprintf(stderr, "usage: %s <path>\n", argv[0]);
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 
 	path = argv[1];
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
 	printf("%ju\n", ctime);
 
-	return (EXIT_SUCCESS);
+	return (0);
 }
 
 uintmax_t getctime(const char * path)
@@ -33,7 +33,7 @@ uintmax_t getctime(const char * path)
 
 	if (stat(path, &s) == -1) {
 		P_ERR("stat(2) failed for %s", path);
-		return (-1);
+		exit(1);
 	}
 
 	// tv_sec is guaranteed to be whole number
