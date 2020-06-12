@@ -1,10 +1,9 @@
 CC = g++
-AR = ar crs
 
 IFLAGS = -I../
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors $(IFLAGS)
 
-LIB = libpreprocess.a
+LIB = libpreprocess.so
 
 all: $(LIB)
 
@@ -17,7 +16,7 @@ $(OBJS):
 	$(CC) $(CFLAGS) -c $<
 
 $(LIB): $(OBJS)
-	$(AR) $@ $(OBJS)
+	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS)
 
 .PHONY: clean test
 
