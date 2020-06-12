@@ -22,5 +22,5 @@ clean:
 	rm $(BIN_DIR)/$(BIN) *.out
 
 libs:
-	(cd ../../libs/preprocess && make) || exit 1
-	(cd ../../libs/qtc && make) || exit 1
+	@(cd ../../libs/preprocess && make) || exit 1
+	@(cd ../../libs/qtc && make) || exit 1
