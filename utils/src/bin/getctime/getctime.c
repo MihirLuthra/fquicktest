@@ -1,12 +1,9 @@
 #include <sys/stat.h>
 
-#include <errno.h>
+#include <error/error.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
-#define P_ERR(fmt, ...) \
-	fprintf(stderr, "%s: Line %d: " fmt "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 
 uintmax_t getctime(const char * path);
 
@@ -15,8 +12,8 @@ int main(int argc, char *argv[])
 	uintmax_t ctime;
 	char *path;
 
-	if (argc < 2) {
-		P_ERR("Insufficient args");
+	if (argc != 2) {
+		P_ERR_NA("Insufficient args");
 		fprintf(stderr, "usage: %s <path>\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
