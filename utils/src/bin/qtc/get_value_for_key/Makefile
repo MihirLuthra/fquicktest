@@ -10,17 +10,13 @@ NAME = get_value_for_key
 SRC = $(NAME).cpp
 BIN = $(NAME)
 
-.PHONY: all clean libs
+.PHONY: all clean
 
 all:: $(BIN)
 
-$(BIN) : $(SRC) libs
+$(BIN) : $(SRC)
 	$(CC) $(CFLAGS) $< -o $(BIN_DIR)/$(BIN)
 	cp $(BIN_DIR)/$(BIN) $(NAME).out
 
-
 clean:
 	rm $(BIN_DIR)/$(BIN) *.out
-
-libs:
-	@(cd ../../../libs/qtc && make) || exit 1
