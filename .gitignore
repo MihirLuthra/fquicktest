@@ -19,3 +19,6 @@ commands/user_commands
 
 utils/bin/*
 utils/libs/*
+
+!utils/bin/.keep
+!utils/libs/.keep
