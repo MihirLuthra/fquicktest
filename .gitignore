@@ -1,3 +1,9 @@
+*.out
+*.o
+*.so
+*.a
+*.*.swp
+
 data/user_data/boilerplates/*
 data/user_data/user_config_files/*
 data/user_data/instances/*
@@ -10,3 +16,6 @@ data/user_data/current_defaults
 commands/user_commands
 
 !commands/user_commands/.keep
+
+utils/bin/*
+utils/libs/*
