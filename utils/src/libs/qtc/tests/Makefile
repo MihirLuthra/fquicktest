@@ -1,6 +1,6 @@
 CC = g++
 
-LFLAGS = -L../ -lqtc
+LFLAGS = -L../../../../libs  -lqtc
 IFLAGS = -I../../
 
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic -fsanitize=address $(IFLAGS) $(LFLAGS)
@@ -8,9 +8,7 @@ CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic -fsanitize=address $(IFLAGS) $(L
 SRC = test_qtc.cpp
 BIN = test_qtc.out
 
-LIBS = ../libqtc.a
-
-$(BIN): $(SRC) $(LIBS)
+$(BIN): $(SRC)
 	$(CC) $(CFLAGS) $< -o $@
 
 .PHONY: clean run
