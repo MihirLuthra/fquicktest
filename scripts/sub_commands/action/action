@@ -57,10 +57,14 @@ self_actions() {
 	action="$( fpreprocess <<<"$action" )" || return_error
 
 	last_arg="$( expr ${ARG_CNT[self]} - 1 )"
-	for arg_no in $(seq 1 "$last_arg")
-	do
-		action_args="$action_args '${ARGS[self,"$arg_no"]}'"
-	done
+
+	if [ $last_arg -ge 1 ]
+	then
+		for arg_no in $(seq 1 "$last_arg")
+		do
+			action_args="$action_args '${ARGS[self,"$arg_no"]}'"
+		done
+	fi
 
 	"$QTBASH" -c "$action $action_args"
 }
