@@ -57,6 +57,10 @@ public:
 	std::string get_value_for_key(std::string key);
 	void remove_key(std::string key, std::ostream &out_file);
 	std::unordered_map<std::string, std::string> import_to_map(bool exact_value = false);
+
+	// set value in the same file
+	void set_value_for_key(std::string key, std::string new_value);
+	void remove_key(std::string key);
 };
 
 class BlockWithoutAKey : public std::exception {

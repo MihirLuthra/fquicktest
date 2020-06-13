@@ -315,6 +315,48 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, 
 
 }
 
+void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value)
+{
+	bool key_exists = false;
+
+	try {
+		open_file();
+	} catch(...) {
+		throw;
+	}
+
+	try {
+		auto key_vals = import_to_map(true);
+		file_reader.close();
+
+		std::ofstream out(file_name);
+
+		if (!out) {
+			throw qtc::FileOpenFailed(file_name);
+		}
+
+		out.seekp(0, std::ios::beg);
+
+		for (auto &pair : key_vals) {
+			if (pair.first == key) {
+				print_key_val(out, key, new_value);
+				key_exists = true;
+			} else {
+				print_key_val(out, pair.first, pair.second, false);
+			}
+
+			out << std::endl;
+		}
+
+		if (!key_exists) {
+			print_key_val(out, key, new_value);
+		}
+	} catch (...) {
+		throw;
+	}
+
+}
+
 void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 {
 	try {
@@ -341,6 +383,37 @@ void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 	}
 }
 
+void qtc::ConfigFile::remove_key(std::string key)
+{
+	try {
+		open_file();
+	} catch(...) {
+		throw;
+	}
+
+	try {
+		auto key_vals = import_to_map(true);
+
+		file_reader.close();
+
+		std::ofstream out(file_name);
+
+		if (!out) {
+			throw qtc::FileOpenFailed(file_name);
+		}
+
+		out.seekp(0, std::ios::beg);
+
+		for (auto &pair : key_vals) {
+			if (pair.first != key) {
+				print_key_val(out, pair.first, pair.second, false);
+				out << std::endl;
+			}
+		}
+	} catch (...) {
+		throw;
+	}
+}
 
 std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map(bool exact_value)
 {
