@@ -125,6 +125,7 @@ prompt_if_overwrite() {
 
 	exists_but_not_file "$path" && return 1
 	[ ! -f "$path" ] && return 0
+	[ -z "$( < "$path" )" ] && return 0
 
 	printf "%s\n"                            \
 			"The file $path already exists." \
