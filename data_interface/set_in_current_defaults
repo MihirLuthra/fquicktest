@@ -15,9 +15,7 @@ set_in_current_defaults() {
 	local key=$1 ; shift
 	local value="$1" ; shift
 
-	set_value_for_key "$CURRENT_DEFAULTS_FILE" "$key" "$value"
-
-	return_if_error
+	set_value_for_key "$CURRENT_DEFAULTS_FILE" "$key" "$value" || return_error
 }
 
 set_in_current_defaults "$@"
