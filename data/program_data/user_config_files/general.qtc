@@ -1,0 +1,3 @@
+HOW_TO_OPEN_EDITOR = {
+	vim '[VAR](FILE_TO_OPEN)'
+}
