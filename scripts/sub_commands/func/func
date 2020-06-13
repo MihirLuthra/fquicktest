@@ -11,7 +11,7 @@ source "$DATA_INTERFACE_DIR"/utility_funcs
 
 source "$SCRIPTS_DIR"/option_parser
 
-source ./func_error_handler
+source "$SCRIPTS_DIR"/sub_commands/func/func_error_handler
 set +e
 
 print_usage() {
