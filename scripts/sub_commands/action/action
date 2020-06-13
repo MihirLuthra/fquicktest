@@ -47,6 +47,8 @@ parse_action_options() {
 self_actions() {
 	local action_key
 	local action
+	local action_args
+	local last_arg
 
 	action_key=${ARGS[self,0]}
 
@@ -54,7 +56,13 @@ self_actions() {
 
 	action="$( fpreprocess <<<"$action" )" || return_error
 
-	"$QTBASH" -c "$action"
+	last_arg="$( expr ${ARG_CNT[self]} - 1 )"
+	for arg_no in $(seq 1 "$last_arg")
+	do
+		action_args="$action_args '${ARGS[self,"$arg_no"]}'"
+	done
+
+	"$QTBASH" -c "$action $action_args"
 }
 
 option_delete() {
