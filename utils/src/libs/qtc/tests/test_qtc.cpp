@@ -316,33 +316,18 @@ void sample_qtc_files::run_tests_for_set_value_for_key()
 	std::string key = "KEY";
 
 	bool test_result = true;
-	char *set_value_for_key_tmp_file = std::tmpnam(nullptr);
-
-	if (set_value_for_key_tmp_file == nullptr) {
-		P_ERR_NA("Failed to create temporary file name");
-		return;
-	}
 
 	qtc::ConfigFile file(file_name);
-	std::ofstream out_file(set_value_for_key_tmp_file);
-
-	if (!out_file) {
-		P_ERR("Failed to open %s", set_value_for_key_tmp_file);
-		return;
-	}
 
 	std::cout << "Setting key \"" << key << "\" to value \"" << value << "\"\n";
 
 	try {
-		file.set_value_for_key(key, value, out_file);
-		fs::rename(set_value_for_key_tmp_file, file_name);
+		file.set_value_for_key(key, value);
 	} catch(std::exception &e) {
 		EXCEPTION("Exception occured with qtc::ConfigFile::set_value_for_key(): %s", e.what());
 	} catch(...) {
 		EXCEPTION_NA("Unknown exception occured with qtc::ConfigFile::set_value_for_key()\n");
 	}
-
-	out_file.close();
 
 	bool result;
 	std::string val;
@@ -372,60 +357,28 @@ void sample_qtc_files::run_tests_for_remove_key()
 	std::string key = "KEY";
 
 	bool test_result = true;
-	char * set_value_for_key_tmp_file = std::tmpnam(nullptr);
-
-	if (set_value_for_key_tmp_file == nullptr) {
-		P_ERR_NA("Failed to create temporary file name");
-		return;
-	}
-
-	char * remove_key_tmp_file = std::tmpnam(nullptr);
-
-	if (remove_key_tmp_file == nullptr) {
-		P_ERR_NA("Failed to create temporary file name");
-		return;
-	}
 
 	qtc::ConfigFile file(file_name);
-	std::ofstream out_file(set_value_for_key_tmp_file);
-
-	if (!out_file) {
-		P_ERR("Failed to open %s", set_value_for_key_tmp_file);
-		return;
-	}
 
 	std::cout << "Setting key \"" << key << "\" to value \"" << value << "\"\n";
 
 	try {
-		file.set_value_for_key(key, value, out_file);
-		fs::rename(set_value_for_key_tmp_file, file_name);
+		file.set_value_for_key(key, value);
 	} catch(std::exception &e) {
 		EXCEPTION("Exception occured with qtc::ConfigFile::set_value_for_key(): %s", e.what());
 	} catch(...) {
 		EXCEPTION_NA("Unknown exception occured with qtc::ConfigFile::set_value_for_key()\n");
 	}
 
-	out_file.close();
-
 	std::cout << "Removing key \"" << key << "\"\n";
 
-	out_file.open(remove_key_tmp_file);
-
-	if (!out_file) {
-		P_ERR("Failed to open %s", remove_key_tmp_file);
-		return;
-	}
-
 	try {
-		file.remove_key(key, out_file);
-		fs::rename(remove_key_tmp_file, file_name);
+		file.remove_key(key);
 	} catch(std::exception &e) {
 		EXCEPTION("Exception occured with qtc::ConfigFile::remove_key(): %s", e.what());
 	} catch(...) {
 		EXCEPTION_NA("Unknown exception occured with qtc::ConfigFile::remove_key()\n");
 	}
-
-	out_file.close();
 
 	try {
 		std::cout << "Searching key \"" << key << "\"\n";
