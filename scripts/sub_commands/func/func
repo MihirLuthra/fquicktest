@@ -78,6 +78,8 @@ option_create_func() {
 	    > "$func_path"        \
 	    || return_error
 
+	chmod +x "$func_path"
+
 	open_file "$func_path" || return_error
 }
 
