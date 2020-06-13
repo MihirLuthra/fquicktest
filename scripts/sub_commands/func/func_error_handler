@@ -1,0 +1,26 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/"common
+
+set -e
+source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/constants
+set +e
+
+f_print_if_func_name_invalid() {
+	local line=$1 ; shift
+	local file_path=$1 ; shift
+	local func_name=$1
+
+	if ! is_identifier_valid "$func_name"
+	then
+		echo_err "$file_path: Line $line: " "Invalid func name $func_name. Funcion name can only contain alphabets, numbers and underscore."
+		return 0
+	fi
+
+	return 1
+}
+
+alias print_if_func_name_invalid='f_print_if_func_name_invalid "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+
+shopt -s expand_aliases

@@ -1,0 +1,41 @@
+func
+	[-a|--alias-file]
+	[-c|--create-func <func_name>]
+	[-d|--delete [<func_name>]]
+	[-h|--help]
+	[-m|--modify-func [<func_name>]]
+	[-r|--rename-file]
+	[-s|--show-all]
+
+
+[-a|--alias-file]:
+	This file is for creating aliases. A value needs to
+	be given to the alias which can contain a combination
+	of functions and/or text. When preprocessing file, a search
+	is made for these alias names and their preprocessed value
+	is substituted.
+
+[-c|--create-func <func_name>]:
+	Just opens the file in which function can be defined.
+
+[-d|--delete [<func_name>]]:
+	Will execute `rm -i` for the given func name.
+	If no arg is supplied, fzf search menu opens up.
+
+[-h|--help]:
+	Shows help for function in less.
+
+[-m|--modify-func [<func_name>]]:
+	Just opens the file in which function can be modified.
+	If no arg is supplied, fzf search menu opens up.
+
+[-r|--rename-file]:
+	This file is for renaming the existing aliases or funcs.
+	There can be a rare case when I file contains a quicktest
+	func in its text which would get replaced but wasn't intended to
+	be that way. Rename file can be used to give a new name to
+	that func so that preprocessor doesn't process that text in
+	the target file.
+
+[-s|--show-all]:
+	Shows all funcs.

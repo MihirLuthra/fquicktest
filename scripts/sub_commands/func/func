@@ -1,0 +1,165 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/"common
+
+set -e
+source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/utility_funcs
+
+source "$DATA_INTERFACE_DIR"/utility_funcs
+
+source "$SCRIPTS_DIR"/option_parser
+
+source ./func_error_handler
+set +e
+
+print_usage() {
+	printf_err "%s\n"                                  \
+	'quicktest func'                                   \
+	'    [-a|--alias-file]'                            \
+	'    [-c|--create-func <func_name>]'               \
+	'    [-d|--delete [<func_name>]]'                  \
+	'    [-h|--help]'                                  \
+	'    [-m|--modify-func [<func_name>]]'             \
+	'    [-r|--rename-file]'                           \
+	'    [-s|--show-all]'
+}
+
+parse_func_options() {
+	local option_parser_retval
+
+	parse_options \
+		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
+		                                                 \
+		'-a' , '--alias-file'                  '0'       \
+		'-c' , '--create-func'                 '1'       \
+		'-d' , '--delete'                      '-1'      \
+		'-h' , '--help'                        '0'       \
+		'-m' , '--modify-func'                 '-1'      \
+		'-r' , '--rename-file'                 '0'       \
+		'-s' , '--show-all'                    '0'       \
+		                                                 \
+		';'                                              \
+		"$@"
+
+	option_parser_retval=$?
+
+	if [ $option_parser_retval -ne 0 ] ; then
+		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		print_usage
+		return_error
+	fi
+}
+
+option_alias_file() {
+	open_file "$ALIAS_FILE_PATH" || return_error
+}
+
+option_create_func() {
+	local func_name
+	local func_path
+	local contents
+
+	func_name=${ARGS[-c,0]}
+
+	print_if_func_name_invalid "$func_name" && return_error
+
+	func_path="$USER_FUNC_DIR/$func_name"
+
+	prompt_if_overwrite "$func_path" || return_error
+
+	contents=$( < "$FUNC_TEMPLATE" )
+
+	replace                   \
+	    "$FUNC_NAME_REPLACEE" \
+	    "$func_name"          \
+	    "$contents"           \
+	    > "$func_path"        \
+	    || return_error
+
+	open_file "$func_path" || return_error
+}
+
+option_delete() {
+	local func_name
+	local func_path
+
+	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
+	then
+		func_name=${ARGS[-d,0]}
+	else
+		func_name="$( fzf_search "SELECT FUNC(-d)" "$USER_FUNC_DIR" )"
+		[ -z "$func_name" ] && return_error
+	fi
+
+	func_path="$USER_FUNC_DIR/$func_name"
+
+	print_if_not_file "$func_path" && return_error
+
+	rm -i "$func_path" || return_error
+}
+
+option_help() {
+	less "$( dirname $BASH_SOURCE )/help.txt"
+}
+
+option_modify_func() {
+	local func_name
+	local func_path
+
+	if [ ${ARG_CNT[-m]:-0} -eq 1 ]
+	then
+		func_name=${ARGS[-m,0]}
+	else
+		func_name="$( fzf_search "SELECT FUNC(-m)" "$USER_FUNC_DIR" )"
+		[ -z "$func_name" ] && return_error
+	fi
+
+	func_path="$USER_FUNC_DIR/$func_name"
+
+	open_file "$func_path" || return_error
+}
+
+option_rename_file() {
+	open_file "$RENAME_FILE_PATH" || return_error
+}
+
+option_show_all() {
+	find_by_ctime "$USER_FUNC_DIR"
+}
+
+func() {
+	parse_func_options "$@" || return_error
+
+	for option in "${!OPTIONS[@]}"
+	do
+		case "$option" in
+			-a)
+				option_alias_file || return_error
+				;;
+			-c)
+				option_create_func || return_error
+				;;
+			-d)
+				option_delete || return_error
+				;;
+			-h)
+				option_help
+				;;
+			-m)
+				option_modify_func || return_error
+				;;
+			-r)
+				option_rename_file || return_error
+				;;
+			-s)
+				option_show_all
+				;;
+		esac
+	done
+
+	return 0
+}
+
+func "$@"
