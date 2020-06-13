@@ -37,7 +37,7 @@ private:
 	unsigned int err_line_no;
 
 	void open_file();
-	void print_key_val(std::ostream &out, std::string key, std::string value);
+	void print_key_val(std::ostream &out, std::string key, std::string value, bool add_spaces);
 	std::string out_block_parse();
 	std::string in_block_parse();
 	std::string in_block_parse_and_strip_blanks();
@@ -56,7 +56,7 @@ public:
 	void set_value_for_key(std::string key, std::string new_value, std::ostream &out_file);
 	std::string get_value_for_key(std::string key);
 	void remove_key(std::string key, std::ostream &out_file);
-	std::unordered_map<std::string, std::string> import_to_map();
+	std::unordered_map<std::string, std::string> import_to_map(bool exact_value = false);
 };
 
 class BlockWithoutAKey : public std::exception {

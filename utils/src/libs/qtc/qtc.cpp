@@ -22,10 +22,14 @@ void qtc::ConfigFile::open_file()
 		}
 	}
 }
-void qtc::ConfigFile::print_key_val(std::ostream &out, std::string key, std::string value)
+void qtc::ConfigFile::print_key_val(std::ostream &out, std::string key, std::string value, bool add_spaces = true)
 {
-	out << key << " = {\n";
-	out << "\t" << value << "\n";
+	out << key << " = {";
+	if (add_spaces) {
+		out << "\n\t" << value << "\n";
+	} else {
+		out << value;
+	}
 	out << "}\n";
 }
 
@@ -123,7 +127,7 @@ std::string qtc::ConfigFile::out_block_parse()
  * 	UnterminatedBlock
  *
  * retval:
- *  returns the contents inside {}
+ *  returns the exact contents inside {}
  */
 std::string qtc::ConfigFile::in_block_parse()
 {
@@ -141,11 +145,10 @@ std::string qtc::ConfigFile::in_block_parse()
 			} else if (ch == ignore_next_char) {
 				ignore_next = true;
 			}
-
-			value += ch;
 		} else {
 			ignore_next = false;
 		}
+		value += ch;
 	}
 
 	throw qtc::UnterminatedBlock();
@@ -156,7 +159,8 @@ std::string qtc::ConfigFile::in_block_parse()
  * This works like in_block_parse() but
  * returns the value inside block with
  * leading and trailing tabs/spaces removed from every line.
- * Blank lines are also removed.
+ * Blank lines are also removed. First layer of backslashes
+ * is removed from the return value.
  *
  * possible exceptions:
  * 	UnterminatedBlock
@@ -164,7 +168,7 @@ std::string qtc::ConfigFile::in_block_parse()
  * retval:
  * 	returns the value inside the block
  * 	with leading and trailing spaces
- * 	removed from each line of value.
+ * 	remioved from each line of value.
  */
 std::string qtc::ConfigFile::in_block_parse_and_strip_blanks()
 {
@@ -289,14 +293,14 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, 
 	}
 
 	try {
-		auto key_vals = import_to_map();
+		auto key_vals = import_to_map(true);
 
 		for (auto &pair : key_vals) {
 			if (pair.first == key) {
 				print_key_val(out, key, new_value);
 				key_exists = true;
 			} else {
-				print_key_val(out, pair.first, pair.second);
+				print_key_val(out, pair.first, pair.second, false);
 			}
 
 			out << std::endl;
@@ -324,11 +328,11 @@ void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 	}
 
 	try {
-		auto key_vals = import_to_map();
+		auto key_vals = import_to_map(true);
 
 		for (auto &pair : key_vals) {
 			if (pair.first != key) {
-				print_key_val(out, pair.first, pair.second);
+				print_key_val(out, pair.first, pair.second, false);
 				out << std::endl;
 			}
 		}
@@ -338,7 +342,7 @@ void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 }
 
 
-std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map()
+std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map(bool exact_value)
 {
 	std::unordered_map<std::string, std::string> imported_map;
 	std::string key, value;
@@ -361,7 +365,11 @@ std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map()
 				break;
 			}
 
-			value = in_block_parse_and_strip_blanks();
+			if (exact_value) {
+				value = in_block_parse();
+			} else {
+				value = in_block_parse_and_strip_blanks();
+			}
 
 			imported_map.insert({key, value});
 		}
