@@ -12,8 +12,6 @@ namespace fs = std::filesystem;
 struct ArgParser {
 	std::string program_name;
 
-	std::string file_name;
-
 	int func_dirs_cnt;
 	std::vector<std::string> func_dirs;
 
@@ -67,14 +65,7 @@ int main(int argc, char *argv[])
 
 	rename_in_rmap(rmap);
 
-	std::ifstream to_preprocess(args.file_name);
-
-	if (!to_preprocess) {
-		P_ERR("Failed to open file %s", args.file_name.c_str());
-		exit(1);
-	}
-
-	Preprocessor p(to_preprocess, std::cout);
+	Preprocessor p(std::cin, std::cout);
 
 	try {
 		p.preprocess(rmap);
@@ -197,14 +188,12 @@ void ArgParser::parse(int argc, char *argv[])
 	 * func dir cnt, alias file cnt
 	 * and rename file cnt, each of which can be 0.
 	 */
-	if (argc < 4) {
+	if (argc < 3) {
 		P_ERR_NA("Insufficient args");
 		usage();
 	}
 
-	args.file_name = argv[1];
-
-	int arg_no = 2;
+	int arg_no = 1;
 	int remaining = 3;
 
 	// gets_args() follows the pattern <count> [<count_names>...] to fill up global variable args
