@@ -15,9 +15,9 @@ static inline bool tab_or_space(char c)
 
 void qtc::ConfigFile::open_file()
 {
-	if (!this->file_reader.is_open()) {
-		this->file_reader.open(this->file_name);
-		if (!this->file_reader) {
+	if (!file_reader.is_open()) {
+		file_reader.open(file_name);
+		if (!file_reader) {
 			throw qtc::FileOpenFailed(file_name);
 		}
 	}
