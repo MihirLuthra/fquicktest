@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	qtc::ConfigFile file(args.file_name);
 
 	try {
-		file.remove_key(args.key, std::cout);
+		file.remove_key(args.key);
 	} catch(std::exception &e) {
 		P_ERR("%s: Line %d: %s", args.file_name.c_str(), file.get_err_line(), e.what());
 		exit(1);
