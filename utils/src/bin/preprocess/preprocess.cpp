@@ -125,6 +125,11 @@ replace_map make_func_replace_map()
 void add_aliases_to_rmap(replace_map &rmap)
 {
 	for (auto alias_file_name : args.alias_files) {
+
+		if (!fs::exists(alias_file_name)) {
+			continue;
+		}
+
 		qtc::ConfigFile afile(alias_file_name);
 		std::unordered_map<std::string, std::string> amap;
 
@@ -156,6 +161,11 @@ void add_aliases_to_rmap(replace_map &rmap)
 void rename_in_rmap(replace_map &rmap)
 {
 	for (const auto &rename_file_name : args.rename_files) {
+
+		if (!fs::exists(rename_file_name)) {
+			continue;
+		}
+
 		qtc::ConfigFile rnfile(rename_file_name);
 
 		std::unordered_map<std::string, std::string> rnmap;
