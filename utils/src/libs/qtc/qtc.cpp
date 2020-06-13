@@ -318,16 +318,20 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, 
 void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value)
 {
 	bool key_exists = false;
+	bool file_open_failed = false;
+	std::unordered_map<std::string, std::string> key_vals;
 
 	try {
 		open_file();
 	} catch(...) {
-		throw;
+		file_open_failed = true;
 	}
 
 	try {
-		auto key_vals = import_to_map(true);
-		file_reader.close();
+		if (!file_open_failed) {
+			key_vals = import_to_map(true);
+			file_reader.close();
+		}
 
 		std::ofstream out(file_name);
 
