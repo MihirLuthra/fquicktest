@@ -15,6 +15,13 @@ readonly COMMANDS_DIR="$QUICKTEST_PATH/commands"
 
 readonly UTILS_BIN_DIR="$QUICKTEST_PATH/utils/bin"
 
+if [[ "$OSTYPE" == "darwin"* ]]
+then
+	export DYLD_LIBRARY_PATH="$QUICKTEST_PATH/utils/libs:$DYLD_LIBRARY_PATH"
+else
+	export LD_LIBRARY_PATH="$QUICKTEST_PATH/utils/libs:$LD_LIBRARY_PATH"
+fi
+
 PATH="$UTILS_BIN_DIR:$PATH"
 PATH="$DATA_INTERFACE_DIR:$PATH"
 
