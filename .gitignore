@@ -3,6 +3,7 @@
 *.so
 *.a
 *.*.swp
+.DS_Store
 
 data/user_data/boilerplates/*
 data/user_data/user_config_files/*
