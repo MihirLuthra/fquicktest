@@ -1,0 +1,55 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/common"
+
+set -e
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/error_handler
+set +e
+
+# quicktest vars:
+#
+#  FILE_TO_OPEN
+#      Represents the file that is going to get opened as per the current_defaults.
+#      This can be file opened for modifying a user config, an instance etc.
+#
+#  INSTANCE
+#      Current instance name
+#
+#  INSTANCES_DIR
+#      Directory where instances are stored
+#
+#  OUTPUT_DIR
+#      A separate directory dedicated to store output files.
+#
+#  QUICKTEST_PATH
+#      Path where quicktest is installed.
+#
+VAR() {
+	local var="$1" ; shift
+	local value
+
+	case "$var" in
+		'FILE_TO_OPEN')
+			value="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "FILE_TO_OPEN" )"
+			;;
+		'INSTANCE')
+			value="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "INSTANCE" )"
+			;;
+		'INSTANCES_DIR')
+			value=$INSTANCES_DIR
+			;;
+		'OUTPUT_DIR')
+			value=$OUTPUT_DIR
+			;;
+		'QUICKTEST_PATH')
+			value="$QUICKTEST_PATH"
+			;;
+	esac
+
+	return_if_error
+
+	printf "%s" "$value"
+}
+
+VAR "$@"
