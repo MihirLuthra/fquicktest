@@ -52,7 +52,7 @@ self_actions() {
 
 	action="$( get_from_user_config_file "$action_key" )" || return_error
 
-	action="$( replace_quicktest_vars "$action" )" || return_error
+	action="$( fpreprocess <<<"$action" )" || return_error
 
 	"$QTBASH" -c "$action"
 }

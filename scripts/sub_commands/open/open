@@ -180,7 +180,7 @@ write_boilerplate_to_instance() {
 
 	prompt_if_overwrite "$instance_path" || return_error
 
-	replace_quicktest_vars "$( < "$boilerplate_path" )" > "$instance_path" || return_error
+	fpreprocess < "$boilerplate_path" > "$instance_path" || return_error
 }
 
 open() {
