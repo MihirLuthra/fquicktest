@@ -1,3 +1,3 @@
 #! /usr/bin/env bash
 
-"$QTBASH" "$QUICKTEST_PATH/commands/program_commands/quicktest" action "___ACTION_KEY___"
+"$QTBASH" "$QUICKTEST_PATH/commands/program_commands/quicktest" action "___ACTION_KEY___" "$@"
