@@ -22,7 +22,7 @@ get_by_relative_cnt() {
         return_error
     fi
 
-	find_by_ctime "$dir" | gawk -v line="$cnt" '
+	list_time_sorted_null_term "$dir" | gawk -v line="$cnt" '
 		BEGIN {
 			RS="\0"
 		}

@@ -51,7 +51,7 @@ bold_printf() {
 	printf "$OFF_BOLD"
 }
 
-find_by_ctime() {
+list_time_sorted_null_term() {
 	local from_dir=$1 ; shift
 
 	# go to the directory and check glob *, if glob is null, next block will be evaluated
@@ -93,7 +93,7 @@ fzf_search() {
 	local header=$1 ; shift
 	local from_dir=$1 ; shift
 
-	find_by_ctime "$from_dir" \
+	list_time_sorted_null_term "$from_dir" \
 		| fzf -0 --read0 --reverse --height=40% --cycle --header="$header" || return_error
 }
 
@@ -106,7 +106,7 @@ fzf_multi_select_search() {
 	local from_dir=$1 ; shift
 	local contents
 
-	contents="$( find_by_ctime "$from_dir" )" || return_error
+	contents="$( list_time_sorted_null_term "$from_dir" )" || return_error
 
 	echo "$contents" | fzf -m --read0 --reverse --height=40% --cycle --header="$header"
 }
