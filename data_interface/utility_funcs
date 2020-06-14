@@ -46,3 +46,15 @@ current_instance_path() {
 
 	printf "%s" "$instance_full_path"
 }
+
+get_from_user_config_file_or_default() {
+	local key=$1
+
+	get_from_user_config_file "$key"
+
+	if [ $? -ne 0 ]
+	then
+		a_echo_err "Error in getting key from user config file, trying default user config file"
+		get_from_default_user_config_file "$key" || return_error
+	fi
+}
