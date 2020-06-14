@@ -7,6 +7,7 @@ readonly __UTILITY_FUNCS__=1
 COMMON_PATH="$QUICKTEST_PATH/"common
 source "$COMMON_PATH"/error_handler
 source "$COMMON_PATH"/constants
+source "$DATA_INTERFACE_DIR"/utility_funcs
 
 is_num() {
 	case "$1" in
@@ -167,7 +168,7 @@ open_file() {
 
 	set_in_current_defaults "$FILE_TO_OPEN_KEY" "$file" || return_error
 
-	open="$(get_from_user_config_file "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
+	open="$(get_from_user_config_file_or_default "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
 
 	"$QTBASH" -c "$open" || return_error
 }
