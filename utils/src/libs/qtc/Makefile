@@ -14,7 +14,7 @@ all: $(LIB)
 SRCS = qtc.cpp
 OBJS = $(SRCS:%.cpp=%.o)
 
-qtc.o : qtc.cpp qtc.hpp
+qtc.o : qtc.cpp qtc.hpp ../quicktest_identifier/quicktest_identifier.hpp
 
 $(OBJS): 
 	$(CC) $(CFLAGS) -c $<

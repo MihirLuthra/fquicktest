@@ -13,7 +13,7 @@ all: $(LIB)
 SRCS = preprocess.cpp
 OBJS = $(SRCS:%.cpp=%.o)
 
-preprocess.o : preprocess.cpp preprocess.hpp
+preprocess.o : preprocess.cpp preprocess.hpp ../quicktest_identifier/quicktest_identifier.hpp
 
 $(OBJS):
 	$(CC) $(CFLAGS) -c $<

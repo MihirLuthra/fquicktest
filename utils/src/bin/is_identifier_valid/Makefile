@@ -11,7 +11,7 @@ BIN = ../../../bin/$(NAME)
 
 all: $(BIN)
 
-$(BIN): $(SRC)
+$(BIN): $(SRC) ../../libs/quicktest_identifier/quicktest_identifier.hpp
 	$(CC) $(CFLAGS) $< -o $@
 	cp $@ $(NAME).out
 
