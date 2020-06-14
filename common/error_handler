@@ -50,10 +50,10 @@ quicktest_path_normalize() {
 	printf "$abs_path"
 }
 
-alias a_echo_err='echo_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
-alias a_cecho_err='cecho_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
-alias a_printf_err='printf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
-alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO: " '
+alias a_echo_err='echo_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
+alias a_cecho_err='cecho_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
+alias a_printf_err='printf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
+alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
 
 alias return_if_error='
 	if [ $? -ne 0 ] ; then
