@@ -4,7 +4,7 @@
 readonly __SUB_COMMANDS_COMMON__=1
 
 option_help() {
-	less "$( dirname $BASH_SOURCE )/help.txt"
+	less "$( dirname $0 )/help.txt"
 }
 
 get_by_relative_cnt() {
