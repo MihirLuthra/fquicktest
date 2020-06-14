@@ -18,6 +18,7 @@ void qtc::ConfigFile::open_file()
 	if (!file_reader.is_open()) {
 		file_reader.open(file_name);
 		if (!file_reader) {
+			err_line_no = 0;
 			throw qtc::FileOpenFailed(file_name);
 		}
 	}
@@ -275,6 +276,7 @@ std::string qtc::ConfigFile::get_value_for_key(std::string key)
 		throw;
 	}
 
+	err_line_no = 0;
 	throw qtc::KeyNotFound(key);
 }
 
@@ -289,6 +291,7 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, 
 	}
 
 	if (!out) {
+		err_line_no = 0;
 		throw qtc::InvalidOutputStream();
 	}
 
@@ -336,6 +339,7 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value)
 		std::ofstream out(file_name);
 
 		if (!out) {
+			err_line_no = 0;
 			throw qtc::FileOpenFailed(file_name);
 		}
 
@@ -370,6 +374,7 @@ void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 	}
 
 	if (!out) {
+		err_line_no = 0;
 		throw qtc::InvalidOutputStream();
 	}
 
@@ -403,6 +408,7 @@ void qtc::ConfigFile::remove_key(std::string key)
 		std::ofstream out(file_name);
 
 		if (!out) {
+			err_line_no = 0;
 			throw qtc::FileOpenFailed(file_name);
 		}
 
