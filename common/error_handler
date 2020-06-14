@@ -53,7 +53,7 @@ quicktest_path_normalize() {
 	printf "$abs_path"
 }
 
-alias a_echo_err='echo_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
+alias a_echo_err='echo_err "$BOLD$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:$BOLD_OFF" '
 alias a_cecho_err='cecho_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
 alias a_printf_err='printf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
 alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
@@ -74,7 +74,7 @@ f_print_if_key_is_null() {
 
 	if [ -z "$2" ]
 	then
-		echo_err "$file_path: Line $line: " "key $1 is empty"
+		echo_err "$BOLD$file_path: Line $line:$BOLD_OFF" "key $1 is empty"
 		return 0
 	fi
 
@@ -87,7 +87,7 @@ f_print_if_not_file() {
 
 	if [ ! -f "$1" ]
 	then
-		echo_err "$file_path: Line $line: " "$1 : No such file"
+		echo_err "$BOLD$file_path: Line $line:$BOLD_OFF" "$1 : No such file"
 		return 0
 	fi
 
@@ -100,7 +100,7 @@ f_exists_but_not_file() {
 
 	if [ ! -f "$1" ] && [ -e "$1" ]
 	then
-		echo_err "$file_path: Line $line: " "$1 exists but isn't a file"
+		echo_err "$BOLD$file_path: Line $line:$BOLD_OFF" "$1 exists but isn't a file"
 		return 0
 	fi
 
