@@ -12,6 +12,7 @@ source "$DATA_INTERFACE_DIR"/utility_funcs
 source "$SCRIPTS_DIR"/option_parser
 
 source "$SCRIPTS_DIR"/sub_commands/func/func_error_handler
+source "$SUB_COMMANDS_DIR"/common
 set +e
 
 print_usage() {
@@ -100,10 +101,6 @@ option_delete() {
 	print_if_not_file "$func_path" && return_error
 
 	rm -i "$func_path" || return_error
-}
-
-option_help() {
-	less "$( dirname $BASH_SOURCE )/help.txt"
 }
 
 option_modify_func() {

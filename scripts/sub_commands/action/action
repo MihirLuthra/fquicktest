@@ -10,6 +10,7 @@ source "$COMMON_PATH"/utility_funcs
 source "$DATA_INTERFACE_DIR"/utility_funcs
 
 source "$SCRIPTS_DIR"/option_parser
+source "$SUB_COMMANDS_DIR"/common
 set +e
 
 print_usage() {
@@ -86,10 +87,6 @@ option_delete() {
 	print_if_not_file "$action_full_path" && return_error
 
 	rm -i "$action_full_path" || return_error
-}
-
-option_help() {
-	less "$( dirname $BASH_SOURCE )/help.txt"
 }
 
 option_register() {
