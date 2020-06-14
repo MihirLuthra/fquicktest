@@ -22,5 +22,12 @@ get_by_relative_cnt() {
         return_error
     fi
 
-	find_by_ctime "$dir" | sed -n "$cnt"p || return_error
+	find_by_ctime "$dir" | gawk -v line="$cnt" '
+		BEGIN {
+			RS="\0"
+		}
+		NR == line {
+			print
+		}
+	' || return_error
 }
