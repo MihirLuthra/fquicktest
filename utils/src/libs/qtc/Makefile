@@ -1,11 +1,10 @@
 CC = g++
-AR = ar crs
 
 IFLAGS = -I../
 CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors $(IFLAGS)
 
 LIB_DIR = ../../../libs
-LIB = $(LIB_DIR)/libqtc.a
+LIB = $(LIB_DIR)/libqtc.so
 
 .PHONY: all clean test
 
@@ -20,7 +19,7 @@ $(OBJS):
 	$(CC) $(CFLAGS) -c $<
 
 $(LIB): $(OBJS)
-	$(AR) $@ $(OBJS)
+	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS)
 
 clean:
 	rm *.o $(LIB)
