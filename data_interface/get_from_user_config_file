@@ -20,15 +20,11 @@ get_from_user_config_file() {
 	local user_config_file_path
 	local value
 
-	user_config_file_name="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "$USER_CONFIG_FILE_KEY" )"
+	user_config_file_name="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "$USER_CONFIG_FILE_KEY" )" \
+		|| return_error
 
-	if [ $? -eq 0 ]
-	then
-		print_if_key_is_null "$USER_CONFIG_FILE_KEY" "$user_config_file_name" && return 1
-		user_config_file_path="$USER_CONFIG_FILES_DIR/$user_config_file_name"
-	else
-		user_config_file_path="$DEFAULT_USER_CONFIG_FILE"
-	fi
+	print_if_key_is_null "$USER_CONFIG_FILE_KEY" "$user_config_file_name" && return 1
+	user_config_file_path="$USER_CONFIG_FILES_DIR/$user_config_file_name"
 
 	value="$( get_value_for_key "$user_config_file_path" "$key" )" || return_error
 
