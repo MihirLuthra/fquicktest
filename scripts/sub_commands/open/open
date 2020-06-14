@@ -9,6 +9,7 @@ source "$COMMON_PATH"/utility_funcs
 source "$DATA_INTERFACE_DIR"/utility_funcs
 
 source "$SCRIPTS_DIR"/option_parser
+source "$SUB_COMMANDS_DIR"/common
 set +e
 
 print_usage() {
@@ -143,16 +144,8 @@ option_instance() {
 instance_by_relative_cnt() {
 	local instance
 	local instance_full_path
-	local cnt=${ARGS[self,0]}
 
-
-	if ! is_num "$cnt"
-	then
-		a_echo_err "$cnt: invalid relative count"
-		return_error
-	fi
-
-	instance="$( find_by_ctime "$INSTANCES_DIR" | sed -n "$cnt"p )"
+	instance="$( get_by_relative_cnt "$INSTANCES_DIR" )"
 
 	[ -z "$instance" ] && return_error
 
