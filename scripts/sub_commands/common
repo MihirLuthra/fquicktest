@@ -31,3 +31,24 @@ get_by_relative_cnt() {
 		}
 	' || return_error
 }
+
+delete_files() {
+	local dir=$1 ; shift
+	local message=$1
+	local files
+	local full_path
+
+	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
+    then
+		files=( "${ARGS[-d,0]}" )
+    else
+		IFS= readarray -t -d '' files < <( fzf_multi_select_search "$message" "$dir" --print0 )
+    fi
+
+	for file in "${files[@]}"
+	do
+		full_path="$dir/$file"
+    	print_if_not_file "$full_path" && return_error
+    	rm -i "$full_path" || return_error
+	done
+}

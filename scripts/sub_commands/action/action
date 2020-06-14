@@ -71,22 +71,7 @@ self_actions() {
 }
 
 option_delete() {
-	local action
-	local action_full_path
-
-	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
-	then
-		action=${ARGS[-d,0]}
-	else
-		action="$( fzf_search "SELECT ACTION(-d)" "$USER_COMMANDS_DIR" )"
-		[ -z "$action" ] && return_error
-	fi
-
-	action_full_path="$USER_COMMANDS_DIR/$action"
-
-	print_if_not_file "$action_full_path" && return_error
-
-	rm -i "$action_full_path" || return_error
+	delete_files "$USER_COMMANDS_DIR" "SELECT ACTION(-d)" || return_error
 }
 
 option_register() {

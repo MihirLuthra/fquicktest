@@ -63,24 +63,7 @@ option_current() {
 }
 
 option_delete() {
-	local user_config_full_path
-	local user_config
-
-	user_config=${ARGS[-d,0]}
-
-	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
-	then
-		user_config=${ARGS[-d,0]}
-	else
-		user_config="$( fzf_search "SELECT USER CONFIG(-u)" "$USER_CONFIG_FILES_DIR" )"
-		[ -z "$user_config" ] && return_error
-	fi
-
-	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
-
-	print_if_not_file "$user_config_full_path" && return_error
-
-	rm -i "$user_config_full_path" || return_error
+	delete_files "$USER_CONFIG_FILES_DIR" "SELECT USER CONFIG(-d)" || return_error
 }
 
 option_modify() {

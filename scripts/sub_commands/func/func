@@ -85,22 +85,7 @@ option_create_func() {
 }
 
 option_delete() {
-	local func_name
-	local func_path
-
-	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
-	then
-		func_name=${ARGS[-d,0]}
-	else
-		func_name="$( fzf_search "SELECT FUNC(-d)" "$USER_FUNC_DIR" )"
-		[ -z "$func_name" ] && return_error
-	fi
-
-	func_path="$USER_FUNC_DIR/$func_name"
-
-	print_if_not_file "$func_path" && return_error
-
-	rm -i "$func_path" || return_error
+	delete_files "$USER_FUNC_DIR" "SELECT FUNC(-d)" || return_error
 }
 
 option_modify_func() {

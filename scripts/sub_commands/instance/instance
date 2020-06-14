@@ -63,22 +63,7 @@ option_current() {
 }
 
 option_delete() {
-	local instance
-	local instance_full_path
-
-	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
-	then
-		instance=${ARGS[-d,0]}
-	else
-		instance="$( fzf_search "SELECT INSTANCE(-d)" "$INSTANCES_DIR" )"
-		[ -z "$instance" ] && return_error
-	fi
-
-	instance_full_path="$INSTANCES_DIR/$instance"
-
-	print_if_not_file "$instance_full_path" && return_error
-
-	rm -i "$instance_full_path" || return_error
+	delete_files "$INSTANCES_DIR" "SELECT INSTANCE(-d)" || return_error
 }
 
 option_get() {

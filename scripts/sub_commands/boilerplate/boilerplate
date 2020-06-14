@@ -66,24 +66,7 @@ option_current() {
 }
 
 option_delete() {
-	local boilerplate_full_path
-	local boilerplate
-
-	boilerplate=${ARGS[-d,0]}
-
-	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
-	then
-		boilerplate=${ARGS[-d,0]}
-	else
-		boilerplate="$( fzf_search "SELECT BOILERPLATE(-d)" "$BOILERPLATE_FILES_DIR" )"
-		[ -z "$boilerplate" ] && return_error
-	fi
-
-	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
-
-	print_if_not_file "$boilerplate_full_path" && return_error
-
-	rm -i "$boilerplate_full_path" || return_error
+	delete_files "$BOILERPLATE_FILES_DIR" "SELECT BOILERPLATE(-d)" || return_error
 }
 
 option_modify() {
