@@ -82,6 +82,12 @@ list_time_sorted_null_term() {
 	}
 }
 
+list_time_sorted() {
+	local from_dir=$1
+
+	list_time_sorted_null_term "$from_dir" | tr '\0' '\n'
+}
+
 #
 # param1: header
 #   This is the heading of fzf search
