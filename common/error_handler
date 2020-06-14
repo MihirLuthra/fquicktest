@@ -4,13 +4,16 @@
 [ -n "$__ERROR_HANDLER__" ] && return 0
 readonly __ERROR_HANDLER__=1
 
+COMMON_PATH="$QUICKTEST_PATH/"common
+source "$COMMON_PATH"/constants
+
 echo_err() {
 	>&2 echo "$@"
 }
 
 cecho_err() {
 	echo_err -n "$RED"
-	echo_err "$red$@$default_color"
+	echo_err "$@"
 	echo_err -n "$DEFAULT_COLOR"
 }
 
