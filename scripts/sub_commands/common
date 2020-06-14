@@ -1,0 +1,26 @@
+#! /usr/bin/env bash
+
+[ -n "$__SUB_COMMANDS_COMMON__" ] && return 0
+readonly __SUB_COMMANDS_COMMON__=1
+
+option_help() {
+	less "$( dirname $BASH_SOURCE )/help.txt"
+}
+
+get_by_relative_cnt() {
+	local dir=$1; shift
+	local cnt=$1
+
+	if [ -z "$cnt" ]
+	then
+		cnt=${ARGS[self,0]}
+	fi
+
+	if ! is_num "$cnt"
+    then
+        a_echo_err "$cnt: invalid relative count"
+        return_error
+    fi
+
+	find_by_ctime "$dir" | sed -n "$cnt"p || return_error
+}
