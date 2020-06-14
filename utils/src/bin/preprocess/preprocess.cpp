@@ -136,7 +136,7 @@ void add_aliases_to_rmap(replace_map &rmap)
 		try {
 			amap = afile.import_to_map();
 		} catch (std::exception &e) {
-			P_ERR("%s: Line %d: %s", alias_file_name.c_str(), afile.get_err_line(), e.what());
+			QTC_EXCEPTION_NM(afile);
 			exit(1);
 		}
 
@@ -173,7 +173,7 @@ void rename_in_rmap(replace_map &rmap)
 		try {
 			rnmap = rnfile.import_to_map();
 		} catch (std::exception &e) {
-			P_ERR("%s: Line %d: %s", rename_file_name.c_str(), rnfile.get_err_line(), e.what());
+			QTC_EXCEPTION_NM(rnfile);
 			exit(1);
 		}
 

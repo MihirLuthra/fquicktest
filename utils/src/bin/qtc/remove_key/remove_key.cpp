@@ -23,10 +23,7 @@ int main(int argc, char *argv[])
 	try {
 		file.remove_key(args.key);
 	} catch(std::exception &e) {
-		P_ERR("%s: Line %d: %s", args.file_name.c_str(), file.get_err_line(), e.what());
-		exit(1);
-	} catch(...) {
-		P_ERR("%s: Line %d: Unknown exception", args.file_name.c_str(), file.get_err_line());
+		QTC_EXCEPTION_NM(file);
 		exit(1);
 	}
 
