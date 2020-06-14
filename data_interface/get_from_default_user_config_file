@@ -1,0 +1,21 @@
+#! /usr/bin/env bash
+
+COMMON_PATH="$QUICKTEST_PATH/common"
+
+set -e
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/utility_funcs
+set +e
+
+get_from_default_user_config_file() {
+
+	local key="$1" ; shift
+	local value
+
+	value="$( get_value_for_key "$DEFAULT_USER_CONFIG_FILE" "$key" )" || return_error
+
+	fpreprocess <<<"$value" || return_error
+}
+
+get_from_default_user_config_file "$@"
