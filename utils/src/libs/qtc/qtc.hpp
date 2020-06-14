@@ -50,6 +50,10 @@ public:
 		return err_line_no;
 	}
 
+	std::string get_file_name() {
+		return file_name;
+	}
+
 	void print_value_for_key(std::string key);
 	void set_value_for_key(std::string key, std::string new_value, std::ostream &out_file);
 	std::string get_value_for_key(std::string key);
