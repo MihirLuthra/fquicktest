@@ -14,7 +14,7 @@ BIN = $(BIN_DIR)/$(NAME)
 
 all: $(BIN)
 
-$(BIN) : $(SRC)
+$(BIN) : $(SRC) ../../libs/error/error.h
 	$(CC) $(CFLAGS) $< -o $(BIN)
 	cp $(BIN) $(NAME).out
 

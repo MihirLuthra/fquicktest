@@ -8,7 +8,7 @@ CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic -fsanitize=address $(IFLAGS) $(L
 SRC = test_qtc.cpp
 BIN = test_qtc.out
 
-$(BIN): $(SRC)
+$(BIN): $(SRC) ../../../libs/error/error.h
 	$(CC) $(CFLAGS) $< -o $@
 
 .PHONY: clean run
