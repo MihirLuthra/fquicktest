@@ -14,6 +14,7 @@ readonly COMMON_DIR="$QUICKTEST_PATH/common"
 readonly COMMANDS_DIR="$QUICKTEST_PATH/commands"
 
 readonly UTILS_BIN_DIR="$QUICKTEST_PATH/utils/bin"
+readonly SUB_COMMANDS_DIR="$SCRIPTS_DIR/sub_commands"
 
 if [[ "$OSTYPE" == "darwin"* ]]
 then
