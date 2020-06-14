@@ -110,11 +110,9 @@ fzf_search() {
 fzf_multi_select_search() {
 	local header=$1 ; shift
 	local from_dir=$1 ; shift
-	local contents
 
-	contents="$( list_time_sorted_null_term "$from_dir" )" || return_error
-
-	echo "$contents" | fzf -m --read0 --reverse --height=40% --cycle --header="$header"
+	list_time_sorted_null_term "$from_dir" \
+		| fzf -m -0 --read0 --reverse --height=40% --cycle --header="$header" || return_error
 }
 
 #
