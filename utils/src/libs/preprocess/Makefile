@@ -22,7 +22,7 @@ $(LIB): $(OBJS)
 	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS)
 
 clean:
-	rm *.o *.so $(LIB)
+	rm *.o $(LIB)
 	#(cd tests && make clean)
 
 #test: all

@@ -23,7 +23,7 @@ $(LIB): $(OBJS)
 	$(AR) $@ $(OBJS)
 
 clean:
-	rm *.a *.o $(LIB)
+	rm *.o $(LIB)
 
 test: all
 	(cd tests && make && make run) || exit 1
