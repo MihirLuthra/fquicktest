@@ -1,6 +1,7 @@
 #ifndef __QTC_HPP__
 #define __QTC_HPP__
 
+#include <error/error.h>
 #include <exception>
 #include <fstream>
 #include <sstream>
@@ -190,5 +191,32 @@ public:
 };
 
 }
+
+#define QTC_EXCEPTION(obj, fmt, ...) \
+do {                                 \
+    if (obj.get_err_line() != 0) {   \
+        P_ERR("%s: Line %d: %s" fmt, obj.get_file_name().c_str(), obj.get_err_line(), e.what(), __VA_ARGS__); \
+    } else {                         \
+        P_ERR("%s: %s", obj.get_file_name().c_str(), e.what()); \
+    }                                \
+}while (0);
+
+#define QTC_EXCEPTION_NA(obj, fmt)   \
+do {                                 \
+    if (obj.get_err_line() != 0) {   \
+        P_ERR("%s: Line %d: %s" fmt, obj.get_file_name().c_str(), obj.get_err_line(), e.what()); \
+    } else {                         \
+        P_ERR("%s: %s", obj.get_file_name().c_str(), e.what()); \
+    }                                \
+}while (0);
+
+#define QTC_EXCEPTION_NM(obj)        \
+do {                                 \
+    if (obj.get_err_line() != 0) {   \
+        P_ERR("%s: Line %d: %s", obj.get_file_name().c_str(), obj.get_err_line(), e.what()); \
+    } else {                         \
+        P_ERR("%s: %s", obj.get_file_name().c_str(), e.what()); \
+    }                                \
+}while (0);
 
 #endif /* __QTC_HPP__ */
