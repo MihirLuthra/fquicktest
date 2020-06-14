@@ -103,7 +103,7 @@ option_register() {
 }
 
 option_show_all() {
-	list_time_sorted "$USER_COMMANDS_DIR"
+	list_time_sorted "$USER_COMMANDS_DIR" || return_error
 }
 
 action() {
@@ -128,7 +128,7 @@ action() {
 				option_register || return_error
 				;;
 			-s)
-				option_show_all
+				option_show_all || return_error
 				;;
 		esac
 	done

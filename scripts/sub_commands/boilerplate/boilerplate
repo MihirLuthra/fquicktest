@@ -111,7 +111,7 @@ option_path() {
 }
 
 option_show_all() {
-	list_time_sorted "$BOILERPLATE_FILES_DIR"
+	list_time_sorted "$BOILERPLATE_FILES_DIR" || return_error
 }
 
 boilerplate() {

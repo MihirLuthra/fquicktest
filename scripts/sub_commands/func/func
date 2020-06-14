@@ -110,7 +110,7 @@ option_rename_file() {
 }
 
 option_show_all() {
-	list_time_sorted "$USER_FUNC_DIR"
+	list_time_sorted "$USER_FUNC_DIR" || return_error
 }
 
 func() {
@@ -138,7 +138,7 @@ func() {
 				option_rename_file || return_error
 				;;
 			-s)
-				option_show_all
+				option_show_all || return_error
 				;;
 		esac
 	done
