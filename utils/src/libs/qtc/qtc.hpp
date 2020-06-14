@@ -44,9 +44,7 @@ private:
 
 public:
 
-	ConfigFile(std::string file_name) {
-		this->file_name = file_name;
-	}
+	ConfigFile(std::string file_name) : file_name(file_name){}
 
 	unsigned int get_err_line() {
 		return err_line_no;
@@ -81,9 +79,7 @@ class FileOpenFailed : public std::exception {
 	std::string file_name;
 	mutable char *ret_str = nullptr;
 public:
-	FileOpenFailed(std::string file_name) {
-		this->file_name = file_name;
-	}
+	FileOpenFailed(std::string file_name) : file_name(file_name) {}
 
 	~FileOpenFailed() {
 		if (ret_str != nullptr) {
@@ -103,9 +99,7 @@ private:
 	char c;
 	mutable char *ret_str = nullptr;
 public:
-	InvalidCharacter(char c) {
-		this->c = c;
-	}
+	InvalidCharacter(char c) : c(c) {}
 
 	~InvalidCharacter() {
 		if (ret_str != nullptr) {
@@ -133,9 +127,7 @@ private:
 	std::string key;
 	mutable char *ret_str = nullptr;
 public:
-	KeyNotFound(std::string key) {
-		this->key = key;
-	}
+	KeyNotFound(std::string key) : key(key) {}
 
 	~KeyNotFound() {
         if(ret_str != nullptr) {
@@ -163,9 +155,7 @@ private:
 	std::string key;
 	mutable char *ret_str = nullptr;
 public:
-	NoValueFoundForKey(std::string key) {
-		this->key = key;
-	}
+	NoValueFoundForKey(std::string key) : key(key) {}
 
 	~NoValueFoundForKey() {
         if(ret_str != nullptr) {
