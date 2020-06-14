@@ -51,38 +51,29 @@ bold_printf() {
 	printf "$OFF_BOLD"
 }
 
-#
-# param1: from_dir
-#   The directory where the search needs to be done
-#
 find_by_ctime() {
-local from_dir=$1 ; shift
-	# rest of the args are excluded dirs
+	local from_dir=$1 ; shift
 
-	local flag
-	local fmt
-
-	# FIXME: Currently the script uses a
-	# terrible way to distunguish between
-	# GNU and BSD stat. Would be preferred if
-	# some portable way could be found for find_by_ctime()
-	if [ "$(uname)" == 'Linux' ]
-	then
-		flag='-c'
-		fmt='%Y %N'
-	else
-		flag='-f'
-		fmt='%c %N'
-	fi
-
+	# go to the directory and check glob *, if glob is null, next block will be evaluated
 	cd "$from_dir" && 2>&1 compgen -G "*" > /dev/null && {
 
-		find * -type f -print0         \
-		| xargs -0 stat "$flag" "$fmt" \
-		| sort -r                      \
-		| awk '{$1=""}1'               \
-		| awk '{$1=$1}1' 2> /dev/null
-
+		# 1) goes through every file in current directory
+		# 2) prints inode modification time, a single space and then file name which is null terminated
+		# 3) sorts it on the basis of inode modification time
+		# 4) gawk then removed time from the output
+		find * -type f -exec bash -c 'printf "%s " $(getctime "{}")' \; -print0 \
+		| sort -r -n -z -k1 \
+		| gawk '
+			BEGIN {
+				RS="\0"
+				ORS="\0"
+			}
+			{
+				r=$1" "
+				sub(r, "")
+				print
+			}
+		'
 		return_if_error
 
 	} || {
@@ -101,11 +92,23 @@ local from_dir=$1 ; shift
 fzf_search() {
 	local header=$1 ; shift
 	local from_dir=$1 ; shift
+
+	find_by_ctime "$from_dir" \
+		| fzf -0 --read0 --reverse --height=40% --cycle --header="$header" || return_error
+}
+
+#
+# same as fzf_search except it supports
+# multiple selection
+#
+fzf_multi_select_search() {
+	local header=$1 ; shift
+	local from_dir=$1 ; shift
 	local contents
 
 	contents="$( find_by_ctime "$from_dir" )" || return_error
 
-	echo "$contents" | fzf --reverse --height=40% --cycle --header="$header"
+	echo "$contents" | fzf -m --read0 --reverse --height=40% --cycle --header="$header"
 }
 
 #
