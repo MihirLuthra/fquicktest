@@ -65,4 +65,4 @@ readonly RED='\033[0;31m'
 readonly DEFAULT_COLOR='\033[0m'
 
 readonly BOLD="$(tput bold)"
-readonly OFF_BOLD="$(tput sgr0)"
+readonly BOLD_OFF="$(tput sgr0)"
