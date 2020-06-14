@@ -121,7 +121,7 @@ option_path() {
 }
 
 option_show_all() {
-	find_by_ctime "$USER_CONFIG_FILES_DIR"
+	list_time_sorted "$USER_CONFIG_FILES_DIR"
 }
 
 user_config() {

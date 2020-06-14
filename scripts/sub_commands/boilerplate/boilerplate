@@ -128,7 +128,7 @@ option_path() {
 }
 
 option_show_all() {
-	find_by_ctime "$BOILERPLATE_FILES_DIR"
+	list_time_sorted "$BOILERPLATE_FILES_DIR"
 }
 
 boilerplate() {

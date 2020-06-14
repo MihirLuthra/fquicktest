@@ -114,7 +114,7 @@ option_path() {
 }
 
 option_show_all() {
-	find_by_ctime "$INSTANCES_DIR"
+	list_time_sorted "$INSTANCES_DIR"
 }
 
 instance() {

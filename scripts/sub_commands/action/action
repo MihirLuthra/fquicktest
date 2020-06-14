@@ -118,7 +118,7 @@ option_register() {
 }
 
 option_show_all() {
-	find_by_ctime "$USER_COMMANDS_DIR"
+	list_time_sorted "$USER_COMMANDS_DIR"
 }
 
 action() {

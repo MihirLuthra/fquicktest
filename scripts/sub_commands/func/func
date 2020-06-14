@@ -125,7 +125,7 @@ option_rename_file() {
 }
 
 option_show_all() {
-	find_by_ctime "$USER_FUNC_DIR"
+	list_time_sorted "$USER_FUNC_DIR"
 }
 
 func() {
