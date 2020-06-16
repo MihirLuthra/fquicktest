@@ -84,8 +84,14 @@ list_time_sorted_null_term() {
 
 list_time_sorted() {
 	local from_dir=$1
+	local retval
 
 	list_time_sorted_null_term "$from_dir" | tr '\0' '\n'
+
+	[ "${PIPESTATUS[0]:-0}" -ne 0 ] && return_error
+	[ "${PIPESTATUS[1]:-0}" -ne 0 ] && return_error
+
+	return 0
 }
 
 #
