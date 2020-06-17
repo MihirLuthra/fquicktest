@@ -216,7 +216,7 @@ replace() {
 # quotes in the string with '"'"'
 # refer to https://stackoverflow.com/a/1250279/11498773
 put_single_quotes() {
-	local str
+	local str=$1
 
 	str="$( replace "'"   "'\"'\"'"   "$str" )" || return_error
 	printf "%s" "'$str'"
