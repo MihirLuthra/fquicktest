@@ -6,7 +6,7 @@ set -e
 source "$COMMON_PATH"/error_handler
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/data_interface
-source "$SCRIPTS_DIR"/option_parser
+source "$COMMON_PATH"/option_parser
 set +e
 
 print_quicktest_help() {
