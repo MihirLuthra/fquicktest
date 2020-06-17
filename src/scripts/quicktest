@@ -7,11 +7,6 @@ source "$COMMON_PATH"/error_handler
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/data_interface
 source "$SCRIPTS_DIR"/option_parser
-
-# GLOBALS
-SUBCMDS_PATH="$SCRIPTS_DIR"/sub_commands
-CURRENT_DIR="$( dirname "$BASH_SOURCE" )"
-QTC_FILE="$CURRENT_DIR"/quicktest.qtc
 set +e
 
 print_quicktest_help() {
@@ -62,10 +57,12 @@ quicktest() {
 	local shift_count
 	local subcmd
 	local default_options
+	local qtc_file
 
 	if [ -z "$*" ]
 	then
-		default_options="$( get_value_for_key "$QTC_FILE" "$DEFAULT_ARGS_KEY" )" || return_error
+		qtc_file="$( dirname "$BASH_SOURCE" )/quicktest.qtc"
+		default_options="$( get_value_for_key "$qtc_file" "$DEFAULT_ARGS_KEY" )" || return_error
 		eval set -- $default_options
 	fi
 
@@ -95,7 +92,7 @@ quicktest() {
 
 	if [ -n "$subcmd" ]
 	then
-		"$QTBASH" "$SUBCMDS_PATH/$subcmd/$subcmd" "$@" || return_error
+		"$QTBASH" "$SUB_COMMANDS_DIR/$subcmd/$subcmd" "$@" || return_error
 	fi
 
 	return 0
