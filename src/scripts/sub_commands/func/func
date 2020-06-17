@@ -9,7 +9,7 @@ source "$COMMON_PATH"/utility_funcs
 source "$COMMON_PATH"/data_interface
 source "$COMMON_PATH"/option_parser
 
-source "$SCRIPTS_DIR"/sub_commands/func/func_error_handler
+source "$SUB_COMMANDS_DIR"/func/func_error_handler
 source "$SUB_COMMANDS_DIR"/common_options
 set +e
 
