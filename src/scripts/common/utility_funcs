@@ -22,7 +22,7 @@ trim_blanks() {
 	gawk '{$1=$1}1' <<<"$1" || return_error
 }
 
-trim_leading_and_trailing_blanks() {
+trim() {
 
 	gawk '{
 		# trim leading spaces
