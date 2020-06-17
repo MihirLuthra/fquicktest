@@ -16,7 +16,7 @@ source "$COMMON_PATH"/utility_funcs
 source "$COMMON_PATH"/data_interface
 
 source "$SCRIPTS_DIR"/option_parser
-source "$SUB_COMMANDS_DIR"/common
+source "$SUB_COMMANDS_DIR"/common_options
 set +e
 
 print_usage() {
