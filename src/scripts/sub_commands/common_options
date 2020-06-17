@@ -17,10 +17,10 @@ get_by_relative_cnt() {
 	fi
 
 	if ! is_num "$cnt"
-    then
-        a_echo_err "$cnt: invalid relative count"
-        return_error
-    fi
+	then
+		a_echo_err "$cnt: invalid relative count"
+		return_error
+	fi
 
 	list_time_sorted_null_term "$dir" | gawk -v line="$cnt" '
 		BEGIN {
@@ -32,23 +32,59 @@ get_by_relative_cnt() {
 	' || return_error
 }
 
-delete_files() {
+args_or_fzf_search() {
 	local dir=$1 ; shift
-	local message=$1
+	local message=$1 ; shift
+	local option=$1 ; shift
+	local action_template=$1 ; shift
+	local replacee=$1
 	local files
 	local full_path
+	local last_arg
+	local arg_no
+	local temp_file
+	local retval
 
-	if [ ${ARG_CNT[-d]:-0} -eq 1 ]
-    then
-		files=( "${ARGS[-d,0]}" )
-    else
-		IFS= readarray -t -d '' files < <( fzf_multi_select_search "$message" "$dir" --print0 )
-    fi
+	if [ ${ARG_CNT[$option]:-0} -ge 1 ]
+	then
+		last_arg="$( expr ${ARG_CNT[$option]} - 1 )"
+		for arg_no in $(seq 1 "$last_arg")
+		do
+			files+=( "${ARGS[$option,$arg_no]}" )
+		done
+	else
+		temp_file="$(mktemp)" || return_error
+		# reading null terminated fzf results into an array
+		IFS= readarray -t -d '' files < <( fzf_multi_select_search "$message" "$dir" --print0 ; \
+			echo $? > "$temp_file")
+
+		retval="$( < "$temp_file" )"
+		rm "$temp_file"
+
+		[ "$retval" -ne 0 ] && return_error
+	fi
 
 	for file in "${files[@]}"
 	do
 		full_path="$dir/$file"
-    	print_if_not_file "$full_path" && return_error
-    	rm -i "$full_path" || return_error
+		print_if_not_file "$full_path" && return_error
+
+		full_path="$( put_single_quotes "$full_path" )"
+
+		echo_err "$full_path"
+
+		action="$( replace "$replacee" "$full_path" "$action_template" )" || return_error
+
+		"${QTBASH}" -c "$action"
 	done
+}
+
+delete_files() {
+	local dir=$1 ; shift
+	local message=$1
+	local action
+
+	action='rm -i __TO_REPLACE__'
+
+	args_or_fzf_search "$dir" "$message" '-d' "$action" '__TO_REPLACE__'
 }
