@@ -206,6 +206,22 @@ replace() {
 	' <<<"$text" || return_error
 }
 
+# Purpose of this func is to put single quotes
+# around str so that when it is passed to bash -c,
+# spaces in the path are sustained and
+# not treated as individual args
+
+# as we are going to put single quotes around
+# full_path, we need to replace any existing single
+# quotes in the string with '"'"'
+# refer to https://stackoverflow.com/a/1250279/11498773
+put_single_quotes() {
+	local str
+
+	str="$( replace "'"   "'\"'\"'"   "$str" )" || return_error
+	printf "%s" "'$str'"
+}
+
 is_bashv4() {
 	if [ -n "$BASH_VERSINFO" ]
 	then
