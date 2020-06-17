@@ -62,7 +62,7 @@ self_actions() {
 	then
 		for arg_no in $(seq 1 "$last_arg")
 		do
-			action_args="$action_args '${ARGS[self,"$arg_no"]}'"
+			action_args="$action_args $( put_single_quotes "${ARGS[self,"$arg_no"]}" )"
 		done
 	fi
 
