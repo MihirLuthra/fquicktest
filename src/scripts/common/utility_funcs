@@ -19,7 +19,7 @@ is_num() {
 # trims leading and trailing spaces
 # also if more than one blank exists, it trims it to single blank
 trim_blanks() {
-	gawk '{$1=$1}1' <<<"$1"
+	gawk '{$1=$1}1' <<<"$1" || return_error
 }
 
 trim_leading_and_trailing_blanks() {
@@ -32,11 +32,11 @@ trim_leading_and_trailing_blanks() {
 		# trim trailing spaces
 		sub(/ +$/, "", $0)
 		sub(/\t+$/, "", $0)
-	}1' <<<"$1"
+	}1' <<<"$1" || return_error
 }
 
 first_word() {
-	gawk '{print $1}' <<<"$1"
+	gawk '{print $1}' <<<"$1" || return_error
 }
 
 bold_echo() {
@@ -208,7 +208,7 @@ replace_first() {
 	}
 
 	END { exit exit_status }
-	' <<<"$text"
+	' <<<"$text" || return_error
 }
 
 replace() {
@@ -230,7 +230,7 @@ replace() {
 	}
 
 	END { exit exit_status }
-	' <<<"$text"
+	' <<<"$text" || return_error
 }
 
 is_bashv4() {
@@ -248,5 +248,5 @@ is_bashv4() {
 }
 
 fpreprocess() {
-	preprocess 2 "$PROGRAM_FUNC_DIR" "$USER_FUNC_DIR" 1 "$ALIAS_FILE_PATH" 1 "$RENAME_FILE_PATH"
+	preprocess 2 "$PROGRAM_FUNC_DIR" "$USER_FUNC_DIR" 1 "$ALIAS_FILE_PATH" 1 "$RENAME_FILE_PATH" || return_error
 }
