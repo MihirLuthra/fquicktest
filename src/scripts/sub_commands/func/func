@@ -6,8 +6,7 @@ set -e
 source "$COMMON_PATH"/error_handler
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/utility_funcs
-
-source "$DATA_INTERFACE_DIR"/utility_funcs
+source "$COMMON_PATH"/data_interface
 
 source "$SCRIPTS_DIR"/option_parser
 

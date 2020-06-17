@@ -1,0 +1,137 @@
+#! /usr/bin/env bash
+
+[ -n "$__DATA_INTERFACE__" ] && return 0
+readonly __DATA_INTERFACE__=1
+
+COMMON_PATH="$QUICKTEST_PATH/src/scripts/common"
+
+set -e
+source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/utility_funcs
+set +e
+
+#
+# Same as get_value_for_key but param(file)
+# gets defaulted to current_defaults file
+#
+get_from_current_defaults() {
+
+	local key="$1" ; shift
+
+	get_value_for_key "$CURRENT_DEFAULTS_FILE" "$key" || return_error
+}
+
+get_from_default_user_config_file() {
+
+	local key="$1" ; shift
+	local value
+
+	value="$( get_value_for_key "$DEFAULT_USER_CONFIG_FILE" "$key" )" || return_error
+
+	fpreprocess <<<"$value" || return_error
+}
+
+#
+# Same as get_value_for_key but param(file)
+# gets defaulted to the file given by key CURRENT_USER_CONFIG_FILE
+# in current_defaults file
+#
+get_from_user_config_file() {
+
+	local key="$1" ; shift
+	local user_config_file_name
+	local user_config_file_path
+	local value
+
+	user_config_file_name="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "$USER_CONFIG_FILE_KEY" )" \
+		|| return_error
+
+	print_if_key_is_null "$USER_CONFIG_FILE_KEY" "$user_config_file_name" && return 1
+	user_config_file_path="$USER_CONFIG_FILES_DIR/$user_config_file_name"
+
+	value="$( get_value_for_key "$user_config_file_path" "$key" )" || return_error
+
+	fpreprocess <<<"$value"
+}
+
+#
+# Same as set_value_for_key but param(file)
+# gets defaulted to current_defaults file
+#
+set_in_current_defaults() {
+	local key=$1 ; shift
+	local value="$1" ; shift
+
+	set_value_for_key "$CURRENT_DEFAULTS_FILE" "$key" "$value" || return_error
+}
+
+#
+# Same as set_value_for_key but param(file)
+# gets defaulted to file given by key CURRENT_USER_CONFIG_FILE
+# in current_defaults file
+#
+set_in_user_config_file() {
+	local key="$1" ; shift
+	local value="$1" ; shift
+	local user_config_file_name
+	local user_config_file_path
+
+	user_config_file_name="$( get_from_current_defaults "$USER_CONFIG_FILE_KEY" )" || return_error
+
+	print_if_key_is_null "$USER_CONFIG_FILE_KEY" "$user_config_file_name" && return 1
+	user_config_file_path="$USER_CONFIG_FILES_DIR/$user_config_file_name"
+
+	set_value_for_key "$user_config_file_path" "$key" "$value" || return_error
+}
+
+current_user_config_path() {
+	local user_config
+	local user_config_full_path
+
+	user_config="$(get_from_current_defaults "$USER_CONFIG_FILE_KEY")" || return_error
+
+	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
+
+	print_if_not_file "$user_config_full_path" && return_error
+
+	printf "%s" "$user_config_full_path"
+}
+
+current_boilerplate_path() {
+	local boilerplate
+	local boilerplate_full_path
+
+	boilerplate="$(get_from_user_config_file "$BOILERPLATE_KEY")" || return_error
+
+	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
+
+	print_if_not_file "$boilerplate_full_path" && return_error
+
+	printf "%s" "$boilerplate_full_path"
+}
+
+current_instance_path() {
+	local instance
+	local instance_full_path
+
+	instance="$(get_from_current_defaults "$INSTANCE_KEY")" || return_error
+
+	instance_full_path="$INSTANCES_DIR/$instance"
+
+	print_if_not_file "$instance_full_path" && return_error
+
+	printf "%s" "$instance_full_path"
+}
+
+get_from_user_config_file_or_default() {
+	local key=$1
+
+	get_from_user_config_file "$key"
+
+	if [ $? -ne 0 ]
+	then
+		a_echo_err "Error in getting key from user config file, trying default user config file"
+		get_from_default_user_config_file "$key" || return_error
+	fi
+}

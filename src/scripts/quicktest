@@ -5,6 +5,7 @@ COMMON_PATH="$QUICKTEST_PATH"/src/scripts/common
 set -e
 source "$COMMON_PATH"/error_handler
 source "$COMMON_PATH"/constants
+source "$COMMON_PATH"/data_interface
 source "$SCRIPTS_DIR"/option_parser
 
 # GLOBALS
