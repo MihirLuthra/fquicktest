@@ -219,17 +219,13 @@ replace() {
 	gawk -v replacee="$replacee"       \
 	     -v replacement="$replacement" \
 	'
-	BEGIN { RS="\0"; exit_status = 1 }
+	BEGIN { RS="\0" }
 
 	# MAIN
 	{
-		if (gsub(replacee, replacement)) {
-			exit_status = 0
-		}
+		gsub(replacee, replacement)
 		print
 	}
-
-	END { exit exit_status }
 	' <<<"$text" || return_error
 }
 
