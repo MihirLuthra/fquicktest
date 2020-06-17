@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-COMMON_PATH="$QUICKTEST_PATH/"common
+COMMON_PATH="$QUICKTEST_PATH/"src/scripts/common
 
 set -e
 source "$COMMON_PATH"/error_handler

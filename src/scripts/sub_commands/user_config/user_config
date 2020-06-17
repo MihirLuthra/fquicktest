@@ -1,13 +1,6 @@
 #! /usr/bin/env bash
 
-#
-# TODO:
-#  add --get option
-#  update current boilerplate on deletion
-#
-#
-
-COMMON_PATH="$QUICKTEST_PATH/"common
+COMMON_PATH="$QUICKTEST_PATH/"src/scripts/common
 
 set -e
 source "$COMMON_PATH"/error_handler
@@ -20,18 +13,21 @@ source "$SUB_COMMANDS_DIR"/common
 set +e
 
 print_usage() {
+
 	printf_err "%s\n"                                  \
-	'quicktest boilerplate'                            \
+	'quicktest user_config'                            \
 	'    [-c|--current]'                               \
-	'    [-d|--delete <boilerplate_name>]'             \
+	'    [-d|--delete <user_config_file_name>]'        \
 	'    [-h|--help]'                                  \
-	'    [-m|--modify [<boilerplate_name>]]'           \
-	'    [-n|--new <boilerplate_name>]'                \
+	'    [-m|--modify [<user_config_file_name>]]'      \
+	'    [-n|--new <user_config_file_name>]'           \
 	'    [-p|--path]'                                  \
 	'    [-s|--show-all]'
+
 }
 
-parse_boilerplate_options() {
+parse_user_config_options() {
+
 	local option_parser_retval
 
 	parse_options \
@@ -55,68 +51,65 @@ parse_boilerplate_options() {
 		print_usage
 		return_error
 	fi
+
 }
 
 option_current() {
-	local boilerplate
+	local user_config
 
-	boilerplate="$(get_from_user_config_file "$BOILERPLATE_KEY")" || return_error
+	user_config="$(get_from_current_defaults "$USER_CONFIG_FILE_KEY")" || return_error
 
-	printf "%s\n" "$boilerplate"
+	printf "%s\n" "$user_config"
 }
 
 option_delete() {
-	delete_files "$BOILERPLATE_FILES_DIR" "SELECT BOILERPLATE(-d)" || return_error
+	delete_files "$USER_CONFIG_FILES_DIR" "SELECT USER CONFIG(-d)" || return_error
 }
 
 option_modify() {
-	local boilerplate_full_path
-	local boilerplate
+	local user_config_full_path
+	local user_config
 
-	boilerplate=${ARGS[-m,0]}
+	user_config=${ARGS[-m,0]}
 
 	if [ ${ARG_CNT[-m]:-0} -eq 1 ]
 	then
-		boilerplate=${ARGS[-m,0]}
+		user_config=${ARGS[-m,0]}
 	else
-		boilerplate="$( fzf_search "SELECT BOILERPLATE(-m)" "$BOILERPLATE_FILES_DIR" )"
-		[ -z "$boilerplate" ] && return_error
+		user_config="$( fzf_search "SELECT USER CONFIG(-u)" "$USER_CONFIG_FILES_DIR" )"
+		[ -z "$user_config" ] && return_error
 	fi
 
-	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
+	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
 
-	print_if_not_file "$boilerplate_full_path" && return_error
+	print_if_not_file "$user_config_full_path" && return_error
 
-	open_file "$boilerplate_full_path" || return_error
+	open_file "$user_config_full_path" || return_error
 }
 
 option_new() {
-	local boilerplate
-	local boilerplate_full_path
+	local user_config
+	local user_config_full_path
 
-	boilerplate=${ARGS[-n,0]}
-	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
+	user_config=${ARGS[-n,0]}
+	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
 
-	exists_but_not_file "$boilerplate_full_path" && return_error
+	exists_but_not_file "$user_config_full_path" && return_error
 
-	open_file "$boilerplate_full_path" || return_error
+	open_file "$user_config_full_path" || return_error
 }
 
 option_path() {
-	local boilerplate_full_path
-
-	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$(option_current)"
-
-	printf "%s\n" "$boilerplate_full_path"
+	printf "%s\n" "$(current_user_config_path)"
 }
 
 option_show_all() {
-	list_time_sorted "$BOILERPLATE_FILES_DIR" || return_error
+	list_time_sorted "$USER_CONFIG_FILES_DIR" || return_error
 }
 
-boilerplate() {
+user_config() {
 
-	parse_boilerplate_options "$@" || return_error
+	parse_user_config_options "$@" || return_error
 
 	for option in "${!OPTIONS[@]}"
 	do
@@ -148,4 +141,4 @@ boilerplate() {
 	return 0
 }
 
-boilerplate "$@"
+user_config "$@"

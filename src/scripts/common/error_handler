@@ -4,7 +4,7 @@
 [ -n "$__ERROR_HANDLER__" ] && return 0
 readonly __ERROR_HANDLER__=1
 
-COMMON_PATH="$QUICKTEST_PATH/"common
+COMMON_PATH="$QUICKTEST_PATH/"src/scripts/common
 source "$COMMON_PATH"/constants
 
 echo_err() {

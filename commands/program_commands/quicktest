@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-SCRIPTS_PATH="$QUICKTEST_PATH"/scripts
+SCRIPTS_PATH="$QUICKTEST_PATH"/src/scripts
 
 desired_bash_version=4
 bash_version="$( "$QTBASH" -c 'echo -n $BASH_VERSINFO' )"

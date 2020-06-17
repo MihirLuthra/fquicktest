@@ -4,7 +4,7 @@
 [ -n "${__DATA_INTERFACE_UTILITY_FUNCS__}" ] && return 0
 readonly __DATA_INTERFACE_UTILITY_FUNCS__=1
 
-COMMON_PATH="$QUICKTEST_PATH/"common
+COMMON_PATH="$QUICKTEST_PATH/src/scripts/common"
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/error_handler
 
