@@ -4,10 +4,7 @@
 [ -n "$__CONSTANTS__" ] && return 0
 readonly __CONSTANTS__=1
 
-readonly QUICKTEST_CONFIG_FILE="$QUICKTEST_PATH/quicktest.config"
-
 readonly SRC_DIR="$QUICKTEST_PATH/src"
-readonly DATA_INTERFACE_DIR="$QUICKTEST_PATH/data_interface"
 readonly DATA_DIR="$QUICKTEST_PATH/data"
 readonly COMMANDS_DIR="$QUICKTEST_PATH/commands"
 
@@ -27,7 +24,6 @@ else
 fi
 
 PATH="$UTILS_BIN_DIR:$PATH"
-PATH="$DATA_INTERFACE_DIR:$PATH"
 
 readonly USER_DATA_DIR="$DATA_DIR/user_data"
 readonly PROGRAM_DATA_DIR="$DATA_DIR/program_data"
