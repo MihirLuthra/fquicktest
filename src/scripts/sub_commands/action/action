@@ -94,8 +94,8 @@ option_register() {
 		> "$new_action_path"   \
 		|| return_error
 
-	chmod +x "$new_action_path" || {
-		rm -rf "$new_action_path"
+	chmod u=rx,go-rwx "$new_action_path" || {
+		rm -f "$new_action_path"
 		return_error
 	}
 }
