@@ -19,12 +19,12 @@ is_num() {
 # trims leading and trailing spaces
 # also if more than one blank exists, it trims it to single blank
 trim_blanks() {
-	awk '{$1=$1}1' <<<"$1"
+	gawk '{$1=$1}1' <<<"$1"
 }
 
 trim_leading_and_trailing_blanks() {
 
-	awk '{
+	gawk '{
 		# trim leading spaces
 		sub(/^ +/, "", $0)
 		sub(/^\t+/, "", $0)
@@ -36,7 +36,7 @@ trim_leading_and_trailing_blanks() {
 }
 
 first_word() {
-	awk '{print $1}' <<<"$1"
+	gawk '{print $1}' <<<"$1"
 }
 
 bold_echo() {
@@ -193,8 +193,8 @@ replace_first() {
 	local replacement=$1 ; shift
 	local text=$1
 
-	awk -v replacee="$replacee"        \
-		-v replacement="$replacement"  \
+	gawk -v replacee="$replacee"        \
+	     -v replacement="$replacement"  \
 	'
 	BEGIN { exit_status = 1 }
 
@@ -216,10 +216,10 @@ replace() {
 	local replacement=$1 ; shift
 	local text=$1
 
-	awk -v replacee="$replacee"        \
-		-v replacement="$replacement"  \
+	gawk -v replacee="$replacee"       \
+	     -v replacement="$replacement" \
 	'
-	BEGIN { exit_status = 1 }
+	BEGIN { RS="\0"; exit_status = 1 }
 
 	# MAIN
 	{
