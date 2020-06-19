@@ -16,7 +16,7 @@ OBJS = $(SRCS:%.cpp=%.o)
 preprocess.o : preprocess.cpp preprocess.hpp ../quicktest_identifier/quicktest_identifier.hpp
 
 $(OBJS):
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -fPIC -c $<
 
 $(LIB): $(OBJS)
 	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS)
