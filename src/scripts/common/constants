@@ -34,6 +34,7 @@ readonly FUNC_TEMPLATE="$PROGRAM_DATA_DIR/func_template"
 readonly PROGRAM_USER_CONFIG_FILES_DIR="$PROGRAM_DATA_DIR/user_config_files"
 readonly DEFAULT_USER_CONFIG_FILE="$PROGRAM_USER_CONFIG_FILES_DIR/general.qtc"
 
+readonly PROGRAM_ALIAS_FILE_PATH="$PROGRAM_DATA_DIR/alias_file.qtc"
 readonly ALIAS_FILE_PATH="$USER_DATA_DIR/alias_file.qtc"
 readonly RENAME_FILE_PATH="$USER_DATA_DIR/rename_file.qtc"
 
