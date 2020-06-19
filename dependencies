@@ -1,0 +1,7 @@
+bash version 4+
+gawk
+g++/clang++ with c++17 support
+gcc/clang
+fzf
+mktemp
+vim
