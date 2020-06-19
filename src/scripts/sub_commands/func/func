@@ -87,20 +87,7 @@ option_delete() {
 }
 
 option_modify_func() {
-	local func_name
-	local func_path
-
-	if [ ${ARG_CNT[-m]:-0} -eq 1 ]
-	then
-		func_name=${ARGS[-m,0]}
-	else
-		func_name="$( fzf_search "SELECT FUNC(-m)" "$USER_FUNC_DIR" )"
-		[ -z "$func_name" ] && return_error
-	fi
-
-	func_path="$USER_FUNC_DIR/$func_name"
-
-	open_file "$func_path" || return_error
+	open_files "$USER_FUNC_DIR" "SELECT FUNC(-m)" '-m' || return_error
 }
 
 option_rename_file() {
