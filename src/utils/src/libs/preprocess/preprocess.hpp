@@ -2,6 +2,7 @@
 #define __PREPROCESS_HPP__
 
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <unordered_map>
 
