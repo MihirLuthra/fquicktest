@@ -37,5 +37,5 @@ uintmax_t getctime(const char * path)
 	}
 
 	// tv_sec is guaranteed to be whole number
-	return ((uintmax_t)s.st_ctimespec.tv_sec);
+	return ((uintmax_t)s.st_ctime);
 }
