@@ -38,10 +38,9 @@ private:
 	unsigned int err_line_no;
 
 	void open_file();
-	void print_key_val(std::ostream &out, std::string key, std::string value, bool add_spaces);
+	void print_key_val(std::ostream &out, std::string key, std::string value);
 	std::string out_block_parse();
 	std::string in_block_parse();
-	std::string in_block_parse_and_strip_blanks();
 
 public:
 
@@ -59,24 +58,17 @@ public:
 	void set_value_for_key(std::string key, std::string new_value, std::ostream &out_file);
 	std::string get_value_for_key(std::string key);
 	void remove_key(std::string key, std::ostream &out_file);
-	std::unordered_map<std::string, std::string> import_to_map(bool exact_value = false);
+	std::unordered_map<std::string, std::string> import_to_map();
 
 	// set value in the same file
 	void set_value_for_key(std::string key, std::string new_value);
 	void remove_key(std::string key);
 };
 
-class BlockWithoutAKey : public std::exception {
-public:
-	const char *what() const noexcept {
-		return "Block without a key";
-	}
-};
-
 class EqualToWithoutAKey : public std::exception {
 public:
 	const char *what() const noexcept {
-		return "Found equal to without a key";
+		return "Found '=' without a key";
 	}
 };
 
@@ -151,7 +143,7 @@ public:
 class MissingEqualTo : public std::exception {
 public:
 	const char *what() const noexcept {
-		return "Missing '=' between key and '{'";
+		return "Key should be followed by a '='";
 	}
 };
 
@@ -183,10 +175,10 @@ public:
 	}
 };
 
-class UnterminatedBlock : public std::exception {
+class ValueWithoutAKey : public std::exception {
 public:
 	const char *what() const noexcept {
-		return "Unterminated block";
+		return "Tab found with no preceding key";
 	}
 };
 

@@ -1,4 +1,5 @@
 #include <fstream>
+#include <regex>
 #include <unordered_map>
 
 #include "qtc.hpp"
@@ -6,11 +7,9 @@
 
 namespace qi = quicktest_identifier;
 
-const char block_start = '{', block_end = '}', ignore_next_char = '\\';
-
-static inline bool tab_or_space(char c)
+bool tab_or_space(char ch)
 {
-	return (c == ' ' || c == '\t');
+	return (ch == '\t' || ch == ' ');
 }
 
 void qtc::ConfigFile::open_file()
@@ -23,34 +22,31 @@ void qtc::ConfigFile::open_file()
 		}
 	}
 }
-void qtc::ConfigFile::print_key_val(std::ostream &out, std::string key, std::string value, bool add_spaces = true)
+
+void qtc::ConfigFile::print_key_val(std::ostream &out, std::string key, std::string value)
 {
-	out << key << " = {";
-	if (add_spaces) {
-		out << "\n\t" << value << "\n";
-	} else {
-		out << value;
-	}
-	out << "}\n";
+	std::string value_to_print = std::regex_replace(value, std::regex("\n"), "\n\t");
+	out << key << " =\n";
+	out << '\t' << value_to_print;
+	out << std::endl;
 }
 
 /*
- * This parses outside blocks i.e. {}.
- * When it finds a key, it goes inside its block
- * and returns the key name.
+ * This parses the untabbed values and returns the key name.
  * Further in_block_parse() should be called to go
- * through the block.
+ * through the value of key.
  *
  * This function checks the correctness of the file
  * until the point it parses and throws exceptions
  * accordingly.
  *
  * possible exceptions:
- * 	BlockWithoutAKey
  * 	EqualToWithoutAKey
  * 	InvalidCharacter
  * 	MissingEqualTo
+ * 	NoValueFoundForKey
  * 	TrailingCharsAfterEqualTo
+ * 	ValueWithoutAKey
  *
  * retval:
  *	It returns the next key found.
@@ -60,7 +56,7 @@ void qtc::ConfigFile::print_key_val(std::ostream &out, std::string key, std::str
  */
 std::string qtc::ConfigFile::out_block_parse()
 {
-	bool next_is_block_start = false;
+	bool next_is_value_start = false;
 	bool next_is_equal_to = false;
 	unsigned char ch;
 	std::string key;
@@ -69,33 +65,31 @@ std::string qtc::ConfigFile::out_block_parse()
 
 	while (file_reader >> ch) {
 
-		if (ch == '\n') err_line_no++;
+		if (ch == '\n') {
 
-		if (ch == block_start) {
-			if (!next_is_block_start) {
-				if (!key.empty()) {
-					throw qtc::MissingEqualTo();
-				} else {
-					throw qtc::BlockWithoutAKey();
+			if (next_is_value_start) {
+				if (file_reader.peek() != '\t') {
+					throw qtc::NoValueFoundForKey(key);
 				}
+				return key;
+			} else if (!key.empty()) {
+				throw qtc::MissingEqualTo();
 			}
 
-			next_is_block_start = false;
-
-			return key;
+			err_line_no++;
 		} else if (ch == '=') {
 			next_is_equal_to = false;
-			next_is_block_start = true;
+			next_is_value_start = true;
 
 			if (key.empty()) {
 				throw qtc::EqualToWithoutAKey();
 			}
 		} else if (next_is_equal_to && !tab_or_space(ch)) {
 			throw qtc::MissingEqualTo();
-		} else if (next_is_block_start && !std::isspace(ch)) {
+		} else if (next_is_value_start && !tab_or_space(ch)) {
 			// this occurs after =
 			throw qtc::TrailingCharsAfterEqualTo();
-		} else if (!key.empty() && tab_or_space(ch) && !next_is_block_start) {
+		} else if (!key.empty() && tab_or_space(ch) && !next_is_value_start) {
 			// This cond is if a tab/space is used after the key
 			next_is_equal_to = true;
 		} else if (std::isspace(ch)) {
@@ -109,7 +103,7 @@ std::string qtc::ConfigFile::out_block_parse()
 		}
 	}
 
-	if (next_is_block_start) {
+	if (next_is_value_start) {
 		throw qtc::NoValueFoundForKey(key);
 	} else if (next_is_equal_to || !key.empty()) {
 		throw qtc::MissingEqualTo();
@@ -119,121 +113,54 @@ std::string qtc::ConfigFile::out_block_parse()
 }
 
 /*
- * This parses inside blocks i.e. {}.
- * It should be called after out_block_parse().
- * It assumes being inside a block and goes until
- * a closing } is found.
- *
- * possible exceptions:
- * 	UnterminatedBlock
+ * This parses the tabbed values for a key.
+ * Should strictly be called after out_block_parse() iff
+ * key returned from it isn't empty.
+ * It goes till EOF or the line not starting with tab or '+'.
  *
  * retval:
- *  returns the exact contents inside {}
+ *  returns the value
  */
 std::string qtc::ConfigFile::in_block_parse()
 {
-	bool ignore_next = false;
 	unsigned char ch;
 	std::string value;
 
 	file_reader >> std::noskipws;
 
+	file_reader >> ch;
+
 	while (file_reader >> ch) {
-		if (ch == '\n') err_line_no++;
-		if (!ignore_next) {
-			if (ch == block_end) {
+		if (ch == '\n') {
+			char next = file_reader.peek();
+			if (next == '\t') {
+				value += ch; 
+			} else if (next != '+') {
 				return value;
-			} else if (ch == ignore_next_char) {
-				ignore_next = true;
 			}
-		} else {
-			ignore_next = false;
+			err_line_no++;
+			file_reader >> ch;
+			continue;
 		}
 		value += ch;
 	}
 
-	throw qtc::UnterminatedBlock();
-}
-
-
-/*
- * This works like in_block_parse() but
- * returns the value inside block with
- * leading and trailing tabs/spaces removed from every line.
- * Blank lines are also removed. First layer of backslashes
- * is removed from the return value.
- *
- * possible exceptions:
- * 	UnterminatedBlock
- *
- * retval:
- * 	returns the value inside the block
- * 	with leading and trailing spaces
- * 	remioved from each line of value.
- */
-std::string qtc::ConfigFile::in_block_parse_and_strip_blanks()
-{
-	bool ignore_next = false;
-	bool skip_leading_spaces = true;
-	std::string spaces, value;
-	char ch;
-
-	file_reader >> std::noskipws;
-
-	while (file_reader >> ch) {
-		if (ch == '\n') err_line_no++;
-		if (!ignore_next) {
-			if (ch == block_end) {
-				return value;
-			} else if (ch == ignore_next_char) {
-				ignore_next = true;
-				continue;
-			} else if (ch == '\n') {
-				if (skip_leading_spaces) {
-					// blank line
-					continue;
-				}
-
-				skip_leading_spaces = true;
-				spaces = "\n";
-				continue;
-			}
-		} else {
-			ignore_next = false;
-		}
-
-		if (skip_leading_spaces && tab_or_space(ch)) {
-			continue;
-		}
-
-		skip_leading_spaces = false;
-
-		if (std::isspace(ch)) {
-			spaces += ch;
-			continue;
-		}
-
-		value += spaces;
-		spaces = "";
-		value += ch;
-	}
-
-	throw qtc::UnterminatedBlock();
+	return "";
 }
 
 /*
  * It returns the value for the key param1.
- * It calls `in_block_parse_and_strip_blanks()` to get key's
+ * It calls `in_block_parse()` to get key's
  * value. Read the desc of that func.
  *
  * possible exceptions:
- *	BlockWithoutAKey
- *	EqualToWithoutAKey
- *	FileOpenFailed
- *	InvalidCharacter
- *	MissingEqualTo
- *	TrailingCharsAfterEqualTo
- *	UnterminatedBlock
+ * 	EqualToWithoutAKey
+ * 	FileOpenFailed
+ * 	InvalidCharacter
+ * 	MissingEqualTo
+ * 	NoValueFoundForKey
+ * 	TrailingCharsAfterEqualTo
+ * 	ValueWithoutAKey
  *
  * param1:
  * 	key whose value should be returned.
@@ -269,7 +196,7 @@ std::string qtc::ConfigFile::get_value_for_key(std::string key)
 			if (!key_found) {
 				in_block_parse();
 			} else {
-				return in_block_parse_and_strip_blanks();
+				return in_block_parse();
 			}
 		}
 	} catch (...) {
@@ -280,6 +207,29 @@ std::string qtc::ConfigFile::get_value_for_key(std::string key)
 	throw qtc::KeyNotFound(key);
 }
 
+/*
+ * It sets the value for the key param1 to value param2.
+ * It outputs the resulting file ouput to param3.
+ *
+ * param1:
+ * 	key whose value needs to be changes
+ *
+ * param2:
+ * 	new value for param1
+ *
+ * param3:
+ * 	ostream to output the updated contents
+ *
+ * possible exceptions:
+ * 	EqualToWithoutAKey
+ * 	FileOpenFailed
+ * 	InvalidCharacter
+ * 	InvalidOutputStream
+ * 	MissingEqualTo
+ * 	NoValueFoundForKey
+ * 	TrailingCharsAfterEqualTo
+ * 	ValueWithoutAKey
+ */
 void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, std::ostream &out)
 {
 	bool key_exists = false;
@@ -296,14 +246,14 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, 
 	}
 
 	try {
-		auto key_vals = import_to_map(true);
+		auto key_vals = import_to_map();
 
 		for (auto &pair : key_vals) {
 			if (pair.first == key) {
 				print_key_val(out, key, new_value);
 				key_exists = true;
 			} else {
-				print_key_val(out, pair.first, pair.second, false);
+				print_key_val(out, pair.first, pair.second);
 			}
 
 			out << std::endl;
@@ -318,6 +268,25 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value, 
 
 }
 
+/*
+ * It sets the value for the key param1 to value param2
+ * in the same file.
+ *
+ * param1:
+ * 	key whose value needs to be changes
+ *
+ * param2:
+ * 	new value for param1
+ *
+ * possible exceptions:
+ * 	EqualToWithoutAKey
+ * 	FileOpenFailed
+ * 	InvalidCharacter
+ * 	MissingEqualTo
+ * 	NoValueFoundForKey
+ * 	TrailingCharsAfterEqualTo
+ * 	ValueWithoutAKey
+ */
 void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value)
 {
 	bool key_exists = false;
@@ -332,7 +301,7 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value)
 
 	try {
 		if (!file_open_failed) {
-			key_vals = import_to_map(true);
+			key_vals = import_to_map();
 			file_reader.close();
 		}
 
@@ -350,7 +319,7 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value)
 				print_key_val(out, key, new_value);
 				key_exists = true;
 			} else {
-				print_key_val(out, pair.first, pair.second, false);
+				print_key_val(out, pair.first, pair.second);
 			}
 
 			out << std::endl;
@@ -365,6 +334,26 @@ void qtc::ConfigFile::set_value_for_key(std::string key, std::string new_value)
 
 }
 
+/*
+ * It removes the key param1.
+ * It outputs the resulting file ouput to param2.
+ *
+ * param1:
+ * 	key to remove
+ *
+ * param2:
+ * 	ostream to output the updated contents
+ *
+ * possible exceptions:
+ * 	EqualToWithoutAKey
+ * 	FileOpenFailed
+ * 	InvalidCharacter
+ * 	InvalidOutputStream
+ * 	MissingEqualTo
+ * 	NoValueFoundForKey
+ * 	TrailingCharsAfterEqualTo
+ * 	ValueWithoutAKey
+ */
 void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 {
 	try {
@@ -379,11 +368,11 @@ void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 	}
 
 	try {
-		auto key_vals = import_to_map(true);
+		auto key_vals = import_to_map();
 
 		for (auto &pair : key_vals) {
 			if (pair.first != key) {
-				print_key_val(out, pair.first, pair.second, false);
+				print_key_val(out, pair.first, pair.second);
 				out << std::endl;
 			}
 		}
@@ -392,6 +381,21 @@ void qtc::ConfigFile::remove_key(std::string key, std::ostream &out)
 	}
 }
 
+/*
+ * It removes the key param1 in the same file itself.
+ *
+ * param1:
+ * 	key to remove
+ *
+ * possible exceptions:
+ * 	EqualToWithoutAKey
+ * 	FileOpenFailed
+ * 	InvalidCharacter
+ * 	MissingEqualTo
+ * 	NoValueFoundForKey
+ * 	TrailingCharsAfterEqualTo
+ * 	ValueWithoutAKey
+ */
 void qtc::ConfigFile::remove_key(std::string key)
 {
 	try {
@@ -401,7 +405,7 @@ void qtc::ConfigFile::remove_key(std::string key)
 	}
 
 	try {
-		auto key_vals = import_to_map(true);
+		auto key_vals = import_to_map();
 
 		file_reader.close();
 
@@ -416,7 +420,7 @@ void qtc::ConfigFile::remove_key(std::string key)
 
 		for (auto &pair : key_vals) {
 			if (pair.first != key) {
-				print_key_val(out, pair.first, pair.second, false);
+				print_key_val(out, pair.first, pair.second);
 				out << std::endl;
 			}
 		}
@@ -425,7 +429,21 @@ void qtc::ConfigFile::remove_key(std::string key)
 	}
 }
 
-std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map(bool exact_value)
+/*
+ * It goes though all the keys in the qtc file
+ * and store the key value pairs in an unordered_map
+ * and returns.
+ *
+ * possible Exceptions:
+ * 	EqualToWithoutAKey
+ * 	FileOpenFailed
+ * 	InvalidCharacter
+ * 	MissingEqualTo
+ * 	NoValueFoundForKey
+ * 	TrailingCharsAfterEqualTo
+ * 	ValueWithoutAKey
+ */
+std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map()
 {
 	std::unordered_map<std::string, std::string> imported_map;
 	std::string key, value;
@@ -448,11 +466,7 @@ std::unordered_map<std::string, std::string> qtc::ConfigFile::import_to_map(bool
 				break;
 			}
 
-			if (exact_value) {
-				value = in_block_parse();
-			} else {
-				value = in_block_parse_and_strip_blanks();
-			}
+			value = in_block_parse();
 
 			imported_map.insert({key, value});
 		}
