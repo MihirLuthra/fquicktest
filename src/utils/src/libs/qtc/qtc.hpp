@@ -1,6 +1,7 @@
 #ifndef __QTC_HPP__
 #define __QTC_HPP__
 
+#include <cstring>
 #include <error/error.h>
 #include <exception>
 #include <fstream>
