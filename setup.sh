@@ -66,3 +66,23 @@ elif is_zsh ; then
 	fi
 	actions_for_zsh
 fi
+
+install_qtc_vim_syntax_highlighting() {
+	mkdir -p "$HOME/.vim/syntax" || return 1
+	mkdir -p "$HOME/.vim/ftdetect" || return 1
+
+	if [ -e "$HOME/.vim/syntax/qtc.vim" ]
+	then
+		return 1
+	fi
+
+	if [ -e "$HOME/.vim/ftdetect/qtc.vim" ]
+	then
+		return 1
+	fi
+
+	cp "$QUICKTEST_PATH/vim/syntax/qtc.vim" "$HOME/.vim/syntax/"
+	cp "$QUICKTEST_PATH/vim/ftdetect/qtc.vim" "$HOME/.vim/ftdetect/"
+}
+
+install_qtc_vim_syntax_highlighting || return 1
