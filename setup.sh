@@ -86,3 +86,5 @@ install_qtc_vim_syntax_highlighting() {
 }
 
 install_qtc_vim_syntax_highlighting || return 1
+
+(cd "$QUICKTEST_PATH" && make)
