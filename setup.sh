@@ -85,6 +85,6 @@ install_qtc_vim_syntax_highlighting() {
 	cp "$QUICKTEST_PATH/vim/ftdetect/qtc.vim" "$HOME/.vim/ftdetect/"
 }
 
-install_qtc_vim_syntax_highlighting || return 1
+install_qtc_vim_syntax_highlighting
 
 (cd "$QUICKTEST_PATH" && make)
