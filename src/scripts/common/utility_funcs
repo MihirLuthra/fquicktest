@@ -165,32 +165,6 @@ prompt_if_overwrite() {
 	return 0
 }
 
-#
-# Description:
-#   Sets $FILE_TO_OPEN_KEY in current defaults. This is done
-#   so that replace_quicktest_vars is able to replace ___FILE_TO_OPEN___.
-#
-#   The file is then touched to modify its timestamps and also so
-#   that it exists in case it didn't exist before.
-#
-#   Way to open is fetched fron user config file and stored in a variable.
-#   The variable is passed to bash -c to get executed.
-#
-# param1: file to open
-#
-open_file() {
-	local file=$1 ; shift
-	local open
-
-	touch "$file" || return_error
-
-	set_in_current_defaults "$FILE_TO_OPEN_KEY" "$file" || return_error
-
-	open="$(get_from_user_config_file_or_default "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
-
-	"$QTBASH" -c "$open" || return_error
-}
-
 replace() {
 	local replacee=$1 ; shift
 	local replacement=$1 ; shift
@@ -241,4 +215,34 @@ is_bashv4() {
 
 fpreprocess() {
 	preprocess 2 "$PROGRAM_FUNC_DIR" "$USER_FUNC_DIR" 1 "$ALIAS_FILE_PATH" 1 "$RENAME_FILE_PATH" || return_error
+}
+
+#
+# Description:
+#   Sets $FILE_TO_OPEN_KEY in current defaults. This is done
+#   so that replace_quicktest_vars is able to replace ___FILE_TO_OPEN___.
+#
+#   The file is then touched to modify its timestamps and also so
+#   that it exists in case it didn't exist before.
+#
+#   Way to open is fetched fron user config file and stored in a variable.
+#   The variable is passed to bash -c to get executed.
+#
+# param1: file to open
+#
+open_file() {
+	local file=$1 ; shift
+	local open
+
+	touch "$file" || return_error
+
+	file="$( put_single_quotes "$file" )" || return_error
+
+	set_in_current_defaults "$FILE_TO_OPEN_KEY" "$file" || return_error
+
+	open="$(get_from_user_config_file_or_default "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
+
+	echo_err ":$open:"
+
+	"$QTBASH" -c "$open" || return_error
 }
