@@ -245,7 +245,5 @@ open_file() {
 
 	open="$(get_from_user_config_file_or_default "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
 
-	echo_err ":$open:"
-
 	"$QTBASH" -c "$open" || return_error
 }
