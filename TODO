@@ -1,2 +1,9 @@
-1) Move build system to CMake
-2) Add support for package managers
+- Move build system to CMake
+- Add support for package managers
+- lt directory [--change|--current etc]
+- curstom prompt with zsh and bash to support lt directory
+- individual directory for funcs created by user
+- custom subcmds created by user like lt copy
+- lt preprocess (change lt func to that)
+- default args in aliases (<>)
+- add multi tab management of instances
