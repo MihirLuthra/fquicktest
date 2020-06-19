@@ -214,7 +214,10 @@ is_bashv4() {
 }
 
 fpreprocess() {
-	preprocess 2 "$PROGRAM_FUNC_DIR" "$USER_FUNC_DIR" 1 "$ALIAS_FILE_PATH" 1 "$RENAME_FILE_PATH" || return_error
+	preprocess \
+		2 "$PROGRAM_FUNC_DIR" "$USER_FUNC_DIR" \
+		2 "$PROGRAM_ALIAS_FILE_PATH" "$ALIAS_FILE_PATH" \
+		1 "$RENAME_FILE_PATH" || return_error
 }
 
 #
