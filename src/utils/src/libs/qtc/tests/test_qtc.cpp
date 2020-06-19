@@ -258,7 +258,7 @@ void sample_qtc_files::run_tests_for_import_to_map()
 				{"HOW_ARE_YOU", "\nFINE\n"},
 				{"HOW_WAS_YOUR_DAY", " GOOD"},
 				{"LIKE_VIM", "YES}"},
-				{"LIKE_LINUX", "\n\n\n\nhello far away"}
+				{"LIKE_LINUX", "\n\n\n\nhello far awayno spaces"}
 			}
 		}
 	};
@@ -289,7 +289,7 @@ void sample_qtc_files::run_tests_for_get_value_for_key()
 				{"HOW_ARE_YOU", "\nFINE\n"},
 				{"HOW_WAS_YOUR_DAY", " GOOD"},
 				{"LIKE_VIM", "YES}"},
-				{"LIKE_LINUX", "\n\n\n\nhello far away"}
+				{"LIKE_LINUX", "\n\n\n\nhello far awayno spaces"}
 			}
 		}
 	};
