@@ -1,3 +1,2 @@
-DEFAULT_ARGS = {
+DEFAULT_ARGS =
 	open 1
-}
