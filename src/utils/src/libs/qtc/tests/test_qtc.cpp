@@ -255,12 +255,10 @@ void sample_qtc_files::run_tests_for_import_to_map()
 		{
 			"sample_qtc_files/wierdly_formatted.qtc",
 			{
-				{"HOW_ARE_YOU", "FINE"},
-				{"HOW_WAS_YOUR_DAY", "GOOD"},
-				{"LIKE_VIM", "YES"},
-				{"LIKE_WINDOWS", "NO"},
-				{"LIKE_LINUX", "ye}s"}
-
+				{"HOW_ARE_YOU", "\nFINE\n"},
+				{"HOW_WAS_YOUR_DAY", " GOOD"},
+				{"LIKE_VIM", "YES}"},
+				{"LIKE_LINUX", "\n\n\n\nhello far away"}
 			}
 		}
 	};
@@ -288,12 +286,10 @@ void sample_qtc_files::run_tests_for_get_value_for_key()
 		{
 			"sample_qtc_files/wierdly_formatted.qtc",
 			{
-				{"HOW_ARE_YOU", "FINE"},
-				{"HOW_WAS_YOUR_DAY", "GOOD"},
-				{"LIKE_VIM", "YES"},
-				{"LIKE_WINDOWS", "NO"},
-				{"LIKE_LINUX", "ye}s"}
-
+				{"HOW_ARE_YOU", "\nFINE\n"},
+				{"HOW_WAS_YOUR_DAY", " GOOD"},
+				{"LIKE_VIM", "YES}"},
+				{"LIKE_LINUX", "\n\n\n\nhello far away"}
 			}
 		}
 	};
