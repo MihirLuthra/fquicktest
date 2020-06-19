@@ -32,18 +32,42 @@ get_by_relative_cnt() {
 	' || return_error
 }
 
-args_or_fzf_search() {
+arg_or_fzf_search() {
+	local dir=$1 ; shift
+	local message=$1 ; shift
+	local option=$1 ; shift
+	local file
+	local full_path
+
+	if [ ${ARG_CNT[$option]:-0} -eq 1 ]
+	then
+		file=${ARGS[$option,0]}
+	else
+		file="$( fzf_search "$message" "$dir" )" || return_error
+		[ -z "$file" ] && return_error
+	fi
+
+	full_path="$dir/$file"
+	print_if_not_file "$full_path" && return_error
+
+	printf "%s" "$full_path"
+}
+
+args_or_fzf_multi_search() {
 	local dir=$1 ; shift
 	local message=$1 ; shift
 	local option=$1 ; shift
 	local action_template=$1 ; shift
-	local replacee=$1
+	local replacee=$1 ; shift
+	local return_on_fail=$1 ; shift
 	local files
 	local full_path
 	local last_arg
 	local arg_no
 	local temp_file
 	local retval
+
+	declare -a ret_arr
 
 	if [ ${ARG_CNT[$option]:-0} -ge 1 ]
 	then
@@ -71,12 +95,17 @@ args_or_fzf_search() {
 
 		full_path="$( put_single_quotes "$full_path" )"
 
-		echo_err "$full_path"
+		ret_arr+=( "$full_path" )
 
-		action="$( replace "$replacee" "$full_path" "$action_template" )" || return_error
-
-		"${QTBASH}" -c "$action"
+		if [ -n "$action_template" ]
+		then
+			action="$( replace "$replacee" "$full_path" "$action_template" )" || return_error
+			"${QTBASH}" -c "$action" ; retval=$?
+			[ -n "$return_on_fail" ] && [ "$retval" -ne 0 ] && return_error
+		fi
 	done
+
+	printf "%s " "${ret_arr[@]}"
 }
 
 delete_files() {
@@ -86,5 +115,24 @@ delete_files() {
 
 	action='rm -i __TO_REPLACE__'
 
-	args_or_fzf_search "$dir" "$message" '-d' "$action" '__TO_REPLACE__'
+	args_or_fzf_multi_search "$dir" "$message" '-d' "$action" '__TO_REPLACE__' '1' > /dev/null
+}
+
+open_files() {
+	local dir=$1 ; shift
+	local message=$1 ; shift
+	local option=$1
+	local action
+	local files_to_open
+
+	action='touch __TO_REPLACE__'
+
+	files_to_open="$( args_or_fzf_multi_search "$dir" "$message" "$option" "$action" '__TO_REPLACE__' '1' )" \
+		|| return_error
+
+	set_in_current_defaults "$FILE_TO_OPEN_KEY" "$files_to_open" || return_error
+
+	open="$(get_from_user_config_file_or_default "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
+
+	"$QTBASH" -c "$open" || return_error
 }
