@@ -2,7 +2,7 @@ CC = g++
 
 LFLAGS = -L../../../../libs -lqtc
 IFLAGS = -I../../../libs
-CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic -DNDEBUG $(LFLAGS) $(IFLAGS)
+CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic -DNDEBUG $(IFLAGS)
 
 BIN_DIR = ../../../../bin
 
@@ -15,7 +15,7 @@ BIN = $(BIN_DIR)/$(NAME)
 all: $(BIN)
 
 $(BIN) : $(SRC) ../../../libs/error/error.h
-	$(CC) $(CFLAGS) $< -o $(BIN)
+	$(CC) $(CFLAGS) $< -o $(BIN) $(LFLAGS)
 	cp $(BIN) $(NAME).out
 
 clean:
