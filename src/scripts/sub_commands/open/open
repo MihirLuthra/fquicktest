@@ -189,6 +189,8 @@ open() {
 		if [ -n "${ARGS[open,0]}" ]
 		then
 			instance_full_path="$(instance_by_relative_cnt)" || return_error
+		else
+			instance_full_path="$(current_instance_path)" || return_error
 		fi
 	fi
 
