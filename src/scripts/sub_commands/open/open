@@ -121,18 +121,13 @@ instance_by_relative_cnt() {
 	local instance
 	local instance_full_path
 
-	instance="$( get_by_relative_cnt 'open' "$INSTANCES_DIR" )"
-
-	[ -z "$instance" ] && return_error
+	instance="$( get_by_relative_cnt 'open' "$INSTANCES_DIR" )" || return_error
 
 	instance_full_path="$INSTANCES_DIR/$instance"
 
 	exists_but_not_file "$instance_full_path" && return_error
 
 	set_in_current_defaults "$INSTANCE_KEY" "$instance" || return_error
-
-	local dir="$( dirname "$file" )"
-	mkdir -p "$dir"
 
 	touch "$instance_full_path"
 

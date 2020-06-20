@@ -15,6 +15,7 @@ print_usage() {
 
 	printf_err "%s\n"                                  \
 	'quicktest user_config'                            \
+	'    [relative_cnt]'                               \
 	'    [-c|--current]'                               \
 	'    [-d|--delete <user_config_file_name>]'        \
 	'    [-h|--help]'                                  \
@@ -30,7 +31,7 @@ parse_user_config_options() {
 	local option_parser_retval
 
 	parse_options \
-		'user_config'                     '0'                \
+		'user_config'                     '-1'               \
 		\
 		'-c' , '--current'                '0'                \
 		'-d' , '--delete'                 '-1'               \
@@ -51,6 +52,21 @@ parse_user_config_options() {
 		return_error
 	fi
 
+}
+
+user_config_by_relative_cnt() {
+    local user_config
+    local user_config_full_path
+
+    user_config="$( get_by_relative_cnt 'user_config' "$USER_CONFIG_FILES_DIR" )" || return_error
+
+    user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
+
+    exists_but_not_file "$user_config_full_path" && return_error
+
+    set_in_current_defaults "$USER_CONFIG_FILE_KEY" "$user_config" || return_error
+
+    open_file "$user_config_full_path" || return_error
 }
 
 option_current() {
@@ -96,6 +112,9 @@ user_config() {
 	for option in "${!OPTIONS[@]}"
 	do
 		case "$option" in
+			user_config)
+				user_config_by_relative_cnt || return_error
+				;;
 			-c)
 				option_current || return_error
 				;;

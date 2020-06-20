@@ -21,6 +21,7 @@ set +e
 print_usage() {
 	printf_err "%s\n"                                  \
 	'quicktest boilerplate'                            \
+	'    [realtive_cnt]'                               \
 	'    [-c|--current]'                               \
 	'    [-d|--delete <boilerplate_name>]'             \
 	'    [-h|--help]'                                  \
@@ -34,7 +35,7 @@ parse_boilerplate_options() {
 	local option_parser_retval
 
 	parse_options \
-		'boilerplate'                     '0'                \
+		'boilerplate'                     '-1'               \
 		\
 		'-c' , '--current'                '0'                \
 		'-d' , '--delete'                 '-1'               \
@@ -54,6 +55,21 @@ parse_boilerplate_options() {
 		print_usage
 		return_error
 	fi
+}
+
+boilerplate_by_relative_cnt() {
+    local boilerplate
+    local boilerplate_full_path
+
+    boilerplate="$( get_by_relative_cnt 'boilerplate' "$BOILERPLATE_FILES_DIR" )" || return_error
+
+    boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
+
+    exists_but_not_file "$boilerplate_full_path" && return_error
+
+    set_in_current_defaults "$BOILERPLATE_KEY" "$boilerplate" || return_error
+
+    open_file "$boilerplate_full_path" || return_error
 }
 
 option_current() {
@@ -103,6 +119,9 @@ boilerplate() {
 	for option in "${!OPTIONS[@]}"
 	do
 		case "$option" in
+			boilerplate)
+				boilerplate_by_relative_cnt || return_error
+				;;
 			-c)
 				option_current || return_error
 				;;

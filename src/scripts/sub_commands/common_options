@@ -11,6 +11,7 @@ get_by_relative_cnt() {
 	local self_key_name=$1 ; shift
 	local dir=$1; shift
 	local cnt=$1
+	local nth_file
 
 	if [ -z "$cnt" ]
 	then
@@ -23,14 +24,22 @@ get_by_relative_cnt() {
 		return_error
 	fi
 
-	list_time_sorted_null_term "$dir" | gawk -v line="$cnt" '
-		BEGIN {
-			RS="\0"
-		}
-		NR == line {
-			print
-		}
-	' || return_error
+	nth_file="$(
+		list_time_sorted_null_term "$dir" | gawk -v line="$cnt" '
+			BEGIN {
+				RS="\0"
+			}
+			NR == line {
+				print
+			}
+	')" || return_error
+
+	[ -z "$nth_file" ] && {
+		a_echo_err "No file at realtive count $cnt"
+		return_error
+	}
+
+	printf "%s" "$nth_file"
 }
 
 arg_or_fzf_search() {
