@@ -29,8 +29,8 @@ parse_func_options() {
 	local option_parser_retval
 
 	parse_options \
-		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
-		                                                 \
+		'func'                                 '0'       \
+		\
 		'-a' , '--alias-file'                  '0'       \
 		'-c' , '--create-func'                 '1'       \
 		'-d' , '--delete'                      '-1'      \
@@ -45,7 +45,7 @@ parse_func_options() {
 	option_parser_retval=$?
 
 	if [ $option_parser_retval -ne 0 ] ; then
-		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		option_parser_error_msg $option_parser_retval
 		print_usage
 		return_error
 	fi

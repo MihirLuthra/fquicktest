@@ -27,9 +27,8 @@ parse_quicktest_options() {
 
 	local option_parser_retval
 
-	parse_options \
-		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
-		                                                 \
+	parse_options                                        \
+		'quicktest'                              '0'     \
 		'action'      , 'a'                      'S'     \
 		'boilerplate' , 'b'                      'S'     \
 		'func'        , 'f'                      'S'     \
@@ -45,7 +44,7 @@ parse_quicktest_options() {
 	option_parser_retval=$?
 
 	if [ $option_parser_retval -ne 0 ] ; then
-		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		option_parser_error_msg $option_parser_retval
 		print_usage
 		return_error
 	fi

@@ -24,8 +24,8 @@ parse_action_options() {
 	local option_parser_retval
 
 	parse_options \
-		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
-		                                                 \
+		'action'                 '-1'                    \
+		\
 		'-d' , '--delete'        '-1'                    \
 		'-h' , '--help'          '0'                     \
 		'-r' , '--register'      '1 1'                   \
@@ -37,7 +37,7 @@ parse_action_options() {
 	option_parser_retval=$?
 
 	if [ $option_parser_retval -ne 0 ] ; then
-		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		option_parser_error_msg $option_parser_retval
 		print_usage
 		return_error
 	fi
@@ -49,19 +49,19 @@ self_actions() {
 	local action_args
 	local last_arg
 
-	action_key=${ARGS[self,0]}
+	action_key=${ARGS[action,0]}
 
 	action="$( get_from_user_config_file "$action_key" )" || return_error
 
 	action="$( fpreprocess <<<"$action" )" || return_error
 
-	last_arg="$( expr ${ARG_CNT[self]} - 1 )"
+	last_arg="$( expr ${ARG_CNT[action]} - 1 )"
 
 	if [ $last_arg -ge 1 ]
 	then
 		for arg_no in $(seq 1 "$last_arg")
 		do
-			action_args="$action_args $( put_single_quotes "${ARGS[self,"$arg_no"]}" )" || return_error
+			action_args="$action_args $( put_single_quotes "${ARGS[action,"$arg_no"]}" )" || return_error
 		done
 	fi
 
@@ -107,7 +107,7 @@ option_show_all() {
 action() {
 	parse_action_options "$@" || return_error
 
-	if [ "${ARG_CNT[self]:-0}" -ne 0 ]
+	if [ "${ARG_CNT[action]:-0}" -ne 0 ]
 	then
 		self_actions || return_error
 		return 0

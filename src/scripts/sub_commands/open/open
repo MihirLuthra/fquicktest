@@ -29,8 +29,8 @@ parse_open_options() {
 	local option_parser_retval
 
 	parse_options \
-		, 'OPTIONS' 'ARG_CNT' 'ARGS' 'self' '0' ';' '--' \
-		                                                 \
+		'open'                   '-1'                    \
+		\
 		'-b' , '--boilerplate'   '-1'                    \
 		'-h' , '--help'          '0'                     \
 		'-i' , '--instance'      '-1'                    \
@@ -43,7 +43,7 @@ parse_open_options() {
 	option_parser_retval=$?
 
 	if [ $option_parser_retval -ne 0 ] ; then
-		option_parser_error_msg $option_parser_retval 'OPTIONS'
+		option_parser_error_msg $option_parser_retval
 		print_usage
 		return_error
 	fi
@@ -121,7 +121,7 @@ instance_by_relative_cnt() {
 	local instance
 	local instance_full_path
 
-	instance="$( get_by_relative_cnt "$INSTANCES_DIR" )"
+	instance="$( get_by_relative_cnt 'open' "$INSTANCES_DIR" )"
 
 	[ -z "$instance" ] && return_error
 
@@ -177,7 +177,7 @@ open() {
 	then
 		instance_full_path="$(option_instance)" || return_error
 	else
-		if [ -n "${ARGS[self,0]}" ]
+		if [ -n "${ARGS[open,0]}" ]
 		then
 			instance_full_path="$(instance_by_relative_cnt)" || return_error
 		else
