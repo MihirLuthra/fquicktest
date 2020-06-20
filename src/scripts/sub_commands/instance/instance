@@ -20,6 +20,7 @@ print_usage() {
 	printf_err "%s\n"                             \
 	'quicktest instance'                          \
 	'    [-c|--current]'                          \
+	'    [--config-file]'                         \
 	'    [-d|--delete [<instance_name>]]'         \
 	'    [-g|--get <at_path> [<instance_name>]]'  \
 	'    [-h|--help]'                             \
@@ -34,6 +35,7 @@ parse_instance_options() {
 		'instance'               '0'                     \
 		\
 		'-c' , '--current'       '0'                     \
+		'--config-file'          '0'                     \
 		'-d' , '--delete'        '-1'                    \
 		'-g' , '--get'           '1 -1'                  \
 		'-h' , '--help'          '0'                     \
@@ -101,6 +103,14 @@ option_show_all() {
 }
 
 instance() {
+	local default_options
+
+	if [ -z "$*" ]
+	then
+		default_options="$( get_default_args )" || return_error
+		eval set -- $default_options
+	fi
+
 	parse_instance_options "$@" || return_error
 
 	for option in "${!OPTIONS[@]}"
@@ -108,6 +118,9 @@ instance() {
 		case "$option" in
 			-c)
 				option_current || return_error
+				;;
+			--config-file)
+				option_config_file || return_error
 				;;
 			-d)
 				option_delete || return_error

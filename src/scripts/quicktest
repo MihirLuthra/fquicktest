@@ -7,17 +7,16 @@ source "$COMMON_PATH"/error_handler
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/data_interface
 source "$COMMON_PATH"/option_parser
-set +e
 
-print_quicktest_help() {
-	less "$( dirname "$BASH_SOURCE" )/help.txt"
-}
+source "$SUB_COMMANDS_DIR"/common_options
+set +e
 
 print_usage() {
 
 	printf_err "%s\n"               \
 	'usage:'                        \
 	'quicktest'                     \
+	'    [--config-file]'           \
 	'    [-h|--help]'               \
 	'    [<sub_command> [<args>]]'
 
@@ -27,7 +26,7 @@ parse_quicktest_options() {
 
 	local option_parser_retval
 
-	parse_options                                        \
+	parse_options \
 		'quicktest'                              '0'     \
 		'action'      , 'a'                      'S'     \
 		'boilerplate' , 'b'                      'S'     \
@@ -36,6 +35,7 @@ parse_quicktest_options() {
 		'open'        , 'o'                      'S'     \
 		'user_config' , 'u'                      'S'     \
 		                                                 \
+		'--config-file'                          '0'     \
 		'-h'          , '--help'                 '0'     \
 		                                                 \
 		';'                                              \
@@ -60,8 +60,7 @@ quicktest() {
 
 	if [ -z "$*" ]
 	then
-		qtc_file="$( dirname "$BASH_SOURCE" )/quicktest.qtc"
-		default_options="$( get_value_for_key "$qtc_file" "$DEFAULT_ARGS_KEY" )" || return_error
+		default_options="$( get_default_args )" || return_error
 		eval set -- $default_options
 	fi
 
@@ -83,8 +82,11 @@ quicktest() {
 				subcmd=$option
 				break
 				;;
+			--config-file)
+				option_config_file || return_error
+				;;
 			-h)
-				print_quicktest_help
+				option_help
 				;;
 		esac
 	done

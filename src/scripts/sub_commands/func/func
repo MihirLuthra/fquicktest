@@ -18,6 +18,7 @@ print_usage() {
 	'quicktest func'                                   \
 	'    [-a|--alias-file]'                            \
 	'    [-c|--create-func <func_name>]'               \
+	'    [--config-file]'                              \
 	'    [-d|--delete [<func_name>]]'                  \
 	'    [-h|--help]'                                  \
 	'    [-m|--modify-func [<func_name>]]'             \
@@ -33,6 +34,7 @@ parse_func_options() {
 		\
 		'-a' , '--alias-file'                  '0'       \
 		'-c' , '--create-func'                 '1'       \
+		'--config-file'                        '0'       \
 		'-d' , '--delete'                      '-1'      \
 		'-h' , '--help'                        '0'       \
 		'-m' , '--modify-func'                 '-1'      \
@@ -99,6 +101,14 @@ option_show_all() {
 }
 
 func() {
+	local default_options
+
+	if [ -z "$*" ]
+	then
+		default_options="$( get_default_args )" || return_error
+		eval set -- $default_options
+	fi
+
 	parse_func_options "$@" || return_error
 
 	for option in "${!OPTIONS[@]}"
@@ -109,6 +119,9 @@ func() {
 				;;
 			-c)
 				option_create_func || return_error
+				;;
+			--config-file)
+				option_config_file || return_error
 				;;
 			-d)
 				option_delete || return_error

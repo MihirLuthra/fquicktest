@@ -14,6 +14,7 @@ set +e
 print_usage() {
 	printf_err "%s\n"                                \
 	'quicktest action [<key_for_action>]'            \
+	'    [--config-file]'                            \
 	'    [-d|--delete <action_name>]'                \
 	'    [-h|--help]'                                \
 	'    [-r|--register <action_name> <action_key>]' \
@@ -26,6 +27,7 @@ parse_action_options() {
 	parse_options \
 		'action'                 '-1'                    \
 		\
+		'--config-file'          '0'                     \
 		'-d' , '--delete'        '-1'                    \
 		'-h' , '--help'          '0'                     \
 		'-r' , '--register'      '1 1'                   \
@@ -105,6 +107,14 @@ option_show_all() {
 }
 
 action() {
+	local default_options
+
+	if [ -z "$*" ]
+	then
+		default_options="$( get_default_args )" || return_error
+		eval set -- $default_options
+	fi
+
 	parse_action_options "$@" || return_error
 
 	if [ "${ARG_CNT[action]:-0}" -ne 0 ]
@@ -116,6 +126,9 @@ action() {
 	for option in "${!OPTIONS[@]}"
 	do
 		case "$option" in
+			--config-file)
+				option_config_file || return_error
+				;;
 			-d)
 				option_delete || return_error
 				;;

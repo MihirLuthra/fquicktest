@@ -17,6 +17,7 @@ print_usage() {
 	'quicktest open'                              \
 	'    [relative_count [-g|--global]]'          \
 	'    [-b|--boilerplate [<boilerplate_name>]]' \
+	'    [--config-file]'                         \
 	'    [-h|--help]'                             \
 	'    [-i|--instance [<instance_name>]]'       \
 	'    [-n|--new]'                              \
@@ -32,6 +33,7 @@ parse_open_options() {
 		'open'                   '-1'                    \
 		\
 		'-b' , '--boilerplate'   '-1'                    \
+		'--config-file'          '0'                     \
 		'-h' , '--help'          '0'                     \
 		'-i' , '--instance'      '-1'                    \
 		'-n' , '--new'           '0'                     \
@@ -148,16 +150,28 @@ write_boilerplate_to_instance() {
 }
 
 open() {
-
 	local boilerplate_full_path
 	local user_config_full_path
 	local instance_full_path
+	local default_options
+
+	if [ -z "$*" ]
+	then
+		default_options="$( get_default_args )" || return_error
+		eval set -- $default_options
+	fi
 
 	parse_open_options "$@" || return_error
 
 	if [ -n "${OPTIONS[-h]}" ]
 	then
 		option_help
+		return 0
+	fi
+
+	if [ -n "${OPTIONS[--config-file]}" ]
+	then
+		option_config_file || return_error
 		return 0
 	fi
 
@@ -175,8 +189,6 @@ open() {
 		if [ -n "${ARGS[open,0]}" ]
 		then
 			instance_full_path="$(instance_by_relative_cnt)" || return_error
-		else
-			instance_full_path="$(current_instance_path)" || return_error
 		fi
 	fi
 
