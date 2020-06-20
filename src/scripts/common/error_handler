@@ -58,8 +58,8 @@ quicktest_path_normalize() {
 
 alias a_echo_err='echo_err "$BOLD$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:$BOLD_OFF" '
 alias a_cecho_err='cecho_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
-alias a_printf_err='printf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
-alias a_cprintf_err='cprintf_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
+alias a_printf_err='printf_err "%s\n" $BOLD"$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:$BOLD_OFF" '
+alias a_cprintf_err='cprintf_err "%s\n" "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
 
 alias return_if_error='
 	if [ $? -ne 0 ] ; then
