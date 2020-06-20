@@ -64,7 +64,10 @@ list_time_sorted_null_term() {
 		# 2) prints inode modification time, a single space and then file name which is null terminated
 		# 3) sorts it on the basis of inode modification time
 		# 4) gawk then removed time from the output
-		find * -type f -exec bash -c 'printf "%s " $(getctime "{}")' \; -print0 \
+		while IFS= read -r -d '' file
+		do
+			printf "%s %s\0" "$( getctime "$file" )" "$file"
+		done < <(find * -type f -print0 ) \
 		| sort -r -n -z -k1 \
 		| gawk '
 			BEGIN {
@@ -77,8 +80,12 @@ list_time_sorted_null_term() {
 				print
 			}
 		'
-		return_if_error
 
+		[ "${PIPESTATUS[0]:-0}" -ne 0 ] && return_error
+		[ "${PIPESTATUS[1]:-0}" -ne 0 ] && return_error
+		[ "${PIPESTATUS[2]:-0}" -ne 0 ] && return_error
+
+		return 0
 	} || {
 		a_echo_err "Directory is empty"
 		return_error
