@@ -25,7 +25,7 @@ parse_action_options() {
 	local option_parser_retval
 
 	parse_options \
-		'action'                 '-1'                    \
+		'action'                 '...'                   \
 		\
 		'--config-file'          '0'                     \
 		'-d' , '--delete'        '-1'                    \
