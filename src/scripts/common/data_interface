@@ -11,15 +11,39 @@ source "$COMMON_PATH"/error_handler
 source "$COMMON_PATH"/utility_funcs
 set +e
 
+current_defaults_new_tty_init() {
+	local current_defaults_full_path=$1
+
+	if [ ! -e "$current_defaults_full_path" ]
+	then
+		# remove all existing files of current tty
+		find "$CURRENT_DEFAULTS_DIR" -name "*_${QT_TTY_NAME}.qtc" -type f -exec rm {} \;
+		latest_cdf="$( get_by_relative_cnt "$CURRENT_DEFAULTS_DIR" '1' 2> /dev/null )"
+
+		if [ -n "$latest_cdf" ]
+		then
+			cp "$CURRENT_DEFAULTS_DIR/$latest_cdf" "$current_defaults_full_path" || return_error
+		else
+			touch "$current_defaults_full_path" || return_error
+		fi
+	fi
+}
+
 #
 # Same as get_value_for_key but param(file)
 # gets defaulted to current_defaults file
 #
 get_from_current_defaults() {
-
 	local key="$1" ; shift
+	local current_defaults_name
+	local current_defaults_full_path
 
-	get_value_for_key "$CURRENT_DEFAULTS_FILE" "$key" || return_error
+	current_defaults_name="${QT_TTY_DATE}_${QT_TTY_NAME}.qtc"
+	current_defaults_full_path="$CURRENT_DEFAULTS_DIR/$current_defaults_name"
+
+	current_defaults_new_tty_init "$current_defaults_full_path" || return_error
+
+	get_value_for_key "$current_defaults_full_path" "$key" || return_error
 }
 
 get_from_default_user_config_file() {
@@ -44,7 +68,7 @@ get_from_user_config_file() {
 	local user_config_file_path
 	local value
 
-	user_config_file_name="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "$USER_CONFIG_FILE_KEY" )" \
+	user_config_file_name="$( get_from_current_defaults "$USER_CONFIG_FILE_KEY" )" \
 		|| return_error
 
 	print_if_key_is_null "$USER_CONFIG_FILE_KEY" "$user_config_file_name" && return 1
@@ -62,8 +86,15 @@ get_from_user_config_file() {
 set_in_current_defaults() {
 	local key=$1 ; shift
 	local value="$1" ; shift
+	local current_defaults_name
+	local current_defaults_full_path
 
-	set_value_for_key "$CURRENT_DEFAULTS_FILE" "$key" "$value" || return_error
+	current_defaults_name="${QT_TTY_DATE}_${QT_TTY_NAME}.qtc"
+	current_defaults_full_path="$CURRENT_DEFAULTS_DIR/$current_defaults_name"
+
+	current_defaults_new_tty_init "$current_defaults_full_path" || return_error
+
+	set_value_for_key "$current_defaults_full_path" "$key" "$value" || return_error
 }
 
 #
