@@ -41,35 +41,6 @@ get_default_args() {
 	printf "%s" "$default_options"
 }
 
-get_by_relative_cnt() {
-	local dir=$1; shift
-	local cnt=$1
-	local nth_file
-
-	if ! is_num "$cnt"
-	then
-		a_echo_err "$cnt: invalid relative count"
-		return_error
-	fi
-
-	nth_file="$(
-		list_time_sorted_null_term "$dir" | gawk -v line="$cnt" '
-			BEGIN {
-				RS="\0"
-			}
-			NR == line {
-				print
-			}
-	')" || return_error
-
-	[ -z "$nth_file" ] && {
-		a_echo_err "No file at realtive count $cnt"
-		return_error
-	}
-
-	printf "%s" "$nth_file"
-}
-
 arg_or_fzf_search() {
 	local dir=$1 ; shift
 	local message=$1 ; shift
