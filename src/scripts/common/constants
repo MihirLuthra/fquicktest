@@ -40,7 +40,7 @@ readonly RENAME_FILE_PATH="$USER_DATA_DIR/rename_file.qtc"
 
 readonly USER_CONFIG_FILES_DIR="$USER_DATA_DIR/user_config_files"
 readonly BOILERPLATE_FILES_DIR="$USER_DATA_DIR/boilerplates"
-readonly CURRENT_DEFAULTS_FILE="$USER_DATA_DIR/current_defaults.qtc"
+readonly CURRENT_DEFAULTS_DIR="$USER_DATA_DIR/current_defaults"
 
 readonly USER_COMMAND_TEMPLATE="$PROGRAM_DATA_DIR/user_command_template"
 
