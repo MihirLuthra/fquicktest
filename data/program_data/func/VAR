@@ -5,6 +5,7 @@ COMMON_PATH="$QUICKTEST_PATH/src/scripts/common"
 set -e
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/error_handler
+source "$COMMON_PATH"/data_interface
 set +e
 
 # quicktest vars:
@@ -31,10 +32,10 @@ VAR() {
 
 	case "$var" in
 		'FILE_TO_OPEN')
-			value="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "FILE_TO_OPEN" )"
+			value="$( get_from_current_defaults "FILE_TO_OPEN" )" || return_error
 			;;
 		'INSTANCE')
-			value="$( get_value_for_key "$CURRENT_DEFAULTS_FILE" "INSTANCE" )"
+			value="$( get_from_current_defaults "INSTANCE" )" || return_error
 			;;
 		'INSTANCES_DIR')
 			value=$INSTANCES_DIR
@@ -46,8 +47,6 @@ VAR() {
 			value="$QUICKTEST_PATH"
 			;;
 	esac
-
-	return_if_error
 
 	printf "%s" "$value"
 }
