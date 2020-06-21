@@ -1,10 +1,8 @@
 #! /usr/bin/env bash
 
-COMMON_PATH="$QUICKTEST_PATH/"src/scripts/common
-
 set -e
-source "$COMMON_PATH"/error_handler
-source "$COMMON_PATH"/constants
+source "$QT_COMMON_PATH"/error_handler
+source "$QT_COMMON_PATH"/constants
 set +e
 
 f_print_if_func_name_invalid() {

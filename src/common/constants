@@ -8,13 +8,12 @@ readonly SRC_DIR="$QUICKTEST_PATH/src"
 readonly DATA_DIR="$QUICKTEST_PATH/data"
 readonly COMMANDS_DIR="$QUICKTEST_PATH/commands"
 
-readonly SCRIPTS_DIR="$SRC_DIR/scripts"
-readonly COMMON_DIR="$SCRIPTS_DIR/common"
+readonly COMMON_DIR="$SRC_DIR/common"
 
 readonly UTILS_DIR="$SRC_DIR/utils"
 readonly UTILS_BIN_DIR="$UTILS_DIR/bin"
 readonly UTILS_LIBS_DIR="$UTILS_DIR/libs"
-readonly SUB_COMMANDS_DIR="$SCRIPTS_DIR/sub_commands"
+readonly SUB_COMMANDS_DIR="$SRC_DIR/sub_commands"
 
 if [[ "$OSTYPE" == "darwin"* ]]
 then

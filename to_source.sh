@@ -27,3 +27,4 @@ fi
 
 readonly QT_TTY_DATE="$( date "+%d%m%Y%H%M%S" )" ; export QT_TTY_DATE
 readonly QT_TTY_NAME="$( basename "$(tty)" )" ; export QT_TTY_NAME
+readonly QT_COMMON_PATH="$QUICKTEST_PATH/src/common" ; export QT_COMMON_PATH

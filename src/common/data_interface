@@ -3,12 +3,10 @@
 [ -n "$__DATA_INTERFACE__" ] && return 0
 readonly __DATA_INTERFACE__=1
 
-COMMON_PATH="$QUICKTEST_PATH/src/scripts/common"
-
 set -e
-source "$COMMON_PATH"/constants
-source "$COMMON_PATH"/error_handler
-source "$COMMON_PATH"/utility_funcs
+source "$QT_COMMON_PATH"/constants
+source "$QT_COMMON_PATH"/error_handler
+source "$QT_COMMON_PATH"/utility_funcs
 set +e
 
 current_defaults_new_tty_init() {

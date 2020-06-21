@@ -1,11 +1,9 @@
 #! /usr/bin/env bash
 
-COMMON_PATH="$QUICKTEST_PATH/src/scripts/common"
-
 set -e
-source "$COMMON_PATH"/constants
-source "$COMMON_PATH"/error_handler
-source "$COMMON_PATH"/data_interface
+source "$QT_COMMON_PATH"/constants
+source "$QT_COMMON_PATH"/error_handler
+source "$QT_COMMON_PATH"/data_interface
 set +e
 
 # quicktest vars:

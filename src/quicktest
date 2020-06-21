@@ -1,14 +1,11 @@
 #! /usr/bin/env bash
 
-COMMON_PATH="$QUICKTEST_PATH"/src/scripts/common
-
 set -e
-source "$COMMON_PATH"/error_handler
-source "$COMMON_PATH"/constants
-source "$COMMON_PATH"/data_interface
-source "$COMMON_PATH"/option_parser
-
-source "$SCRIPTS_DIR"/common_options
+source "$QT_COMMON_PATH"/error_handler
+source "$QT_COMMON_PATH"/constants
+source "$QT_COMMON_PATH"/data_interface
+source "$QT_COMMON_PATH"/option_parser
+source "$QT_COMMON_PATH"/common_options
 set +e
 
 print_usage() {
