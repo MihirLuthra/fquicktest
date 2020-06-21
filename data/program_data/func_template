@@ -5,7 +5,7 @@ COMMON_PATH="$QUICKTEST_PATH/src/scripts/common"
 set -e
 source "$COMMON_PATH"/constants
 source "$COMMON_PATH"/error_handler
-source "$SCRIPTS_DIR"/option_parser
+source "$COMMON_PATH"/option_parser
 set +e
 
 ___FUNC_NAME___() {
