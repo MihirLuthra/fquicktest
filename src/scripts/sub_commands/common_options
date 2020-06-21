@@ -42,15 +42,9 @@ get_default_args() {
 }
 
 get_by_relative_cnt() {
-	local self_key_name=$1 ; shift
 	local dir=$1; shift
 	local cnt=$1
 	local nth_file
-
-	if [ -z "$cnt" ]
-	then
-		cnt=${ARGS[$self_key_name,0]}
-	fi
 
 	if ! is_num "$cnt"
 	then

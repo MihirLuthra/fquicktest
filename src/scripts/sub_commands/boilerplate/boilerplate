@@ -63,7 +63,7 @@ boilerplate_by_relative_cnt() {
     local boilerplate
     local boilerplate_full_path
 
-    boilerplate="$( get_by_relative_cnt 'boilerplate' "$BOILERPLATE_FILES_DIR" )" || return_error
+    boilerplate="$( get_by_relative_cnt "$BOILERPLATE_FILES_DIR" "${ARGS[boilerplate,0]}" )" || return_error
 
     boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
 
