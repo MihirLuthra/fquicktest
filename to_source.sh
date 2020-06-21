@@ -24,3 +24,6 @@ fi
 if [ -z "$QTBASH" ] ; then
 	export QTBASH="bash"
 fi
+
+readonly QT_TTY_DATE="$( date "+%d%m%Y%H%M%S" )" ; export QT_TTY_DATE
+readonly QT_TTY_NAME="$( basename "$(tty)" )" ; export QT_TTY_NAME
