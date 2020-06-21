@@ -20,6 +20,7 @@ print_usage() {
 	'    [--config-file]'                         \
 	'    [-h|--help]'                             \
 	'    [-i|--instance [<instance_name>]]'       \
+	'    [-l|--last]'                             \
 	'    [-n|--new]'                              \
 	'    [-u|--user-config [<user_config_name>]]'
 
@@ -36,6 +37,7 @@ parse_open_options() {
 		'--config-file'          '0'                     \
 		'-h' , '--help'          '0'                     \
 		'-i' , '--instance'      '-1'                    \
+		'-l' , '--last'          '0'                     \
 		'-n' , '--new'           '0'                     \
 		'-u' , '--user-config'   '-1'                    \
 		                                                 \
@@ -192,6 +194,11 @@ open() {
 		else
 			instance_full_path="$(current_instance_path)" || return_error
 		fi
+	fi
+
+	if [ -n "${OPTIONS[-l]}" ]
+	then
+		instance_full_path="$(current_instance_path)" || return_error
 	fi
 
 	if [ -n "${OPTIONS[-n]}" ]
