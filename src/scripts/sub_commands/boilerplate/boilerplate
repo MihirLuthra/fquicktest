@@ -93,11 +93,15 @@ option_modify() {
 option_new() {
 	local boilerplate
 	local boilerplate_full_path
+	local dir
 
 	boilerplate=${ARGS[-n,0]}
 	boilerplate_full_path="$BOILERPLATE_FILES_DIR/$boilerplate"
 
 	exists_but_not_file "$boilerplate_full_path" && return_error
+
+	dir="$( dirname "$boilerplate_full_path" )" || return_error
+	mkdir -p "$dir" || return_error
 
 	open_file "$boilerplate_full_path" || return_error
 }

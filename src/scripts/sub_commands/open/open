@@ -98,6 +98,7 @@ option_user_config() {
 option_instance() {
 	local instance
 	local instance_full_path
+	local dir
 
 	if [ ${ARG_CNT[-i]:-0} -eq 1 ]
 	then
@@ -111,12 +112,12 @@ option_instance() {
 
 	exists_but_not_file "$instance_full_path" && return_error
 
+	dir="$( dirname "$instance_full_path" )" || return_error
+	mkdir -p "$dir" || return_error
+
 	set_in_current_defaults "$INSTANCE_KEY" "$instance" || return_error
 
-	local dir="$( dirname "$file" )"
-	mkdir -p "$dir"
-
-	touch "$instance_full_path"
+	touch "$instance_full_path" || return_error
 
 	printf "%s" "$instance_full_path"
 }
