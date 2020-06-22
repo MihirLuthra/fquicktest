@@ -1,7 +1,7 @@
-CC = gcc
+include ../../Mk/general.mk
 
 IFLAGS = -I../../libs/
-CFLAGS = -O3 -Wall -Wextra -DNDEBUG -pedantic $(IFLAGS)
+CFLAGS += $(IFLAGS)
 
 BIN_DIR = ../../../bin
 

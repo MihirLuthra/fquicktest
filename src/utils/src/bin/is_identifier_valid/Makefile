@@ -1,7 +1,7 @@
-CC = g++
+include ../../Mk/general.mk
 
 IFLAGS = -I../../libs
-CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic $(IFLAGS)
+CXXFLAGS += $(IFLAGS)
 
 NAME = is_identifier_valid
 SRC = $(NAME).cpp
@@ -12,7 +12,7 @@ BIN = ../../../bin/$(NAME)
 all: $(BIN)
 
 $(BIN): $(SRC) ../../libs/quicktest_identifier/quicktest_identifier.hpp
-	$(CC) $(CFLAGS) $< -o $@
+	$(CXX) $(CXXFLAGS) $< -o $@
 	cp $@ $(NAME).out
 
 clean:

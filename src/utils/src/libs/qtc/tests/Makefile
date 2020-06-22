@@ -1,15 +1,15 @@
-CC = g++
+include ../../Mk/general.mk
 
 LFLAGS = -L../../../../libs  -lqtc
 IFLAGS = -I../../
 
-CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic -fsanitize=address $(IFLAGS) $(LFLAGS)
+CXXFLAGS += $(IFLAGS)
 
 SRC = test_qtc.cpp
 BIN = test_qtc.out
 
 $(BIN): $(SRC) ../../../libs/error/error.h
-	$(CC) $(CFLAGS) $< -o $@
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LFLAGS)
 
 .PHONY: clean run
 

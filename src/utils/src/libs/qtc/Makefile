@@ -1,7 +1,7 @@
-CC = g++
+include ../../Mk/general.mk
 
 IFLAGS = -I../
-CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic-errors $(IFLAGS)
+CXXFLAGS += $(IFLAGS)
 
 LIB_DIR = ../../../libs
 LIB = $(LIB_DIR)/libqtc.so
@@ -16,10 +16,10 @@ OBJS = $(SRCS:%.cpp=%.o)
 qtc.o : qtc.cpp qtc.hpp ../quicktest_identifier/quicktest_identifier.hpp
 
 $(OBJS): 
-	$(CC) $(CFLAGS) -fPIC -c $<
+	$(CXX) $(CXXFLAGS) -fPIC -c $<
 
 $(LIB): $(OBJS)
-	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS)
+	$(CXX) $(CXXFLAGS) -fPIC -shared -o $@ $(OBJS)
 
 clean:
 	rm *.o $(LIB)
