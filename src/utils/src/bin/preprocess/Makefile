@@ -1,6 +1,13 @@
 include ../../Mk/general.mk
 
 LFLAGS = -L../../../libs -lpreprocess -lqtc
+
+ifeq ($(CXX),g++)
+LFLAGS += -lstdc++fs
+else ifeq ($(CXX),clang++)
+LFLAGS += -lc++fs
+endif
+
 IFLAGS = -I../../libs
 CXXFLAGS += $(IFLAGS)
 
