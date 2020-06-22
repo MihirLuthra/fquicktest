@@ -14,6 +14,7 @@ set +e
 print_usage() {
 	printf_err "%s\n"                                  \
 	'quicktest func'                                   \
+	'    [<func_name> [<func_args>]]'                  \
 	'    [-a|--alias-file]'                            \
 	'    [-c|--create-func <func_name>]'               \
 	'    [--config-file]'                              \
@@ -28,7 +29,7 @@ parse_func_options() {
 	local option_parser_retval
 
 	parse_options \
-		'func'                                 '0'       \
+		'func'                                 '...'     \
 		\
 		'-a' , '--alias-file'                  '0'       \
 		'-c' , '--create-func'                 '1'       \
@@ -49,6 +50,31 @@ parse_func_options() {
 		print_usage
 		return_error
 	fi
+}
+
+self_actions() {
+	local func_name
+	local func_path
+	local args
+
+	func_name=${ARGS[func,0]}
+
+	print_if_func_name_invalid "$func_name" && return_error
+
+	if [ -f "$PROGRAM_FUNC_DIR/$func_name" ]
+	then
+		func_path="$PROGRAM_FUNC_DIR/$func_name"
+	elif [ -f "$USER_FUNC_DIR/$func_name" ]
+	then
+		func_path="$USER_FUNC_DIR/$func_name"
+	else
+		a_echo_err "$func_name: function not found"
+		return_error
+	fi
+
+	args="$(forward_args 'func' '1')" || return_error
+
+	"$QTBASH" -c "$func_path $args" || return_error
 }
 
 option_alias_file() {
@@ -112,6 +138,9 @@ func() {
 	for option in "${!OPTIONS[@]}"
 	do
 		case "$option" in
+			func)
+				self_actions || return_error
+				;;
 			-a)
 				option_alias_file || return_error
 				;;
