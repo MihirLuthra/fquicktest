@@ -1,0 +1,147 @@
+#! /usr/bin/env bash
+
+set -e
+QUICKTEST_PATH="$( cd "$( dirname "$BASH_SOURCE" )" && pwd )"
+QT_COMMON_PATH="$QUICKTEST_PATH/src/common"
+
+source "$QT_COMMON_PATH/constants"
+source "$QT_COMMON_PATH/error_handler"
+set +e
+
+report() {
+	local purple='\033[0;35m'
+	printf "\n>>> ${purple}%s${DEFAULT_COLOR}\n" "$@"
+}
+
+report_done() {
+	printf "<<< ${GREEN}%s${DEFAULT_COLOR}\n" "$@"
+}
+
+command_exists() {
+	command -v "$1" >/dev/null 2>&1
+}
+
+make_initial_checks() {
+	report "Making basic requirement checks"
+	if [ -z "$SHELL" ]
+	then
+		a_echo_err '$SHELL is null' || return_error
+	fi
+	report_done "Basic requirement checks passed"
+}
+
+#
+# select loop is rather not the best choice for me.
+# When I first used select loop, I was stuck cuz I
+# didn't knew that a number needs to be selected and not
+# text.
+#
+ask_yes_or_no() {
+	local yn
+	while true; do
+		read yn
+		case $yn in
+			[Yy]*)
+				return 0
+				;;
+			[Nn]*)
+				return 1
+				;;
+			*)
+				echo "Please enter [y/n]:"
+				;;
+		esac
+	done
+}
+
+dependency_checks() {
+	report "Making dependency checks"
+	IFS=$'\n'
+	for dep_name in $( < "$QUICKTEST_PATH/dependencies")
+	do
+		if ! command_exists "$dep_name"
+		then
+			echo "$dep_name is an important dependency of $PROG_NAME"
+			echo "$dep_name not found in PATH, do you still wish to proceeed?[y/n]"
+
+			ask_yes_or_no || return_error
+		fi
+	done
+	report_done "Dependency checks passed"
+}
+
+is_shell_bash() {
+	local shell_name
+
+	shell_name="${SHELL##*/}"
+
+	test "$shell_name" == "bash"
+}
+
+is_shell_zsh() {
+	local shell_name
+
+	shell_name="${SHELL##*/}"
+
+	test "$shell_name" == "zsh"
+}
+
+add_source_scripts() {
+	local code_to_add
+
+	code_to_add="
+# fquicktest source scripts start
+source '$QUICKTEST_PATH/to_source.sh'
+# fquicktest source scripts end"
+
+	if is_shell_zsh
+	then
+		report "Adding to_source.sh to .zshrc and .zlogin"
+		echo "$code_to_add" >> "$HOME/.zshrc"
+		echo "$code_to_add" >> "$HOME/.zlogin"
+	elif is_shell_bash
+	then
+		report "Adding to_source.sh to .bashrc and .bash_profile"
+		echo "$code_to_add" >> "$HOME/.bashrc"
+		echo "$code_to_add" >> "$HOME/.bash_profile"
+	else
+		a_printf_err "%s\n" \
+			"Only supported with bash or zsh as user's default shell" \
+			"Your shell = $SHELL"
+		return_error
+	fi
+	report_done "to_source.sh successfully added"
+}
+
+install_qtc_vim_syntax_highlighting() {
+	printf "\n%s\n" "Do you want to install vim syntax highlighting for .qtc files?[y/n]"
+	ask_yes_or_no || return 0
+
+	report "Adding vim syntax files"
+	mkdir -p "$HOME/.vim/syntax" || return_error
+	mkdir -p "$HOME/.vim/ftdetect" || return_error
+
+	cp "$QUICKTEST_PATH/vim/syntax/qtc.vim" "$HOME/.vim/syntax/" || return_error
+	cp "$QUICKTEST_PATH/vim/ftdetect/qtc.vim" "$HOME/.vim/ftdetect/" || return_error
+	report_done "Successfully added vim syntax files"
+}
+
+install() {
+	report "Making source"
+
+	( cd "$QUICKTEST_PATH" && make) || return_error
+
+	report_done "Done making source"
+
+	make_initial_checks || return_error
+
+	dependency_checks || return_error
+
+	add_source_scripts || return_error
+
+	install_qtc_vim_syntax_highlighting || return_error
+
+	report_done "Installation successful"
+}
+
+install "$@"
