@@ -1,7 +1,7 @@
-bash version 4+
+bash
 gawk
-g++/clang++ with c++17 support
-gcc/clang
+g++
+gcc
 fzf
 mktemp
 vim
