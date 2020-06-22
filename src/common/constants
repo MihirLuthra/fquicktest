@@ -4,6 +4,8 @@
 [ -n "$__CONSTANTS__" ] && return 0
 readonly __CONSTANTS__=1
 
+readonly PROG_NAME='fquicktest'
+
 readonly SRC_DIR="$QUICKTEST_PATH/src"
 readonly DATA_DIR="$QUICKTEST_PATH/data"
 readonly COMMANDS_DIR="$QUICKTEST_PATH/commands"
@@ -61,6 +63,7 @@ readonly ACTION_KEY_REPLACEE='___ACTION_KEY___'
 readonly FUNC_NAME_REPLACEE='___FUNC_NAME___'
 
 readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
 readonly DEFAULT_COLOR='\033[0m'
 
 readonly BOLD="$(tput bold)"
