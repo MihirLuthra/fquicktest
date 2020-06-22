@@ -39,6 +39,26 @@ get_default_args() {
 	printf "%s" "$default_options"
 }
 
+forward_args() {
+	local key=$1 ; shift
+	local start_idx=$1
+
+	local last_arg
+	local constructed_args
+
+	last_arg="$( expr ${ARG_CNT[$key]} - 1 )"
+
+	if [ $last_arg -ge $start_idx ]
+	then
+		for arg_no in $(seq $start_idx $last_arg)
+		do
+			constructed_args="$constructed_args $( put_single_quotes "${ARGS[$key,$arg_no]}" )" || return_error
+		done
+	fi
+
+	printf "%s" "$constructed_args"
+}
+
 arg_or_fzf_search() {
 	local dir=$1 ; shift
 	local message=$1 ; shift
