@@ -23,6 +23,7 @@ print_usage() {
 	'    [-g|--get <at_path> [<instance_name>]]'  \
 	'    [-h|--help]'                             \
 	'    [-p|--path]'                             \
+	'    [-r|--rename [<old_name>] <new_name>]' \
 	'    [-s|--show-all]'
 }
 
@@ -38,6 +39,7 @@ parse_instance_options() {
 		'-g' , '--get'           '1 -1'                  \
 		'-h' , '--help'          '0'                     \
 		'-p' , '--path'          '0'                     \
+		'-r' , '--rename'        '1 -1'                  \
 		'-s' , '--show-all'      '0'                     \
 		                                                 \
 		';'                                              \
@@ -96,6 +98,10 @@ option_path() {
 	printf "%s\n" "$instance_full_path"
 }
 
+option_rename() {
+	rename_file "$INSTANCES_DIR" || return_error
+}
+
 option_show_all() {
 	list_time_sorted "$INSTANCES_DIR" || return_error
 }
@@ -131,6 +137,9 @@ instance() {
 				;;
 			-p)
 				option_path
+				;;
+			-r|--rename)
+				option_rename || return_error
 				;;
 			-s)
 				option_show_all || return_error

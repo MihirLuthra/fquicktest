@@ -21,6 +21,35 @@ option_config_file() {
 	open_file "$( dirname $0 )/$prog_name.qtc" || return_error
 }
 
+rename_file() {
+	local dir=$1 ; shift
+	local message=$1 ; shift
+	local option=$1
+	local old_name
+	local old_path
+	local new_name
+	local new_path
+
+	[ -z "$message" ] && message='SELECT FILE TO RENAME:(-r)'
+	[ -z "$option" ] && option='-r'
+
+	if [ ${ARG_CNT[$option]} -eq 1 ]
+	then
+		old_name="$( fzf_search "$message" "$dir" )" || return_error
+		new_name=${ARGS[$option,0]}
+	else
+		old_name=${ARGS[$option,0]}
+		new_name=${ARGS[$option,1]}
+	fi
+
+	old_path="$dir/$old_name"
+	new_path="$dir/$new_name"
+
+	print_if_not_file "$old_path" && return_error
+
+	mv "$old_path" "$new_path" || return_error
+}
+
 get_default_args() {
 	local qtc_file
 	local default_options

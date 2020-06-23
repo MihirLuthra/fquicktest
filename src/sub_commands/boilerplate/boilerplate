@@ -27,6 +27,7 @@ print_usage() {
 	'    [-m|--modify [<boilerplate_name>]]'           \
 	'    [-n|--new <boilerplate_name>]'                \
 	'    [-p|--path]'                                  \
+	'    [-r|--rename [<old_name>] <new_name>]'        \
 	'    [-s|--show-all]'
 }
 
@@ -43,6 +44,7 @@ parse_boilerplate_options() {
 		'-m' , '--modify'                 '-1'               \
 		'-n' , '--new'                    '1'                \
 		'-p' , '--path'                   '0'                \
+		'-r' , '--rename'                 '1 -1'             \
 		'-s' , '--show-all'               '0'                \
 		                                                     \
 		';'                                                  \
@@ -112,6 +114,10 @@ option_path() {
 	printf "%s\n" "$boilerplate_full_path"
 }
 
+option_rename() {
+	rename_file "$BOILERPLATE_FILES_DIR" || return_error
+}
+
 option_show_all() {
 	list_time_sorted "$BOILERPLATE_FILES_DIR" || return_error
 }
@@ -153,6 +159,9 @@ boilerplate() {
 				;;
 			-p)
 				option_path || return_error
+				;;
+			-r)
+				option_rename || return_error
 				;;
 			-s)
 				option_show_all || return_error

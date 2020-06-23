@@ -21,6 +21,7 @@ print_usage() {
 	'    [-m|--modify [<user_config_file_name>]]'      \
 	'    [-n|--new <user_config_file_name>]'           \
 	'    [-p|--path]'                                  \
+	'    [-r|--rename [<old_name>] <new_name>]'        \
 	'    [-s|--show-all]'
 
 }
@@ -39,6 +40,7 @@ parse_user_config_options() {
 		'-m' , '--modify'                 '-1'               \
 		'-n' , '--new'                    '1'                \
 		'-p' , '--path'                   '0'                \
+		'-r' , '--rename'                 '1 -1'             \
 		'-s' , '--show-all'               '0'                \
 		                                                     \
 		';'                                                  \
@@ -105,6 +107,10 @@ option_path() {
 	printf "%s\n" "$(current_user_config_path)"
 }
 
+option_rename() {
+	rename_file "$USER_CONFIG_FILES_DIR" || return_error
+}
+
 option_show_all() {
 	list_time_sorted "$USER_CONFIG_FILES_DIR" || return_error
 }
@@ -146,6 +152,9 @@ user_config() {
 				;;
 			-p)
 				option_path || return_error
+				;;
+			-r)
+				option_rename || return_error
 				;;
 			-s)
 				option_show_all || return_error
