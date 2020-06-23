@@ -3,8 +3,8 @@ syn match key_containing_spaces '^[[:blank:]]*[0-9a-zA-Z_-]\+[[:blank:]]\+[^=[:b
 syn match invalid_char '.'
 
 " Keywords
-syn keyword quicktest_aliases contained FILE_TO_OPEN INSTANCE INSTANCE_PATH INSTANCES_DIR
-syn keyword quicktest_aliases contained OUTPUT_DIR OUTPUT_PATH QUICKTEST_PATH
+syn keyword quicktest_aliases contained FILE_TO_OPEN INSTANCE INSTANCE_BASENAME INSTANCE_PATH INSTANCES_DIR
+syn keyword quicktest_aliases contained OUTPUT_DIR D_OUTPUT_DIR OUTPUT_DIR QUICKTEST_PATH
 syn keyword quicktest_funcs contained BASH VAR
 
 " Keys
