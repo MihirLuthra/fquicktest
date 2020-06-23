@@ -141,7 +141,7 @@ void add_aliases_to_rmap(replace_map &rmap)
 		}
 
 		for (auto alias : amap) {
-			rmap.insert_or_assign(alias.first, [&rmap, alias](std::string args) -> std::string {
+			rmap.insert_or_assign(alias.first, [&rmap, alias]([[maybe_unused]] std::string args) -> std::string {
 				std::istringstream value(alias.second);
 				std::ostringstream preprocessed_value;
 				Preprocessor p(value, preprocessed_value);
