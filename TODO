@@ -1,8 +1,6 @@
 - Move build system to CMake
 - Add support for package managers
-- lt directory [--change|--current etc]
-- curstom prompt with zsh and bash to support lt directory
-- individual directory for funcs created by user
-- custom subcmds created by user like lt copy
-- lt preprocess (change lt func to that)
-- default args in aliases (<>)
+- default args in aliases (<>, <1>, <2>)
+- combine pwd with lt
+- lt directory to create boilerplate dirs
+- custom sub commands like lt copy
