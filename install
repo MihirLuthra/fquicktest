@@ -127,12 +127,6 @@ install_qtc_vim_syntax_highlighting() {
 }
 
 install() {
-	report "Making source"
-
-	( cd "$QUICKTEST_PATH" && make) || return_error
-
-	report_done "Done making source"
-
 	make_initial_checks || return_error
 
 	dependency_checks || return_error
