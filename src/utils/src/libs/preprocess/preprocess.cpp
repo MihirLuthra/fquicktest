@@ -49,21 +49,18 @@ std::string Preprocessor::parse_func_block(replace_map rmap)
 {
 	std::string args;
 	char ch;
-	bool ignore_next = false;
 
 	while (inp >> ch) {
-		if (!ignore_next) {
-			if (ch == function_block_end) {
+		if (ch == function_block_end) {
+			if (args.back() == ignore_next_char) {
+				args.back() = ch;
+				continue;
+			} else {
 				return args;
-			} else if (ch == block_start) {
-				args += parse_block(rmap);
-				continue;
-			} else if (ch == ignore_next_char) {
-				ignore_next = true;
-				continue;
 			}
-		} else {
-			ignore_next = false;
+		} else if (ch == block_start) {
+			args += parse_block(rmap);
+			continue;
 		}
 
 		args += ch;
