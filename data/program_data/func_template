@@ -6,6 +6,11 @@ source "$QT_COMMON_PATH"/error_handler
 source "$QT_COMMON_PATH"/option_parser
 set +e
 
+# ___FUNC_NAME____DIR is for storing files related to this function
+# It gets automatically created on creating a new func and
+# is deleted if the function gets deleted.
+readonly ___FUNC_NAME____DIR="$FUNC_DUMP_DIR/___FUNC_NAME___"
+
 ___FUNC_NAME___() {
 
 }
