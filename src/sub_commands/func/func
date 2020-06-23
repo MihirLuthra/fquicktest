@@ -108,11 +108,17 @@ option_create_func() {
 		return_error
 	}
 
+	mkdir -p "$FUNC_DUMP_DIR/$func_name" || return_error
+
 	open_file "$func_path" || return_error
 }
 
 option_delete() {
-	delete_files "$USER_FUNC_DIR" "SELECT FUNC(-d)" || return_error
+	local action
+
+	action='rm -i __TO_REPLACE__ ; rm -rf $FUNC_DUMP_DIR/__TO_REPLACE__'
+	args_or_fzf_multi_search "$USER_FUNC_DIR" "SELECT FUNC(-d)" '-d' "$action" '__TO_REPLACE__' '1' > /dev/null \
+		|| return_error
 }
 
 option_modify_func() {
