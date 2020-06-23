@@ -5,6 +5,9 @@
 *.*.swp
 .DS_Store
 
+data/program_data/func_dump_dir/*
+!data/program_data/func_dump_dir/.keep
+
 data/user_data/boilerplates/*
 data/user_data/user_config_files/*
 data/user_data/instances/*
