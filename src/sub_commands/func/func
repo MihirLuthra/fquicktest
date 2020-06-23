@@ -103,7 +103,10 @@ option_create_func() {
 	    > "$func_path"        \
 	    || return_error
 
-	chmod +x "$func_path"
+	chmod u=rwx,go-rwx "$func_path" || {
+		rm -f "$func_path"
+		return_error
+	}
 
 	open_file "$func_path" || return_error
 }
