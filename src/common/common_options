@@ -171,7 +171,8 @@ delete_files() {
 
 	action='rm -i __TO_REPLACE__'
 
-	args_or_fzf_multi_search "$dir" "$message" '-d' "$action" '__TO_REPLACE__' '1' > /dev/null
+	args_or_fzf_multi_search "$dir" "$message" '-d' "$action" '__TO_REPLACE__' '1' > /dev/null \
+		|| return_error
 }
 
 open_files() {
