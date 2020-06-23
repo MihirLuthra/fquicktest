@@ -54,6 +54,7 @@ bold_printf() {
 
 list_time_sorted_null_term() {
 	local from_dir=$1 ; shift
+	local name
 
 	# go to the directory and check glob *, if glob is null, next block will be evaluated
 	cd "$from_dir" && 2>&1 compgen -G "*" > /dev/null && {
@@ -64,8 +65,15 @@ list_time_sorted_null_term() {
 		# 4) gawk then removed time from the output
 		while IFS= read -r -d '' file
 		do
-			printf "%s %s\0" "$( getctime "$file" )" "$file"
-		done < <(find * -type f -print0 ) \
+			name=${file##*/}
+			case "$name" in
+				.*)
+					continue;
+					;;
+			esac
+
+			printf "%s %s\0" "$( getctime "$file" )" "$name"
+		done < <(find . -type f -print0 ) \
 		| sort -r -n -z -k1 \
 		| gawk '
 			BEGIN {
