@@ -1,8 +1,8 @@
 D_OUTPUT_DIR =
 	[BASH](
-		dir="[VAR](OUTPUT_DIR)/$(dirname '[VAR](INSTANCE)'\)"
+		dir="[VAR](OUTPUT_DIR)/$(dirname -- '[VAR](INSTANCE)'\)"
 		mkdir -p "$dir" || return 1
-		echo -n "$dir"
+		printf "%s" "$dir"
 	)
 
 FILE_TO_OPEN =
@@ -10,6 +10,11 @@ FILE_TO_OPEN =
 
 INSTANCE =
 	[VAR](INSTANCE)
+
+INSTANCE_BASENAME =
+	[BASH](
+		printf "%s" "$(basename -- '[VAR](INSTANCE)'\)"
+	)
 
 INSTANCE_PATH =
 	[VAR](INSTANCES_DIR)/[VAR](INSTANCE)
