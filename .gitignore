@@ -14,6 +14,7 @@ data/user_data/outputs/*
 data/user_data/alias_file.qtc
 data/user_data/rename_file.qtc
 data/user_data/current_defaults/*
+data/user_data/func_dump_dir/*
 
 !data/user_data/boilerplates/.keep
 !data/user_data/user_config_files/.keep
@@ -21,6 +22,7 @@ data/user_data/current_defaults/*
 !data/user_data/func/.keep
 !data/user_data/outputs/.keep
 !data/user_data/current_defaults/.keep
+!data/user_data/func_dump_dir/.keep
 
 commands/user_commands/*
 
