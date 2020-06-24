@@ -23,6 +23,7 @@ trim_blanks() {
 	gawk '{$1=$1}1' <<<"$1" || return_error
 }
 
+# to trim leading and trailing blanks
 trim() {
 
 	gawk '{
@@ -52,52 +53,51 @@ bold_printf() {
 	printf "$OFF_BOLD"
 }
 
+#
+# This function lists the contents of directory param1
+# in the order of inode modification time (ctime).
+# The output of this function is \0 delimited.
+#
 list_time_sorted_null_term() {
 	local from_dir=$1 ; shift
 	local name
 
-	# go to the directory and check glob *, if glob is null, next block will be evaluated
-	cd "$from_dir" && 2>&1 compgen -G "*" > /dev/null && {
+	while IFS= read -r -d '' file
+	do
+		name=${file##*/}
+		case "$name" in
+			.*)
+				continue;
+				;;
+		esac
 
-		# 1) goes through every file in current directory
-		# 2) prints inode modification time, a single space and then file name which is null terminated
-		# 3) sorts it on the basis of inode modification time
-		# 4) gawk then removed time from the output
-		while IFS= read -r -d '' file
-		do
-			name=${file##*/}
-			case "$name" in
-				.*)
-					continue;
-					;;
-			esac
+		printf "%s %s\0" "$( getctime "$file" )" "$name"
+	done < <(find "$from_dir" -type f -print0 ) \
+	| sort -r -n -z -k1 \
+	| gawk '
+		BEGIN {
+			RS="\0"
+			ORS="\0"
+		}
+		{
+			r=$1" "
+			sub(r, "")
+			print
+		}
+	'
 
-			printf "%s %s\0" "$( getctime "$file" )" "$name"
-		done < <(find . -type f -print0 ) \
-		| sort -r -n -z -k1 \
-		| gawk '
-			BEGIN {
-				RS="\0"
-				ORS="\0"
-			}
-			{
-				r=$1" "
-				sub(r, "")
-				print
-			}
-		'
+	[ "${PIPESTATUS[0]:-0}" -ne 0 ] && return_error
+	[ "${PIPESTATUS[1]:-0}" -ne 0 ] && return_error
+	[ "${PIPESTATUS[2]:-0}" -ne 0 ] && return_error
 
-		[ "${PIPESTATUS[0]:-0}" -ne 0 ] && return_error
-		[ "${PIPESTATUS[1]:-0}" -ne 0 ] && return_error
-		[ "${PIPESTATUS[2]:-0}" -ne 0 ] && return_error
-
-		return 0
-	} || {
-		a_echo_err "Directory is empty"
-		return_error
-	}
+	return 0
 }
 
+#
+# just converts the \0 delimited output
+# of list_time_sorted_null_term() to newline
+# delimited.
+#
 list_time_sorted() {
 	local from_dir=$1
 	local retval
@@ -142,7 +142,7 @@ fzf_multi_select_search() {
 #
 # Description:
 #  This is used when we maybe overwriting a file.
-#  This checks if a path exists and if it is a file,
+#  This checks if a path exists and if it is a file and not empty,
 #  user is asked if file should be overwritten or not.
 #
 # retval:
@@ -178,6 +178,15 @@ prompt_if_overwrite() {
 	return 0
 }
 
+#
+# param1: replacee
+#
+# param2: replacement
+#
+# param3: text in which replacement needs to be made
+#
+# output: text with replacements
+#
 replace() {
 	local replacee=$1 ; shift
 	local replacement=$1 ; shift
@@ -261,6 +270,15 @@ open_file() {
 	"$QTBASH" -c "$open" || return_error
 }
 
+#
+# in a list of files sorted in order of
+# inode modification time, it prints the n^th
+# newest file where n is param2.
+#
+# param1: directory
+#
+# param2: relative cnt
+#
 get_by_relative_cnt() {
 	local dir=$1; shift
 	local cnt=$1
