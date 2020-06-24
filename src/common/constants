@@ -6,71 +6,25 @@ readonly __CONSTANTS__=1
 
 readonly PROG_NAME='fquicktest'
 
+# >>> main fquicktest directories
 readonly SRC_DIR="$QUICKTEST_PATH/src"
 readonly DATA_DIR="$QUICKTEST_PATH/data"
 readonly COMMANDS_DIR="$QUICKTEST_PATH/commands"
-
-readonly COMMON_DIR="$SRC_DIR/common"
 
 readonly UTILS_DIR="$SRC_DIR/utils"
 readonly UTILS_BIN_DIR="$UTILS_DIR/bin"
 readonly UTILS_LIBS_DIR="$UTILS_DIR/libs"
 readonly SUB_COMMANDS_DIR="$SRC_DIR/sub_commands"
 
-if [[ "$OSTYPE" == "darwin"* ]]
-then
-	export DYLD_LIBRARY_PATH="$UTILS_LIBS_DIR:$DYLD_LIBRARY_PATH"
-else
-	export LD_LIBRARY_PATH="$UTILS_LIBS_DIR:$LD_LIBRARY_PATH"
-fi
-
-PATH="$UTILS_BIN_DIR:$PATH"
-
 readonly USER_DATA_DIR="$DATA_DIR/user_data"
 readonly PROGRAM_DATA_DIR="$DATA_DIR/program_data"
 
-readonly PROGRAM_FUNC_DIR="$PROGRAM_DATA_DIR/func"
-readonly USER_FUNC_DIR="$USER_DATA_DIR/func"
-readonly FUNC_TEMPLATE="$PROGRAM_DATA_DIR/func_template"
-readonly PROGRAM_USER_CONFIG_FILES_DIR="$PROGRAM_DATA_DIR/user_config_files"
-readonly DEFAULT_USER_CONFIG_FILE="$PROGRAM_USER_CONFIG_FILES_DIR/general.qtc"
+readonly CONSTANTS_DIR="$SRC_DIR/common/_constants"
 
-readonly FUNC_DUMP_DIR="$USER_DATA_DIR/func_dump_dir"
-
-# func dump is for data that doesn't need to be tracked git
-readonly PROG_FUNC_DUMP_DIR="$PROGRAM_DATA_DIR/func_dump_dir"
-# func files are tracked by git
-readonly PROG_FUNC_FILES="$PROGRAM_DATA_DIR/func_files"
-
-readonly PROGRAM_ALIAS_FILE_PATH="$PROGRAM_DATA_DIR/alias_file.qtc"
-readonly ALIAS_FILE_PATH="$USER_DATA_DIR/alias_file.qtc"
-readonly RENAME_FILE_PATH="$USER_DATA_DIR/rename_file.qtc"
-
-readonly USER_CONFIG_FILES_DIR="$USER_DATA_DIR/user_config_files"
-readonly BOILERPLATE_FILES_DIR="$USER_DATA_DIR/boilerplates"
-readonly CURRENT_DEFAULTS_DIR="$USER_DATA_DIR/current_defaults"
-
-readonly USER_COMMAND_TEMPLATE="$PROGRAM_DATA_DIR/user_command_template"
-
-readonly INSTANCES_DIR="$USER_DATA_DIR/instances"
-
-readonly OUTPUT_DIR="$USER_DATA_DIR/outputs"
-
-readonly USER_COMMANDS_DIR="$COMMANDS_DIR/user_commands"
-readonly PROGRAM_COMMANDS_DIR="$COMMANDS_DIR/program_commands"
-
-readonly FILE_TO_OPEN_KEY='FILE_TO_OPEN'
-readonly HOW_TO_OPEN_EDITOR_KEY='HOW_TO_OPEN_EDITOR'
-readonly INSTANCE_KEY='INSTANCE'
-readonly USER_CONFIG_FILE_KEY='USER_CONFIG_FILE'
-readonly BOILERPLATE_KEY='BOILERPLATE'
-readonly DEFAULT_ARGS_KEY='DEFAULT_ARGS'
-readonly ACTION_KEY_REPLACEE='___ACTION_KEY___'
-readonly FUNC_NAME_REPLACEE='___FUNC_NAME___'
-
-readonly RED='\033[0;31m'
-readonly GREEN='\033[0;32m'
-readonly DEFAULT_COLOR='\033[0m'
-
-readonly BOLD="$(tput bold)"
-readonly BOLD_OFF="$(tput sgr0)"
+source "$CONSTANTS_DIR/keys"
+source "$CONSTANTS_DIR/paths"
+source "$CONSTANTS_DIR/program_dirs"
+source "$CONSTANTS_DIR/program_files"
+source "$CONSTANTS_DIR/replacees"
+source "$CONSTANTS_DIR/text_formatters"
+source "$CONSTANTS_DIR/user_dirs"

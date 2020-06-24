@@ -1,0 +1,23 @@
+#! /usr/bin/env bash
+
+[ -n "$__PROGRAM_FILES__" ] && return 0
+readonly __PROGRAM_FILES__=1
+
+# >>> templates
+
+# template for new func
+readonly FUNC_TEMPLATE="$PROGRAM_DATA_DIR/func_template"
+
+# template for new action
+readonly USER_COMMAND_TEMPLATE="$PROGRAM_DATA_DIR/user_command_template"
+
+
+
+# is essential keys like `HOW_TO_OPEN_EDITOR` are not found in current user config file,
+# this file is searched for that key
+readonly DEFAULT_USER_CONFIG_FILE="$PROGRAM_USER_CONFIG_FILES_DIR/general.qtc"
+
+
+
+# alises created by program are stored here
+readonly PROGRAM_ALIAS_FILE_PATH="$PROGRAM_DATA_DIR/alias_file.qtc"

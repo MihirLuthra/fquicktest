@@ -1,0 +1,10 @@
+#! /usr/bin/env bash
+
+[ -n "$__REPLACEES__" ] && return 0
+readonly __REPLACEES__=1
+
+# replaced in user_command_template with the action
+readonly ACTION_KEY_REPLACEE='___ACTION_KEY___'
+
+# replaced in func_template with the func
+readonly FUNC_NAME_REPLACEE='___FUNC_NAME___'

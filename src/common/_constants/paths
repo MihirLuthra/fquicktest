@@ -1,0 +1,13 @@
+#! /usr/bin/env bash
+
+[ -n "$__PATH__" ] && return 0
+readonly __PATH__=1
+
+export PATH="$UTILS_BIN_DIR:$PATH"
+
+if [[ "$OSTYPE" == "darwin"* ]]
+then
+	export DYLD_LIBRARY_PATH="$UTILS_LIBS_DIR:$DYLD_LIBRARY_PATH"
+else
+	export LD_LIBRARY_PATH="$UTILS_LIBS_DIR:$LD_LIBRARY_PATH"
+fi

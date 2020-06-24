@@ -1,0 +1,42 @@
+#! /usr/bin/env bash
+
+[ -n "$__USER_DIRS__" ] && return 0
+readonly __USER_DIRS__=1
+
+# for storing user defined funcs
+readonly USER_FUNC_DIR="$USER_DATA_DIR/func"
+
+# user defined funcs use FUNC_DUMP_DIR to store their data
+readonly FUNC_DUMP_DIR="$USER_DATA_DIR/func_dump_dir"
+
+
+
+# global aliases created by user are stored here
+readonly ALIAS_FILE_PATH="$USER_DATA_DIR/alias_file.qtc"
+
+# user can rename the funcs in rename file globally
+readonly RENAME_FILE_PATH="$USER_DATA_DIR/rename_file.qtc"
+
+
+
+# user config files defined by user are stored here
+readonly USER_CONFIG_FILES_DIR="$USER_DATA_DIR/user_config_files"
+
+# boilerplate files made by user are stored here
+readonly BOILERPLATE_FILES_DIR="$USER_DATA_DIR/boilerplates"
+
+# this stores current defaults files for all tty instances
+readonly CURRENT_DEFAULTS_DIR="$USER_DATA_DIR/current_defaults"
+
+# instances made by user are stored here.
+readonly INSTANCES_DIR="$USER_DATA_DIR/instances"
+
+# this is an optional output directory which user can use
+# for generated executable files. e.g., gcc generated a.out can be
+# stored here.
+readonly OUTPUT_DIR="$USER_DATA_DIR/outputs"
+
+
+
+# commands defined by the user by `lt action` are stored here.
+readonly USER_COMMANDS_DIR="$COMMANDS_DIR/user_commands"

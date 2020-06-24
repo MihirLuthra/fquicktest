@@ -1,0 +1,24 @@
+#! usr/bin/env bash
+
+[ -n "$__PROGRAM_DIRS__" ] && return 0
+readonly __PROGRAM_DIRS__=1
+
+# dir where program's functions are stored
+readonly PROGRAM_FUNC_DIR="$PROGRAM_DATA_DIR/func"
+
+# this is where progam's funcs can store their data and it's _not_ tracked by git
+readonly PROG_FUNC_DUMP_DIR="$PROGRAM_DATA_DIR/func_dump_dir"
+
+# this is where program's funcs cans store their data and it is tracker by git
+readonly PROG_FUNC_FILES="$PROGRAM_DATA_DIR/func_files"
+
+
+
+# dir where prorgam's user config files are stored
+readonly PROGRAM_USER_CONFIG_FILES_DIR="$PROGRAM_DATA_DIR/user_config_files"
+
+
+
+# this is added to user's path
+# main command quicktest and lt (symlink) are stored here.
+readonly PROGRAM_COMMANDS_DIR="$COMMANDS_DIR/program_commands"
