@@ -1,16 +1,19 @@
-action [<key_for_action>]
-	[-d|--delete <action_name>]
+action [<key_for_action> [<args_to_action>]]
+	[-d|--delete <action_name>...]
 	[-h|--help]
 	[-r|--rename [<old_name>] <new_name>]
 	[--register <action_name> <action_key>]
 	[-s|--show-all]
 
-[<key_for_action>]:
+[<key_for_action> [<args_to_action>]]:
 	Would execute the commands corresponding to
 	the <key_for_action> in user config file.
 
-[-d|--delete [<action_name>]]:
-	Deletes the specified action. If no arg,
+[--config-file]:
+	Opens action's config file.
+
+[-d|--delete <action_name>...]:
+	Deletes the specified actions. If no arg,
 	fzf search menu opens for selection.
 
 [-r|--rename [<old_name>] <new_name>]:
@@ -28,4 +31,4 @@ action [<key_for_action>]
 	Display help for action.
 
 [-s|--show-all]:
-	Lists all regustered commands.
+	Lists all registered commands.
