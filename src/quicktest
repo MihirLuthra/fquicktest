@@ -15,7 +15,12 @@ print_usage() {
 	'quicktest'                     \
 	'    [--config-file]'           \
 	'    [-h|--help]'               \
-	'    [<sub_command> [<args>]]'
+	'    [action [<args>]]'         \
+	'    [boilerplate [<args>]]'    \
+	'    [func [<args>]]'           \
+	'    [instance [<args>]]'       \
+	'    [open [<args>]]'           \
+	'    [user_config [<args>]]'
 
 }
 
