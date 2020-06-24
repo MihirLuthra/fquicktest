@@ -19,11 +19,11 @@ print_usage() {
 	'quicktest instance'                          \
 	'    [-c|--current]'                          \
 	'    [--config-file]'                         \
-	'    [-d|--delete [<instance_name>]]'         \
+	'    [-d|--delete <instance_name>...]'        \
 	'    [-g|--get <at_path> [<instance_name>]]'  \
 	'    [-h|--help]'                             \
 	'    [-p|--path]'                             \
-	'    [-r|--rename [<old_name>] <new_name>]' \
+	'    [-r|--rename [<old_name>] <new_name>]'   \
 	'    [-s|--show-all]'
 }
 
@@ -35,7 +35,7 @@ parse_instance_options() {
 		\
 		'-c' , '--current'       '0'                     \
 		'--config-file'          '0'                     \
-		'-d' , '--delete'        '-1'                    \
+		'-d' , '--delete'        '...'                   \
 		'-g' , '--get'           '1 -1'                  \
 		'-h' , '--help'          '0'                     \
 		'-p' , '--path'          '0'                     \
@@ -93,7 +93,7 @@ option_get() {
 option_path() {
 	local instance_full_path
 
-	instance_full_path="$INSTANCES_DIR/$(option_current)"
+	instance_full_path="$INSTANCES_DIR/$(option_current)" || return_error
 
 	printf "%s\n" "$instance_full_path"
 }
@@ -136,7 +136,7 @@ instance() {
 				option_help
 				;;
 			-p)
-				option_path
+				option_path || return_error
 				;;
 			-r|--rename)
 				option_rename || return_error

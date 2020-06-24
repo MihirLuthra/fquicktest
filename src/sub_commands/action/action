@@ -26,7 +26,7 @@ parse_action_options() {
 		'action'                 '...'                   \
 		\
 		'--config-file'          '0'                     \
-		'-d' , '--delete'        '-1'                    \
+		'-d' , '--delete'        '...'                   \
 		'-h' , '--help'          '0'                     \
 		'-r' , '--register'      '1 1'                   \
 		'-s' , '--show-all'      '0'                     \

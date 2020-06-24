@@ -18,10 +18,11 @@ print_usage() {
 	'    [-a|--alias-file]'                            \
 	'    [-c|--create-func <func_name>]'               \
 	'    [--config-file]'                              \
-	'    [-d|--delete [<func_name>]]'                  \
+	'    [-d|--delete <func_name>...]'                 \
 	'    [-h|--help]'                                  \
-	'    [-m|--modify-func [<func_name>]]'             \
-	'    [-r|--rename-file]'                           \
+	'    [-m|--modify-func <func_name>...]'            \
+	'    [-r|--rename [<old_name>] <new_name>]'        \
+	'    [--rename-file]'                              \
 	'    [-s|--show-all]'
 }
 
@@ -34,10 +35,11 @@ parse_func_options() {
 		'-a' , '--alias-file'                  '0'       \
 		'-c' , '--create-func'                 '1'       \
 		'--config-file'                        '0'       \
-		'-d' , '--delete'                      '-1'      \
+		'-d' , '--delete'                      '...'     \
 		'-h' , '--help'                        '0'       \
 		'-m' , '--modify-func'                 '-1'      \
-		'-r' , '--rename-file'                 '0'       \
+		'-r' , '--rename'                      '...'     \
+		       '--rename-file'                 '0'       \
 		'-s' , '--show-all'                    '0'       \
 		                                                 \
 		';'                                              \

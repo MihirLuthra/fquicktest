@@ -39,9 +39,9 @@ parse_boilerplate_options() {
 		\
 		'-c' , '--current'                '0'                \
 		'--config-file'                   '0'                \
-		'-d' , '--delete'                 '-1'               \
+		'-d' , '--delete'                 '...'              \
 		'-h' , '--help'                   '0'                \
-		'-m' , '--modify'                 '-1'               \
+		'-m' , '--modify'                 '...'              \
 		'-n' , '--new'                    '1'                \
 		'-p' , '--path'                   '0'                \
 		'-r' , '--rename'                 '1 -1'             \

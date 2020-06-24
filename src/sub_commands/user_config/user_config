@@ -13,12 +13,12 @@ print_usage() {
 
 	printf_err "%s\n"                                  \
 	'quicktest user_config'                            \
-	'    [relative_cnt]'                               \
+	'    [<relative_cnt>]'                             \
 	'    [-c|--current]'                               \
 	'    [--config-file]'                              \
-	'    [-d|--delete <user_config_file_name>]'        \
+	'    [-d|--delete <user_config_file_name>...]'     \
 	'    [-h|--help]'                                  \
-	'    [-m|--modify [<user_config_file_name>]]'      \
+	'    [-m|--modify <user_config_file_name>...]'     \
 	'    [-n|--new <user_config_file_name>]'           \
 	'    [-p|--path]'                                  \
 	'    [-r|--rename [<old_name>] <new_name>]'        \
@@ -35,9 +35,9 @@ parse_user_config_options() {
 		\
 		'-c' , '--current'                '0'                \
 		'--config-file'                   '0'                \
-		'-d' , '--delete'                 '-1'               \
+		'-d' , '--delete'                 '...'              \
 		'-h' , '--help'                   '0'                \
-		'-m' , '--modify'                 '-1'               \
+		'-m' , '--modify'                 '...'              \
 		'-n' , '--new'                    '1'                \
 		'-p' , '--path'                   '0'                \
 		'-r' , '--rename'                 '1 -1'             \
