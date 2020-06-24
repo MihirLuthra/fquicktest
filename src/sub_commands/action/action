@@ -15,7 +15,8 @@ print_usage() {
 	'    [--config-file]'                            \
 	'    [-d|--delete <action_name>]'                \
 	'    [-h|--help]'                                \
-	'    [-r|--register <action_name> <action_key>]' \
+	'    [-r|--rename [<old_name>] <new_name>]'      \
+	'    [--register <action_name> <action_key>]'    \
 	'    [-s|--show-all]'
 }
 
@@ -28,7 +29,8 @@ parse_action_options() {
 		'--config-file'          '0'                     \
 		'-d' , '--delete'        '...'                   \
 		'-h' , '--help'          '0'                     \
-		'-r' , '--register'      '1 1'                   \
+		'-r' , '--rename'        '1 -1'                  \
+		       '--register'      '1 1'                   \
 		'-s' , '--show-all'      '0'                     \
 		                                                 \
 		';'                                              \
@@ -61,6 +63,10 @@ self_actions() {
 
 option_delete() {
 	delete_files "$USER_COMMANDS_DIR" "SELECT ACTION(-d)" || return_error
+}
+
+option_rename() {
+	rename_file "$USER_COMMANDS_DIR" || return_error
 }
 
 option_register() {
@@ -125,6 +131,9 @@ action() {
 				option_help
 				;;
 			-r)
+				option_rename || return_error
+				;;
+			--register)
 				option_register || return_error
 				;;
 			-s)

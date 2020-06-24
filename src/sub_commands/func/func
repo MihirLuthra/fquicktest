@@ -127,6 +127,10 @@ option_modify_func() {
 	open_files "$USER_FUNC_DIR" "SELECT FUNC(-m)" '-m' || return_error
 }
 
+option_rename() {
+	rename_file "$USER_FUNC_DIR" || return_error
+}
+
 option_rename_file() {
 	open_file "$RENAME_FILE_PATH" || return_error
 }
@@ -170,7 +174,10 @@ func() {
 			-m)
 				option_modify_func || return_error
 				;;
-			-r)
+			-r|--rename)
+				option_rename || return_error
+				;;
+			--rename-file)
 				option_rename_file || return_error
 				;;
 			-s)
