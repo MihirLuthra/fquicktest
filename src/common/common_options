@@ -221,7 +221,7 @@ args_or_fzf_multi_search() {
 	if [ ${ARG_CNT[$option]:-0} -ge 1 ]
 	then
 		last_arg="$( expr ${ARG_CNT[$option]} - 1 )"
-		for arg_no in $(seq 1 "$last_arg")
+		for arg_no in $(seq 0 "$last_arg")
 		do
 			files+=( "${ARGS[$option,$arg_no]}" )
 		done
