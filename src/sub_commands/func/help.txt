@@ -1,25 +1,30 @@
-func
+func [<func_name> [<func_args>]]
 	[-a|--alias-file]
 	[-c|--create-func <func_name>]
-	[-d|--delete [<func_name>]]
+	[-d|--delete <func_name>...]
 	[-h|--help]
-	[-m|--modify-func [<func_name>]]
-	[-r|--rename-file]
+	[-m|--modify-func <func_name>...]
+	[-r|--rename [<old_name>] <new_name>]
+	[--rename-file]
 	[-s|--show-all]
 
+[<func_name> [<func_args>]]:
+	This would execute the func given by <func_name>
+	and <func_args>.
 
 [-a|--alias-file]:
-	This file is for creating aliases. A value needs to
-	be given to the alias which can contain a combination
+	This opens global alias file. This file is for creating aliases.
+	A value needs to be given to the alias which can contain a combination
 	of functions and/or text. When preprocessing file, a search
 	is made for these alias names and their preprocessed value
 	is substituted.
 
 [-c|--create-func <func_name>]:
-	Just opens the file in which function can be defined.
+	Just opens the file in which function can be defined
+	with boilerplate.
 
-[-d|--delete [<func_name>]]:
-	Will execute `rm -i` for the given func name.
+[-d|--delete <func_name>...]:
+	Will execute `rm -i` for the given func names.
 	If no arg is supplied, fzf search menu opens up.
 
 [-h|--help]:
@@ -29,9 +34,15 @@ func
 	Just opens the file in which function can be modified.
 	If no arg is supplied, fzf search menu opens up.
 
-[-r|--rename-file]:
+[-r|--rename [<old_name>] <new_name>]:
+	Renames file with <old_name> to <new_name>.
+	If only 1 arg is given, fzf search menu opens
+	for selection of <old_name>.
+
+[--rename-file]:
+	This opens global rename file.
 	This file is for renaming the existing aliases or funcs.
-	There can be a rare case when I file contains a quicktest
+	There can be a rare case when a file contains a quicktest
 	func in its text which would get replaced but wasn't intended to
 	be that way. Rename file can be used to give a new name to
 	that func so that preprocessor doesn't process that text in

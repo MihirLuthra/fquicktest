@@ -1,53 +1,49 @@
-user_config
+user_config [<relative_cnt>]
 	[-c|--current]
-	[-d|--delete <user_config_file_name>]
+	[--config-file]
+	[-d|--delete <user_config_file_name>...]
 	[-h|--help]
-	[-m|--modify [<user_config_file_name>]]
+	[-m|--modify <user_config_file_name>...]
 	[-n|--new <user_config_file_name>]
 	[-p|--path]
+	[-r|--rename [<old_name>] <new_name>]
 	[-s|--show-all]
 
+
+[<relative_cnt>]:
+	This is an argument to `user_config` which is the relative
+    count to the previously opened user configs.
+    For example, if this option is 2, it would mean
+    the second last user config that was opened.
 
 [-c|--current]:
 	Returns the name of the current user config file.
 
-# TODO:
-[--create-uc-boilerplate <boilerplate_name>]:
-	Creates a boilerplate file that can be used with -n|--new option
-	to fill new user config files with some initial contents.
+[--config-file]:
+	Opens config file for user_config.
 
-[-d|--delete [<user_config_file_name>]]:
-	Deletes the specified user config file.
-	If no arg is supplied, will open fzf search menu to select a
-	user config file.
+[-d|--delete <user_config_file_name>...]:
+	Deletes the specified user config files.
+	If no arg is supplied, will open fzf search menu to select
+	user config files.
 
 [-h|--help]:
 	Displays help in less.
 
-[-m|--modify [<user_config_file_name>]]:
-	This would open the specified user config file. If no arg is passed,
-	it will open fzf search menu to select a user config file.
-
+[-m|--modify <user_config_file_name>...]:
+	This would open the specified user config files. If no args are passed,
+	it will open fzf search menu to select user config files.
 
 [-n|--new <user_config_file_name>
-	This would cause creation of new user config file with the default user config
-	boilerplate code (which can be set by --create-uc-boilerplate).
-
-Suboptions:
-# TODO:
-	[-b|--boilerplate [<boilerplate_name>]] would cause it to use some different user config boilerplate
-	as per the argument.
-	If no arg is supplied, it will open fzf search menu to select a
-	user config file.
-
-# TODO:
-	[-r|--replicate [<user_config_file_name>]] would cause the new user config file to
-	be a copy of the specified existing user config file.
-	If no arg is supplied, will open fzf search menu to select a
-	user config file.
+	This would cause creation of new user config file.
 
 [-p|--path]:
 	This returns the path to current user config file.
+
+[-r|--rename [<old_name>] <new_name>]:
+	Renames file with <old_name> to <new_name>.
+	If only 1 arg is given, fzf search menu opens
+	for selection of <old_name>.
 
 [-s|--show-all]:
 	List all user config files.

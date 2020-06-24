@@ -1,46 +1,72 @@
 To get help for a subcommand use -h|--help option on them.
 
 quicktest
+	[--config-file]
 	[-h|--help]
 	[<sub_command> [<args>]]
 
+[--config-file]:
+	Opens config file for quicktest.
+
+[-h|--help]:
+	Shows help for quicktest.
+
 quicktest has the following subcommands:
 
-action [<key_for_action>]
-	[-d|--delete <action_name>]
+action [<key_for_action> [<args_to_action>]]
+	[-d|--delete <action_name>...]
 	[-h|--help]
-	[-r|--register <action_name> <action_key>]
+	[-r|--rename [<old_name>] <new_name>]
+	[--register <action_name> <action_key>]
 	[-s|--show-all]
 
-boilerplate
+boilerplate [<relative_cnt>]
 	[-c|--current]
-	[-d|--delete <user_config_file_name>]
-	[-h|--help]
-	[-m|--modify [<user_config_file_name>]]
-	[-n|--new <user_config_file_name>]
+	[--config-file]
+	[-d|--delete <boilerplate_name>...]
+	[-h|--help] 
+	[-m|--modify [<boilerplate_name>...]]
+	[-n|--new <boilerplate_name>]
 	[-p|--path]
+	[-r|--rename [<old_name>] <new_name>]
+	[-s|--show-all]
+
+func [<func_name> [<func_args>]]
+	[-a|--alias-file]
+	[-c|--create-func <func_name>]
+	[-d|--delete <func_name>...]
+	[-h|--help] 
+	[-m|--modify-func <func_name>...]
+	[-r|--rename [<old_name>] <new_name>]
+	[--rename-file]
 	[-s|--show-all]
 
 instance
 	[-c|--current]
-	[-d|--delete [<instance_name>]]
+	[--config-file]
+	[-d|--delete <instance_name>...]
 	[-g|--get <at_path> [<instance_name>]]:
 	[-h|--help]
 	[-p|--path]
+	[-r|--rename [<old_name>] <new_name>]
 	[-s|--show-all]
 
-open [relative_count]
+open [<relative_count>]
 	[-b|--boilerplate [<boilerplate_name>]]
+	[--config-file]
 	[-h|--help]
 	[-i|--instance [<instance_name>]]
+	[-l|--last]
 	[-n|--new]
 	[-u|--user-config [<user_config_name>]]
 
-user_config
+user_config [<relative_cnt>]
 	[-c|--current]
-	[-d|--delete <user_config_file_name>]
+	[--config-file]
+	[-d|--delete <user_config_file_name>...]
 	[-h|--help]
-	[-m|--modify [<user_config_file_name>]]
+	[-m|--modify <user_config_file_name>...]
 	[-n|--new <user_config_file_name>]
 	[-p|--path]
+	[-r|--rename [<old_name>] <new_name>]
 	[-s|--show-all]

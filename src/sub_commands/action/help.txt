@@ -1,7 +1,8 @@
 action [<key_for_action>]
 	[-d|--delete <action_name>]
 	[-h|--help]
-	[-r|--register <action_name> <action_key>]
+	[-r|--rename [<old_name>] <new_name>]
+	[--register <action_name> <action_key>]
 	[-s|--show-all]
 
 [<key_for_action>]:
@@ -12,7 +13,12 @@ action [<key_for_action>]
 	Deletes the specified action. If no arg,
 	fzf search menu opens for selection.
 
-[-r|--register <action_name> <action_key>]:
+[-r|--rename [<old_name>] <new_name>]:
+	Renames file with <old_name> to <new_name>.
+	If only 1 arg is given, fzf search menu opens
+	for selection of <old_name>.
+
+[--register <action_name> <action_key>]:
 	Adds an executable with name <action_name>
 	to registered_commands thereby making it visible
 	in user's PATH. This executable will run commands

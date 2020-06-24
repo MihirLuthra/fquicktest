@@ -1,14 +1,19 @@
 instance
 	[-c|--current]
-	[-d|--delete [<instance_name>]]
+	[--config-file]
+	[-d|--delete <instance_name>...]
 	[-g|--get <at_path> [<instance_name>]]:
 	[-h|--help]
 	[-p|--path]
+	[-r|--rename [<old_name>] <new_name>]
 	[-s|--show-all]
 
 
 [-c|--current]:
 	Prints name of the last used instance.
+
+[--config-file]:
+	Opens instance's config file.
 
 [-d|--delete [<instance_name>]]:
 	Deletes the specified instance. If no arg is specified,
@@ -23,6 +28,11 @@ instance
 
 [-p|--path]:
 	Prints path to current instance.
+
+[-r|--rename [<old_name>] <new_name>]:
+	Renames file with <old_name> to <new_name>.
+	If only 1 arg is given, fzf search menu opens
+	for selection of <old_name>.
 
 [-s|--show-all]:
 	Lists all instances.
