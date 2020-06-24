@@ -1,6 +1,6 @@
-SUBDIR=                 \
-	qtc                 \
-	preprocess 
+SUBDIR= \
+	qtc        \
+	preprocess
 
 .PHONY: all clean
 

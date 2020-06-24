@@ -1,4 +1,4 @@
-SUBDIR =                \
+SUBDIR = \
 	get_value_for_key   \
 	set_value_for_key   \
 	remove_key

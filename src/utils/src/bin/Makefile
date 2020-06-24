@@ -1,5 +1,5 @@
-SUBDIR=                 \
-    getctime            \
+SUBDIR= \
+	getctime            \
 	is_identifier_valid \
 	qtc                 \
 	preprocess 
