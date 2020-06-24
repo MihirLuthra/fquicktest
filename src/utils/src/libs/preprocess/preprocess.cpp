@@ -14,7 +14,7 @@ std::string Preprocessor::parse_block(replace_map rmap)
 
 	char ch;
 
-	replacee += '[';
+	replacee += block_start;
 
 	while (inp >> ch) {
 
