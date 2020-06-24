@@ -9,8 +9,7 @@ source "$QT_COMMON_PATH/error_handler"
 set +e
 
 report() {
-	local purple='\033[0;35m'
-	printf "\n>>> ${purple}%s${DEFAULT_COLOR}\n" "$@"
+	printf "\n>>> ${PURPLE}%s${DEFAULT_COLOR}\n" "$@"
 }
 
 report_done() {
