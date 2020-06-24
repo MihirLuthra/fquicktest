@@ -10,13 +10,13 @@ source "$QT_COMMON_PATH"/common_options
 set +e
 
 print_usage() {
-	printf_err "%s\n"                                \
-	'quicktest action [<key_for_action>]'            \
-	'    [--config-file]'                            \
-	'    [-d|--delete <action_name>]'                \
-	'    [-h|--help]'                                \
-	'    [-r|--rename [<old_name>] <new_name>]'      \
-	'    [--register <action_name> <action_key>]'    \
+	printf_err "%s\n"                                  \
+	'quicktest action [<key_for_action>]'              \
+	'    [-a|--add-action <action_name> <action_key>]' \
+	'    [--config-file]'                              \
+	'    [-d|--delete <action_name>]'                  \
+	'    [-h|--help]'                                  \
+	'    [-r|--rename [<old_name>] <new_name>]'        \
 	'    [-s|--show-all]'
 }
 
@@ -26,11 +26,11 @@ parse_action_options() {
 	parse_options \
 		'action'                 '...'                   \
 		\
+		'-a' , '--add-action'    '1 1'                   \
 		'--config-file'          '0'                     \
 		'-d' , '--delete'        '...'                   \
 		'-h' , '--help'          '0'                     \
 		'-r' , '--rename'        '1 -1'                  \
-		       '--register'      '1 1'                   \
 		'-s' , '--show-all'      '0'                     \
 		                                                 \
 		';'                                              \
@@ -61,26 +61,20 @@ self_actions() {
 	"$QTBASH" -c "$action $action_args"
 }
 
-option_delete() {
-	delete_files "$USER_COMMANDS_DIR" "SELECT ACTION(-d)" || return_error
-}
-
-option_rename() {
-	rename_file "$USER_COMMANDS_DIR" || return_error
-}
-
-option_register() {
+option_add_action() {
 	local action_name
 	local action_key
 	local new_action_path
 	local contents
 
-	action_name=${ARGS[-r,0]}
-	action_key=${ARGS[-r,1]}
+	action_name=${ARGS[-a,0]}
+	action_key=${ARGS[-a,1]}
 
 	new_action_path="$USER_COMMANDS_DIR/$action_name"
 
 	prompt_if_overwrite "$new_action_path" || return_error
+
+	touch "$new_action_path" || return_error
 
 	contents="$( < $USER_COMMAND_TEMPLATE )"
 
@@ -91,10 +85,18 @@ option_register() {
 		> "$new_action_path"   \
 		|| return_error
 
-	chmod u=rx,go-rwx "$new_action_path" || {
+	chmod u=rwx,go-rwx "$new_action_path" || {
 		rm -f "$new_action_path"
 		return_error
 	}
+}
+
+option_delete() {
+	delete_files "$USER_COMMANDS_DIR" "SELECT ACTION(-d)" || return_error
+}
+
+option_rename() {
+	rename_file "$USER_COMMANDS_DIR" || return_error
 }
 
 option_show_all() {
@@ -121,6 +123,9 @@ action() {
 	for option in "${!OPTIONS[@]}"
 	do
 		case "$option" in
+			-a|--add-action)
+				option_add_action || return_error
+				;;
 			--config-file)
 				option_config_file || return_error
 				;;
@@ -132,9 +137,6 @@ action() {
 				;;
 			-r)
 				option_rename || return_error
-				;;
-			--register)
-				option_register || return_error
 				;;
 			-s)
 				option_show_all || return_error

@@ -1,13 +1,19 @@
 action [<key_for_action> [<args_to_action>]]
+	[-a|--add-action <action_name> <action_key>]
 	[-d|--delete <action_name>...]
 	[-h|--help]
 	[-r|--rename [<old_name>] <new_name>]
-	[--register <action_name> <action_key>]
 	[-s|--show-all]
 
 [<key_for_action> [<args_to_action>]]:
 	Would execute the commands corresponding to
 	the <key_for_action> in user config file.
+
+[-a|--add-action <action_name> <action_key>]:
+	Adds an executable with name <action_name>
+	to registered_commands thereby making it visible
+	in user's PATH. This executable will run commands
+	corresponding to <action_key>.
 
 [--config-file]:
 	Opens action's config file.
@@ -20,12 +26,6 @@ action [<key_for_action> [<args_to_action>]]
 	Renames file with <old_name> to <new_name>.
 	If only 1 arg is given, fzf search menu opens
 	for selection of <old_name>.
-
-[--register <action_name> <action_key>]:
-	Adds an executable with name <action_name>
-	to registered_commands thereby making it visible
-	in user's PATH. This executable will run commands
-	corresponding to <action_key>.
 
 [-h|--help]:
 	Display help for action.
