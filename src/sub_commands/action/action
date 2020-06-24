@@ -89,6 +89,9 @@ option_add_action() {
 		rm -f "$new_action_path"
 		return_error
 	}
+
+	echo "Added action $action_name."
+	echo "This action will run the code given by key $action_key in your user config_file"
 }
 
 option_delete() {
