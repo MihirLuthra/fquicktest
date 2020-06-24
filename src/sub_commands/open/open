@@ -13,7 +13,7 @@ print_usage() {
 
 	printf_err "%s\n"                             \
 	'quicktest open'                              \
-	'    [relative_count [-g|--global]]'          \
+	'    [<relative_count>]'                      \
 	'    [-b|--boilerplate [<boilerplate_name>]]' \
 	'    [--config-file]'                         \
 	'    [-h|--help]'                             \
