@@ -10,9 +10,12 @@ source "$QT_COMMON_PATH"/utility_funcs
 source "$QT_COMMON_PATH"/data_interface
 set +e
 
-option_help() {
-	less "$( dirname $0 )/help.txt"
-}
+#
+# Functions in this file assume that
+# the args are parser using parse_options().
+#
+
+# >>> Direct options
 
 option_config_file() {
 	local prog_name
@@ -21,6 +24,32 @@ option_config_file() {
 	open_file "$( dirname $0 )/$prog_name.qtc" || return_error
 }
 
+option_help() {
+	less "$( dirname $0 )/help.txt"
+}
+
+#
+# This func works on the assumption
+# that the caller has taken user input to rename
+# the file as per the schema '1 -1'.
+# It checks ARGS_CNT[] array for the number of args passed.
+# If the arg cnt is 1, it opens an fzf search menu to
+# search give user the option to select from param1 directory.
+# That being the old file is renamed to ARGS[$option,0].
+#
+# If 2 args are supplied, they should be in the order
+# <old_name> then <new_name>.
+#
+# param1: directory for fzf_search
+#
+# param2 (opt): header message for fzf_search
+# default: 'SELECT FILE TO RENAME:(-r)'
+#
+# param3 (opt): key to use in ARGS[]
+# default: -r
+#
+# THROWS
+#
 rename_file() {
 	local dir=$1 ; shift
 	local message=$1 ; shift
@@ -50,6 +79,14 @@ rename_file() {
 	mv "$old_path" "$new_path" || return_error
 }
 
+#
+# It gets the value for key DEFAULT_ARGS
+# from the config file of the caller command.
+#
+# output: prints args on stdout
+#
+# THROWS
+#
 get_default_args() {
 	local qtc_file
 	local default_options
@@ -68,6 +105,20 @@ get_default_args() {
 	printf "%s" "$default_options"
 }
 
+#
+# It quotes all args so they can be passed to bash -c ''
+# and interpreted in the same way as if they were passed
+# directly by the user.
+# It takes the args from ARGS[] array.
+#
+# param1: key to use in ARGS array
+#
+# param2: starting index in args array
+#
+# output: prints args on stdout
+#
+# THROWS
+#
 forward_args() {
 	local key=$1 ; shift
 	local start_idx=$1
@@ -88,6 +139,21 @@ forward_args() {
 	printf "%s" "$constructed_args"
 }
 
+#
+# It checks the ARGS_CNT[] array if it has the
+# desired arg. If not, it opens a fzf_search()
+# menu for selection.
+#
+# param1: directory for fzf search
+#
+# param2: heading message for fzf search
+#
+# param3: option to be used in ARGS_CNT[]/ARGS[]
+#
+# output: prints arg/fzf-selection on stdout
+#
+# THROWS
+#
 arg_or_fzf_search() {
 	local dir=$1 ; shift
 	local message=$1 ; shift
@@ -109,6 +175,33 @@ arg_or_fzf_search() {
 	printf "%s" "$full_path"
 }
 
+#
+# It checks the ARGS_CNT[] array if it has the
+# desired arg. If not, it opens a fzf_multi_select_search()
+# menu for selection. For every args, it executes an action
+# as per action_template. The action template may contain
+# some text which gets replace with the current file.
+# e.g., if param4 is 'rm __TO_REPLACE__' and param5 is '__TO_REPLACE__',
+# every file selected by the user will get removed.
+#
+# param1: directory for fzf search
+#
+# param2: heading message for fzf search
+#
+# param3: option to be used in ARGS_CNT[]/ARGS[]
+#
+# param4: action template to perform of every selected file
+#
+# param5: text to be replaced with current file in action template
+#
+# param6: if the action specified by action_template files, return_error
+#         is called if this arg is not null
+#
+# output: prints arg/fzf-selections(space delimited) and
+#         single quoted (by put_single_quotes()) on stdout.
+#
+# THROWS
+#
 args_or_fzf_multi_search() {
 	local dir=$1 ; shift
 	local message=$1 ; shift
@@ -164,6 +257,16 @@ args_or_fzf_multi_search() {
 	printf "%s " "${ret_arr[@]}"
 }
 
+#
+# wrapper around args_or_fzf_multi_search()
+# for removing files.
+#
+# param1: directory for fzf search
+#
+# param2: message for fzf search heading
+#
+# THROWS
+#
 delete_files() {
 	local dir=$1 ; shift
 	local message=$1
@@ -175,6 +278,18 @@ delete_files() {
 		|| return_error
 }
 
+#
+# wrapper around args_or_fzf_multi_search()
+# for opening files.
+#
+# param1: directory for fzf search
+#
+# param2: message for fzf search heading
+#
+# param3: option to use in ARGS/ARGS_CNT
+#
+# THROWS
+#
 open_files() {
 	local dir=$1 ; shift
 	local message=$1 ; shift
