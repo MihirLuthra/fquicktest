@@ -1,0 +1,23 @@
+preprocess
+	[<file_name>...]
+	[-a|--alias-file <alias_file>...]
+	[--config-file]
+	[-h|--help]
+	[-r|--rename-file <rename_file>...]
+
+[<file_name>...]:
+	All files passed as arg will be preprocessed.
+
+[-a|--alias-file <alias_file>...]:
+	All args to -a will be used as alias files
+	while preprocessing the files passed to preprocess.
+
+[--config-file]:
+	Opens the config file for preprocess.
+
+[-h|--help]:
+	Opens help for preprocess in less.
+
+[-r|--rename-file <rename_file>...]:
+	All args to -r will be used as rename files
+	while preprocessing the files passed to preprocess.

@@ -20,6 +20,7 @@ print_usage() {
 	'    [func [<args>]]'           \
 	'    [instance [<args>]]'       \
 	'    [open [<args>]]'           \
+	'    [preprocess [<args>]]'     \
 	'    [user_config [<args>]]'
 
 }
@@ -35,6 +36,7 @@ parse_quicktest_options() {
 		'func'        , 'f'                      'S'     \
 		'instance'    , 'i'                      'S'     \
 		'open'        , 'o'                      'S'     \
+		'preprocess'  , 'p'                      'S'     \
 		'user_config' , 'u'                      'S'     \
 		                                                 \
 		'--config-file'                          '0'     \
@@ -72,7 +74,7 @@ quicktest() {
 	do
 		case "$option" in
 
-			action|boilerplate|func|instance|open|user_config)
+			action|boilerplate|func|instance|open|preprocess|user_config)
 
 				# All subcmd here
 

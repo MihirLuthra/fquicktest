@@ -1,0 +1,130 @@
+#! /usr/bin/env bash
+
+set -e
+source "$QT_COMMON_PATH"/error_handler
+source "$QT_COMMON_PATH"/constants
+source "$QT_COMMON_PATH"/utility_funcs
+source "$QT_COMMON_PATH"/data_interface
+source "$QT_COMMON_PATH"/option_parser
+source "$QT_COMMON_PATH"/common_options
+set +e
+
+print_usage() {
+	printf_err "%s\n"                             \
+	'quicktest preprocess'                        \
+	'    [<file_name>...]'                        \
+	'    [-a|--alias-file <alias_file>...]'       \
+	'    [--config-file]'                         \
+	'    [-h|--help]'                             \
+	'    [-r|--rename-file <rename_file>...]'
+}
+
+parse_preprocess_options() {
+	local option_parser_retval
+
+	parse_options \
+		'preprocess'                           '...'  \
+		\
+		'-a' , '--alias-file'                  '...'  \
+		       '--config-file'                 '0'    \
+		'-h' , '--help'                        '0'    \
+		'-r' , '--rename-file'                 '...'  \
+		\
+		';'                                           \
+		"$@"
+
+	option_parser_retval=$?
+
+	if [ $option_parser_retval -ne 0 ] ; then
+		option_parser_error_msg $option_parser_retval
+		print_usage
+		return_error
+	fi
+}
+
+self_actions() {
+	local contents
+	local start_idx
+	local last_idx
+	local arg_no
+	local file
+	local func_cnt
+	local alias_files_cnt
+	local rename_files_cnt
+
+	declare -a alias_files
+	declare -a rename_files
+	declare -a files
+
+	last_idx="$( expr "${ARG_CNT[-a]:-0}" - 1 )"
+	[ $? -eq 2 ] && return_error
+	start_idx=0
+
+	[ $start_idx -le "$last_idx" ] && for arg_no in $(seq $start_idx $last_idx)
+	do
+		print_if_not_file "${ARGS[-a,$arg_no]}" && return_error
+		alias_files+=( "${ARGS[-a,$arg_no]}" )
+	done
+
+	last_idx="$( expr "${ARG_CNT[-r]:-0}" - 1 )"
+	[ $? -eq 2 ] && return_error
+	start_idx=0
+
+	[ $start_idx -le "$last_idx" ] && for arg_no in $(seq 0 $last_idx)
+	do
+		print_if_not_file "${ARGS[-r,$arg_no]}" && return_error
+		rename_files+=( "${ARGS[-r,$arg_no]}" )
+	done
+
+	last_idx="$( expr "${ARG_CNT[preprocess]:-0}" - 1 )"
+	[ $? -eq 2 ] && return_error
+	start_idx=0
+
+	func_cnt=2
+	alias_files_cnt="$(expr "${#alias_files[@]}" + 2)"
+	rename_files_cnt="$(expr "${#rename_files[@]}" + 1)"
+
+	[ $start_idx -le "$last_idx" ] && for arg_no in $(seq 0 $last_idx)
+	do
+		file=${ARGS[preprocess,$arg_no]}
+		print_if_not_file "$file" && return_error
+
+		contents="$( < "$file" )" || return_error
+
+		"$UTILS_BIN_DIR"/preprocess \
+		$func_cnt "$PROGRAM_FUNC_DIR" "$USER_FUNC_DIR" \
+		$alias_files_cnt "$PROGRAM_ALIAS_FILE_PATH" "$ALIAS_FILE_PATH" "${alias_files[@]}" \
+		$rename_files_cnt "$RENAME_FILE_PATH" "${rename_files[@]}" <<<"$contents" > "$file" || return_error
+	done
+}
+
+preprocess() {
+	local default_options
+
+	if [ -z "$*" ]
+	then
+		default_options="$( get_default_args )" || return_error
+		eval set -- $default_options
+	fi
+
+	parse_preprocess_options "$@" || return_error
+
+	for option in "${!OPTIONS[@]}"
+	do
+		case "$option" in
+			preprocess)
+				self_actions || return_error
+				;;
+			--config-file)
+				option_config_file || return_error
+				;;
+			-h)
+				option_help
+				;;
+		esac
+	done
+
+	return 0
+}
+
+preprocess "$@"
