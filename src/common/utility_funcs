@@ -64,7 +64,7 @@ list_time_sorted_null_term() {
 
 	while IFS= read -r -d '' file
 	do
-		name=${file##*/}
+		name=${file##$from_dir/}
 		case "$name" in
 			.*)
 				continue;
