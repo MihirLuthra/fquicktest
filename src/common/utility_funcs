@@ -65,10 +65,13 @@ list_time_sorted_null_term() {
 	while IFS= read -r -d '' file
 	do
 		name=${file##$from_dir/}
+
+		# ignore hidden directories and files
 		case "$name" in
 			.*)
-				continue;
-				;;
+				;&
+			*/.*)
+				continue
 		esac
 
 		printf "%s %s\0" "$( getctime "$file" )" "$name"
