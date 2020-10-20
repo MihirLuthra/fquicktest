@@ -16,6 +16,7 @@ data/user_data/func/*
 data/user_data/outputs/*
 data/user_data/alias_file.qtc
 data/user_data/rename_file.qtc
+data/user_data/extension_map.qtc
 data/user_data/current_defaults/*
 data/user_data/func_dump_dir/*
 
