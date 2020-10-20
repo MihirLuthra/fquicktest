@@ -16,6 +16,7 @@ print_usage() {
 	'    [<relative_count>]'                      \
 	'    [-b|--boilerplate [<boilerplate_name>]]' \
 	'    [--config-file]'                         \
+	'    [-e|--extension-map]'                    \
 	'    [-h|--help]'                             \
 	'    [-i|--instance [<instance_name>]]'       \
 	'    [-l|--last]'                             \
@@ -29,17 +30,18 @@ parse_open_options() {
 	local option_parser_retval
 
 	parse_options \
-		'open'                   '-1'                    \
-		\
-		'-b' , '--boilerplate'   '-1'                    \
-		'--config-file'          '0'                     \
-		'-h' , '--help'          '0'                     \
-		'-i' , '--instance'      '-1'                    \
-		'-l' , '--last'          '0'                     \
-		'-n' , '--new'           '0'                     \
-		'-u' , '--user-config'   '-1'                    \
-		                                                 \
-		';'                                              \
+		'open'                   '-1' \
+		                              \
+		'-b' , '--boilerplate'   '-1' \
+		'--config-file'          '0'  \
+		'-e' , '--extension-map' '0'  \
+		'-h' , '--help'          '0'  \
+		'-i' , '--instance'      '-1' \
+		'-l' , '--last'          '0'  \
+		'-n' , '--new'           '0'  \
+		'-u' , '--user-config'   '-1' \
+		                              \
+		';'                           \
 		"$@"
 
 	option_parser_retval=$?
@@ -63,6 +65,28 @@ option_boilerplate() {
 	printf "%s" "$boilerplate_full_path"
 }
 
+option_extension_map() {
+	open_file "$EXTENSION_MAP_FILE_PATH" || return_error
+}
+
+construct_user_config_full_path_and_set_in_defaults() {
+	local user_config=$1
+
+	[ -z "$user_config" ] && {
+		a_printf_err "user config is empty"
+		return_error
+	}
+
+	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
+	print_if_not_file "$user_config_full_path" && return_error
+
+	set_in_current_defaults "$USER_CONFIG_FILE_KEY" "$user_config" || return_error
+
+	touch "$user_config_full_path"
+
+	printf "%s" "$user_config_full_path"
+}
+
 option_user_config() {
 	local user_config
 	local user_config_full_path
@@ -75,14 +99,7 @@ option_user_config() {
 		[ -z "$user_config" ] && return_error
 	fi
 
-	user_config_full_path="$USER_CONFIG_FILES_DIR/$user_config"
-	print_if_not_file "$user_config_full_path" && return_error
-
-	set_in_current_defaults "$USER_CONFIG_FILE_KEY" "$user_config" || return_error
-
-	touch "$user_config_full_path"
-
-	printf "%s" "$user_config_full_path"
+	construct_user_config_full_path_and_set_in_defaults "$user_config" || return_error
 }
 
 #
@@ -118,6 +135,18 @@ option_instance() {
 	touch "$instance_full_path" || return_error
 
 	printf "%s" "$instance_full_path"
+}
+
+get_user_config_full_path_by_extension() {
+	local instance_full_path=$1
+	local extension
+	local user_config
+
+	extension="${instance_full_path##*.}"
+
+	user_config="$( get_value_for_key "$EXTENSION_MAP_FILE_PATH" "$extension" )" || return_error
+
+	construct_user_config_full_path_and_set_in_defaults "$user_config" || return_error
 }
 
 instance_by_relative_cnt() {
@@ -176,11 +205,10 @@ open() {
 		return 0
 	fi
 
-	if [ -n "${OPTIONS[-u]}" ]
+	if [ -n "${OPTIONS[-e]}" ]
 	then
-		user_config_full_path="$(option_user_config)" || return_error
-	else
-		user_config_full_path="$(current_user_config_path)" || return_error
+		option_extension_map || return_error
+		return 0
 	fi
 
 	if [ -n "${OPTIONS[-i]}" ]
@@ -192,6 +220,23 @@ open() {
 			instance_full_path="$(instance_by_relative_cnt)" || return_error
 		else
 			instance_full_path="$(current_instance_path)" || return_error
+		fi
+	fi
+
+	if [ -n "${OPTIONS[-u]}" ]
+	then
+		user_config_full_path="$(option_user_config)" || return_error
+	else
+		# if -u is not passed and -i is passed, try to infer user config file by extension
+		# using extension map.
+		if [ -n "${OPTIONS[-i]}" ]
+		then
+			user_config_full_path="$( get_user_config_full_path_by_extension "$instance_full_path" )"
+		fi
+
+		if [ -z "$user_config_full_path" ]
+		then
+			user_config_full_path="$(current_user_config_path)" || return_error
 		fi
 	fi
 
