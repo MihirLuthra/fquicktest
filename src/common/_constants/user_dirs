@@ -22,6 +22,10 @@ readonly CURRENT_DEFAULTS_DIR="$USER_DATA_DIR/current_defaults"
 # instances made by user are stored here.
 readonly INSTANCES_DIR="$USER_DATA_DIR/instances"
 
+# projects made by user are stored here.
+readonly PROJECTS_DIR="$USER_DATA_DIR/projects"
+
+
 # this is an optional output directory which user can use
 # for generated executable files. e.g., gcc generated a.out can be
 # stored here.

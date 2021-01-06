@@ -11,6 +11,7 @@ data/program_data/func_dump_dir/*
 data/user_data/boilerplates/*
 data/user_data/user_config_files/*
 data/user_data/instances/*
+data/user_data/projects/*
 data/user_data/current_defaults.qtc
 data/user_data/func/*
 data/user_data/outputs/*
@@ -23,6 +24,7 @@ data/user_data/func_dump_dir/*
 !data/user_data/boilerplates/.keep
 !data/user_data/user_config_files/.keep
 !data/user_data/instances/.keep
+!data/user_data/projects/.keep
 !data/user_data/func/.keep
 !data/user_data/outputs/.keep
 !data/user_data/current_defaults/.keep
