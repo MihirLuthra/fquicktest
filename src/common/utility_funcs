@@ -53,48 +53,55 @@ bold_printf() {
 	printf "$OFF_BOLD"
 }
 
+list_time_sorted_null_term() {
+	local from_dir=$1 ; shift
+	cdirt "$from_dir" || return_error
+}
+
+#
+# Old implementation of list_time_sorted_null_term
 #
 # This function lists the contents of directory param1
 # in the order of inode modification time (ctime).
 # The output of this function is \0 delimited.
 #
-list_time_sorted_null_term() {
-	local from_dir=$1 ; shift
-	local name
+# list_time_sorted_null_term() {
+# 	local from_dir=$1 ; shift
+# 	local name
 
-	while IFS= read -r -d '' file
-	do
-		name=${file##$from_dir/}
+# 	while IFS= read -r -d '' file
+# 	do
+# 		name=${file##$from_dir/}
 
-		# ignore hidden directories and files
-		case "$name" in
-			.*)
-				;&
-			*/.*)
-				continue
-		esac
+# 		# ignore hidden directories and files
+# 		case "$name" in
+# 			.*)
+# 				;&
+# 			*/.*)
+# 				continue
+# 		esac
 
-		printf "%s %s\0" "$( getctime "$file" )" "$name"
-	done < <(find "$from_dir" -type f -print0 ) \
-	| sort -r -n -z -k1 \
-	| gawk '
-		BEGIN {
-			RS="\0"
-			ORS="\0"
-		}
-		{
-			r=$1" "
-			sub(r, "")
-			print
-		}
-	'
+# 		printf "%s %s\0" "$( getctime "$file" )" "$name"
+# 	done < <(find "$from_dir" -type f -print0 ) \
+# 	| sort -r -n -z -k1 \
+# 	| gawk '
+# 		BEGIN {
+# 			RS="\0"
+# 			ORS="\0"
+# 		}
+# 		{
+# 			r=$1" "
+# 			sub(r, "")
+# 			print
+# 		}
+# 	'
 
-	[ "${PIPESTATUS[0]:-0}" -ne 0 ] && return_error
-	[ "${PIPESTATUS[1]:-0}" -ne 0 ] && return_error
-	[ "${PIPESTATUS[2]:-0}" -ne 0 ] && return_error
+# 	[ "${PIPESTATUS[0]:-0}" -ne 0 ] && return_error
+# 	[ "${PIPESTATUS[1]:-0}" -ne 0 ] && return_error
+# 	[ "${PIPESTATUS[2]:-0}" -ne 0 ] && return_error
 
-	return 0
-}
+# 	return 0
+# }
 
 #
 # just converts the \0 delimited output

@@ -1,4 +1,5 @@
 SUBDIR= \
+	cdirt               \
 	getctime            \
 	is_identifier_valid \
 	qtc                 \
