@@ -76,7 +76,7 @@ self_actions() {
 
 	args="$(forward_args 'func' '1')" || return_error
 
-	"$QTBASH" -c "$func_path $args" || return_error
+	"$QTBASH" -c ""$QTBASH" $func_path $args" || return_error
 }
 
 option_alias_file() {
@@ -118,6 +118,7 @@ option_create_func() {
 option_delete() {
 	local action
 
+	# FIXME : rm -rf $FUNC_DUMP_DIR/__TO_REPLACE__ is wrong
 	action='rm -i __TO_REPLACE__ ; rm -rf $FUNC_DUMP_DIR/__TO_REPLACE__'
 	args_or_fzf_multi_search "$USER_FUNC_DIR" "SELECT FUNC(-d)" '-d' "$action" '__TO_REPLACE__' '1' > /dev/null \
 		|| return_error
