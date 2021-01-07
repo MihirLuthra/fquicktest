@@ -27,6 +27,10 @@ readonly HOW_TO_OPEN_EDITOR_KEY='HOW_TO_OPEN_EDITOR'
 # file to be used when --new option is supplied to `lt open`
 readonly BOILERPLATE_KEY='BOILERPLATE'
 
+# this keys holds a boilerplate denoting the boilerplate
+# project to be used when --new option is supplied to `lt project`
+readonly PROJECT_BOILERPLATE_KEY='BOILERPLATE_PROJECT'
+
 
 
 # >>> command config file keys
