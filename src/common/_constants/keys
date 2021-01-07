@@ -12,6 +12,9 @@ readonly FILE_TO_OPEN_KEY='FILE_TO_OPEN'
 # this key is set to the current instance name
 readonly INSTANCE_KEY='INSTANCE'
 
+# this key is set to the current instance name
+readonly PROJECT_INSTANCE_KEY='PROJECT_INSTANCE'
+
 # this key is set to the current user config file
 readonly USER_CONFIG_FILE_KEY='USER_CONFIG_FILE'
 
