@@ -16,6 +16,9 @@ readonly USER_CONFIG_FILES_DIR="$USER_DATA_DIR/user_config_files"
 # boilerplate files made by user are stored here
 readonly BOILERPLATE_FILES_DIR="$USER_DATA_DIR/boilerplates"
 
+# boilerplate projects made by user are stored here
+readonly PROJECT_BOILERPLATE_DIR="$USER_DATA_DIR/project_boilerplates"
+
 # this stores current defaults files for all tty instances
 readonly CURRENT_DEFAULTS_DIR="$USER_DATA_DIR/current_defaults"
 
