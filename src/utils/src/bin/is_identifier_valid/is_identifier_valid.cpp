@@ -1,7 +1,7 @@
 #include <cstdio>
-#include <quicktest_identifier/quicktest_identifier.hpp>
+#include <clium_identifier/clium_identifier.hpp>
 
-namespace qi = quicktest_identifier;
+namespace qi = clium_identifier;
 
 int main(int argc, char *argv[])
 {

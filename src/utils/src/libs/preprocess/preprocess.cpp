@@ -1,9 +1,9 @@
 #include <iostream>
 #include "preprocess.hpp"
-#include <quicktest_identifier/quicktest_identifier.hpp>
+#include <clium_identifier/clium_identifier.hpp>
 #include <unordered_map>
 
-namespace qi = quicktest_identifier;
+namespace qi = clium_identifier;
 
 const char block_start = '[', block_end = ']', function_block_start = '(', function_block_end = ')';
 const char ignore_next_char = '\\';

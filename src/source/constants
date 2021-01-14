@@ -4,12 +4,12 @@
 [ -n "$__CONSTANTS__" ] && return 0
 readonly __CONSTANTS__=1
 
-readonly PROG_NAME='fquicktest'
+readonly PROG_NAME='clium'
 
-# >>> main fquicktest directories
-readonly SRC_DIR="$QUICKTEST_PATH/src"
-readonly DATA_DIR="$QUICKTEST_PATH/data"
-readonly COMMANDS_DIR="$QUICKTEST_PATH/commands"
+# >>> main clium directories
+readonly SRC_DIR="$CLIUM_PATH/src"
+readonly DATA_DIR="$CLIUM_PATH/data"
+readonly COMMANDS_DIR="$CLIUM_PATH/commands"
 
 readonly UTILS_DIR="$SRC_DIR/utils"
 readonly UTILS_BIN_DIR="$UTILS_DIR/bin"
@@ -19,7 +19,7 @@ readonly SUB_COMMANDS_DIR="$SRC_DIR/sub_commands"
 readonly USER_DATA_DIR="$DATA_DIR/user_data"
 readonly PROGRAM_DATA_DIR="$DATA_DIR/program_data"
 
-readonly CONSTANTS_DIR="$SRC_DIR/common/_constants"
+readonly CONSTANTS_DIR="$SRC_DIR/source/_constants"
 
 source "$CONSTANTS_DIR/keys"
 source "$CONSTANTS_DIR/paths"

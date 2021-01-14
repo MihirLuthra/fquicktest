@@ -5,7 +5,7 @@
 readonly __ERROR_HANDLER__=1
 
 set -e
-source "$QT_COMMON_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/constants
 set +e
 
 echo_err() {
@@ -39,7 +39,7 @@ cprintf_err() {
 # retval:
 #  1 on error
 #
-quicktest_path_normalize() {
+path_normalize() {
 	local path="$1" ; shift
 	local abs_path_dir
 	local abs_path
@@ -54,10 +54,10 @@ quicktest_path_normalize() {
 	printf "$abs_path"
 }
 
-alias a_echo_err='echo_err "$BOLD$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:$BOLD_OFF" '
-alias a_cecho_err='cecho_err "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
-alias a_printf_err='printf_err "%s\n" $BOLD"$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:$BOLD_OFF" '
-alias a_cprintf_err='cprintf_err "%s\n" "$( quicktest_path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
+alias a_echo_err='echo_err "$BOLD$( path_normalize "$BASH_SOURCE" ): Line $LINENO:$BOLD_OFF" '
+alias a_cecho_err='cecho_err "$( path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
+alias a_printf_err='printf_err "%s\n" $BOLD"$( path_normalize "$BASH_SOURCE" ): Line $LINENO:$BOLD_OFF" '
+alias a_cprintf_err='cprintf_err "%s\n" "$( path_normalize "$BASH_SOURCE" ): Line $LINENO:" '
 
 alias return_if_error='
 	if [ $? -ne 0 ] ; then
@@ -108,8 +108,8 @@ f_exists_but_not_file() {
 	return 1
 }
 
-alias print_if_key_is_null='f_print_if_key_is_null "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
-alias print_if_not_file='f_print_if_not_file "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
-alias exists_but_not_file='f_exists_but_not_file "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+alias print_if_key_is_null='f_print_if_key_is_null "$LINENO" "$( path_normalize "$BASH_SOURCE" )"'
+alias print_if_not_file='f_print_if_not_file "$LINENO" "$( path_normalize "$BASH_SOURCE" )"'
+alias exists_but_not_file='f_exists_but_not_file "$LINENO" "$( path_normalize "$BASH_SOURCE" )"'
 
 shopt -s expand_aliases

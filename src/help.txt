@@ -1,17 +1,17 @@
 To get help for a subcommand use -h|--help option on them.
 
-quicktest
+clium
 	[--config-file]
 	[-h|--help]
 	[<sub_command> [<args>]]
 
 [--config-file]:
-	Opens config file for quicktest.
+	Opens config file for clium.
 
 [-h|--help]:
-	Shows help for quicktest.
+	Shows help for clium.
 
-quicktest has the following subcommands:
+clium has the following subcommands:
 
 action [<key_for_action> [<args_to_action>]]
 	[-d|--delete <action_name>...]

@@ -4,10 +4,10 @@
 readonly __SUB_COMMANDS_COMMON__=1
 
 set -e
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/utility_funcs
-source "$QT_COMMON_PATH"/data_interface
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/utility_funcs
+source "$CLIUM_SOURCE_PATH"/data_interface
 set +e
 
 #
@@ -249,7 +249,7 @@ args_or_fzf_multi_search() {
 		if [ -n "$action_template" ]
 		then
 			action="$( replace "$replacee" "$full_path" "$action_template" )" || return_error
-			"${QTBASH}" -c "$action" ; retval=$?
+			"${CLIUM_BASH}" -c "$action" ; retval=$?
 			[ -n "$return_on_fail" ] && [ "$retval" -ne 0 ] && return_error
 		fi
 	done
@@ -306,5 +306,5 @@ open_files() {
 
 	open="$(get_from_user_config_file_or_default "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
 
-	"$QTBASH" -c "$open" || return_error
+	"$CLIUM_BASH" -c "$open" || return_error
 }

@@ -1,5 +1,5 @@
-#ifndef __QUICKTEST_IDENTIFIER_HPP__
-#define __QUICKTEST_IDENTIFIER_HPP__
+#ifndef __CLIUM_IDENTIFIER_HPP__
+#define __CLIUM_IDENTIFIER_HPP__
 
 #include <cctype>
 #include <cstring>
@@ -12,7 +12,7 @@
  * This file defines the rules for its validity.
  */
 
-namespace quicktest_identifier {
+namespace clium_identifier {
 	bool is_invalid(char ch)
 	{
 		return (!std::isalnum(ch) && ch != '_' && ch != '-');
@@ -84,4 +84,4 @@ namespace quicktest_identifier {
 	}
 }
 
-#endif /* __QUICKTEST_IDENTIFIER_HPP__ */
+#endif /* __CLIUM_IDENTIFIER_HPP__ */

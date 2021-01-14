@@ -1,12 +1,12 @@
 #! /usr/bin/env bash
 
 set -e
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/data_interface
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/data_interface
 set +e
 
-# quicktest vars:
+# clium vars:
 #
 #  FILE_TO_OPEN
 #      Represents the file that is going to get opened as per the current_defaults.
@@ -21,8 +21,8 @@ set +e
 #  OUTPUT_DIR
 #      A separate directory dedicated to store output files.
 #
-#  QUICKTEST_PATH
-#      Path where quicktest is installed.
+#  CLIUM_PATH
+#      Path where clium is installed.
 #
 VAR() {
 	local var="$1" ; shift
@@ -41,8 +41,8 @@ VAR() {
 		'OUTPUT_DIR')
 			value=$OUTPUT_DIR
 			;;
-		'QUICKTEST_PATH')
-			value="$QUICKTEST_PATH"
+		'CLIUM_PATH')
+			value="$CLIUM_PATH"
 			;;
 	esac
 

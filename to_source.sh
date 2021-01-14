@@ -1,30 +1,32 @@
 #! /bin/sh
 
-if [ -n "$__SOURCE_GUARD_QUICKTEST__" ] ; then
+if [ -n "$__SOURCE_GUARD_CLIUM__" ] ; then
 	return 0
 else
-	readonly __SOURCE_GUARD_QUICKTEST__="1"
+	readonly __SOURCE_GUARD_CLIUM__="1"
 fi
 
 
 if [ -n "$BASH_VERSION" ] ; then
-	QPATH="$( cd "$( dirname "$BASH_SOURCE" )" ; pwd )"
+	TEMP_CLIUM_PATH="$( cd "$( dirname "$BASH_SOURCE" )" ; pwd )"
 elif [ -n "$ZSH_VERSION" ] ; then
-	QPATH=$( dirname "$0:A" )
+	TEMP_CLIUM_PATH=$( dirname "$0:A" )
+else
+	>&2 echo "Clium not supported as both \$BASH_VERSION and \$ZSH_VERSION are null"
+	>&2 echo "Clium only works on zsh or bash."
+	return 1
 fi
 
-
-if [ -z "$QUICKTEST_PATH" ] ; then
-	export QUICKTEST_PATH="$QPATH"
-	unset QPATH
-	PATH="$QUICKTEST_PATH/commands/user_commands:$PATH"
-	PATH="$QUICKTEST_PATH/commands/program_commands:$PATH"
+if [ -z "$CLIUM_PATH" ] ; then
+	export CLIUM_PATH=$TEMP_CLIUM_PATH
+	PATH="$CLIUM_PATH/commands/user_commands:$PATH"
+	PATH="$CLIUM_PATH/commands/program_commands:$PATH"
 fi
 
-if [ -z "$QTBASH" ] ; then
-	export QTBASH="bash"
+if [ -z "$CLIUM_BASH" ] ; then
+	export CLIUM_BASH="bash"
 fi
 
-readonly QT_TTY_DATE="$( date "+%d%m%Y%H%M%S" )" ; export QT_TTY_DATE
-readonly QT_TTY_NAME="$( basename "$(tty)" )" ; export QT_TTY_NAME
-readonly QT_COMMON_PATH="$QUICKTEST_PATH/src/common" ; export QT_COMMON_PATH
+readonly CLIUM_TTY_DATE="$( date "+%d%m%Y%H%M%S" )" ; export CLIUM_TTY_DATE
+readonly CLIUM_TTY_NAME="$( basename "$(tty)" )" ; export CLIUM_TTY_NAME
+readonly CLIUM_SOURCE_PATH="$CLIUM_PATH/src/source" ; export CLIUM_SOURCE_PATH

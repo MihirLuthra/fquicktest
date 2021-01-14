@@ -20,5 +20,5 @@ readonly PROGRAM_USER_CONFIG_FILES_DIR="$PROGRAM_DATA_DIR/user_config_files"
 
 
 # this is added to user's path
-# main command quicktest and lt (symlink) are stored here.
+# main command clium and lt (symlink) are stored here.
 readonly PROGRAM_COMMANDS_DIR="$COMMANDS_DIR/program_commands"

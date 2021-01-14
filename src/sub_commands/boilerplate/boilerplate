@@ -8,26 +8,26 @@
 #
 
 set -e
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/utility_funcs
-source "$QT_COMMON_PATH"/data_interface
-source "$QT_COMMON_PATH"/option_parser
-source "$QT_COMMON_PATH"/common_options
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/utility_funcs
+source "$CLIUM_SOURCE_PATH"/data_interface
+source "$CLIUM_SOURCE_PATH"/option_parser
+source "$CLIUM_SOURCE_PATH"/common_options
 set +e
 
 print_usage() {
-	printf_err "%s\n"                                  \
-	'quicktest boilerplate'                            \
-	'    [realtive_cnt]'                               \
-	'    [-c|--current]'                               \
-	'    [--config-file]'                              \
-	'    [-d|--delete <boilerplate_name>]'             \
-	'    [-h|--help]'                                  \
-	'    [-m|--modify [<boilerplate_name>]]'           \
-	'    [-n|--new <boilerplate_name>]'                \
-	'    [-p|--path]'                                  \
-	'    [-r|--rename [<old_name>] <new_name>]'        \
+	printf_err "%s\n"                           \
+	'clium boilerplate'                         \
+	'    [realtive_cnt]'                        \
+	'    [-c|--current]'                        \
+	'    [--config-file]'                       \
+	'    [-d|--delete <boilerplate_name>]'      \
+	'    [-h|--help]'                           \
+	'    [-m|--modify [<boilerplate_name>]]'    \
+	'    [-n|--new <boilerplate_name>]'         \
+	'    [-p|--path]'                           \
+	'    [-r|--rename [<old_name>] <new_name>]' \
 	'    [-s|--show-all]'
 }
 

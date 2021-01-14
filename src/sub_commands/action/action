@@ -1,17 +1,17 @@
 #! /usr/bin/env bash
 
 set -e
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/utility_funcs
-source "$QT_COMMON_PATH"/data_interface
-source "$QT_COMMON_PATH"/option_parser
-source "$QT_COMMON_PATH"/common_options
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/utility_funcs
+source "$CLIUM_SOURCE_PATH"/data_interface
+source "$CLIUM_SOURCE_PATH"/option_parser
+source "$CLIUM_SOURCE_PATH"/common_options
 set +e
 
 print_usage() {
 	printf_err "%s\n"                                  \
-	'quicktest action [<key_for_action>]'              \
+	'clium action [<key_for_action>]'                  \
 	'    [-a|--add-action <action_name> <action_key>]' \
 	'    [--config-file]'                              \
 	'    [-d|--delete <action_name>]'                  \
@@ -58,7 +58,7 @@ self_actions() {
 
 	action_args="$(forward_args 'action' '1')" || return_error
 
-	"$QTBASH" -c "$action $action_args"
+	"$CLIUM_BASH" -c "$action $action_args"
 }
 
 option_add_action() {

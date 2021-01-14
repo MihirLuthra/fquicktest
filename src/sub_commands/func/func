@@ -1,28 +1,28 @@
 #! /usr/bin/env bash
 
 set -e
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/utility_funcs
-source "$QT_COMMON_PATH"/data_interface
-source "$QT_COMMON_PATH"/option_parser
-source "$QT_COMMON_PATH"/common_options
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/utility_funcs
+source "$CLIUM_SOURCE_PATH"/data_interface
+source "$CLIUM_SOURCE_PATH"/option_parser
+source "$CLIUM_SOURCE_PATH"/common_options
 
 source "$SUB_COMMANDS_DIR"/func/func_error_handler
 set +e
 
 print_usage() {
-	printf_err "%s\n"                                  \
-	'quicktest func'                                   \
-	'    [<func_name> [<func_args>]]'                  \
-	'    [-a|--alias-file]'                            \
-	'    [-c|--create-func <func_name>]'               \
-	'    [--config-file]'                              \
-	'    [-d|--delete <func_name>...]'                 \
-	'    [-h|--help]'                                  \
-	'    [-m|--modify-func <func_name>...]'            \
-	'    [-r|--rename [<old_name>] <new_name>]'        \
-	'    [--rename-file]'                              \
+	printf_err "%s\n"                            \
+	'clium func'                                 \
+	'    [<func_name> [<func_args>]]'            \
+	'    [-a|--alias-file]'                      \
+	'    [-c|--create-func <func_name>]'         \
+	'    [--config-file]'                        \
+	'    [-d|--delete <func_name>...]'           \
+	'    [-h|--help]'                            \
+	'    [-m|--modify-func <func_name>...]'      \
+	'    [-r|--rename [<old_name>] <new_name>]'  \
+	'    [--rename-file]'                        \
 	'    [-s|--show-all]'
 }
 
@@ -30,19 +30,18 @@ parse_func_options() {
 	local option_parser_retval
 
 	parse_options \
-		'func'                                 '...'     \
-		\
-		'-a' , '--alias-file'                  '0'       \
-		'-c' , '--create-func'                 '1'       \
-		'--config-file'                        '0'       \
-		'-d' , '--delete'                      '...'     \
-		'-h' , '--help'                        '0'       \
-		'-m' , '--modify-func'                 '-1'      \
-		'-r' , '--rename'                      '...'     \
-		       '--rename-file'                 '0'       \
-		'-s' , '--show-all'                    '0'       \
-		                                                 \
-		';'                                              \
+		'func'                  '...'  \
+		'-a' , '--alias-file'   '0'    \
+		'-c' , '--create-func'  '1'    \
+		'--config-file'         '0'    \
+		'-d' , '--delete'       '...'  \
+		'-h' , '--help'         '0'    \
+		'-m' , '--modify-func'  '-1'   \
+		'-r' , '--rename'       '...'  \
+		       '--rename-file'  '0'    \
+		'-s' , '--show-all'     '0'    \
+		                               \
+		';' \
 		"$@"
 
 	option_parser_retval=$?
@@ -76,7 +75,7 @@ self_actions() {
 
 	args="$(forward_args 'func' '1')" || return_error
 
-	"$QTBASH" -c ""$QTBASH" $func_path $args" || return_error
+	"$CLIUM_BASH" -c ""$CLIUM_BASH" $func_path $args" || return_error
 }
 
 option_alias_file() {

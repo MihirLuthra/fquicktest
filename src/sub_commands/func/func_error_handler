@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
 set -e
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/constants
 set +e
 
 f_print_if_func_name_invalid() {
@@ -19,6 +19,6 @@ f_print_if_func_name_invalid() {
 	return 1
 }
 
-alias print_if_func_name_invalid='f_print_if_func_name_invalid "$LINENO" "$( quicktest_path_normalize "$BASH_SOURCE" )"'
+alias print_if_func_name_invalid='f_print_if_func_name_invalid "$LINENO" "$( path_normalize "$BASH_SOURCE" )"'
 
 shopt -s expand_aliases

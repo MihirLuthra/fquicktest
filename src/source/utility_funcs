@@ -5,9 +5,9 @@
 readonly __UTILITY_FUNCS__=1
 
 set -e
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/data_interface
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/data_interface
 set +e
 
 is_num() {
@@ -255,7 +255,7 @@ fpreprocess() {
 #
 # Description:
 #   Sets $FILE_TO_OPEN_KEY in current defaults. This is done
-#   so that replace_quicktest_vars is able to replace ___FILE_TO_OPEN___.
+#   so that [VAR]() replacement can happen for FILE_TO_OPEN.
 #
 #   The file is then touched to modify its timestamps and also so
 #   that it exists in case it didn't exist before.
@@ -277,7 +277,7 @@ open_file() {
 
 	open="$(get_from_user_config_file_or_default "$HOW_TO_OPEN_EDITOR_KEY")" || return_error
 
-	"$QTBASH" -c "$open" || return_error
+	"$CLIUM_BASH" -c "$open" || return_error
 }
 
 #

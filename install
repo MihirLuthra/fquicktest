@@ -1,11 +1,11 @@
 #! /usr/bin/env bash
 
 set -e
-QUICKTEST_PATH="$( cd "$( dirname "$BASH_SOURCE" )" && pwd )"
-QT_COMMON_PATH="$QUICKTEST_PATH/src/common"
+CLIUM_PATH="$( cd "$( dirname "$BASH_SOURCE" )" && pwd )"
+CLIUM_SOURCE_PATH="$CLIUM_PATH/src/source"
 
-source "$QT_COMMON_PATH/constants"
-source "$QT_COMMON_PATH/error_handler"
+source "$CLIUM_SOURCE_PATH/constants"
+source "$CLIUM_SOURCE_PATH/error_handler"
 set +e
 
 report() {
@@ -56,7 +56,7 @@ ask_yes_or_no() {
 dependency_checks() {
 	report "Making dependency checks"
 	IFS=$'\n'
-	for dep_name in $( < "$QUICKTEST_PATH/dependencies")
+	for dep_name in $( < "$CLIUM_PATH/dependencies")
 	do
 		if ! command_exists "$dep_name"
 		then
@@ -88,10 +88,16 @@ is_shell_zsh() {
 add_source_scripts() {
 	local code_to_add
 
+	if [ -n "$__SOURCE_GUARD_CLIUM__" ]
+	then
+		report_done "$CLIUM_PATH/to_source.sh already sourced, not adding it again"
+		return 0
+	fi
+
 	code_to_add="
-# fquicktest source scripts start
-source '$QUICKTEST_PATH/to_source.sh'
-# fquicktest source scripts end"
+# clium source scripts START
+source '$CLIUM_PATH/to_source.sh'
+# clium source scripts END"
 
 	if is_shell_zsh
 	then
@@ -120,8 +126,8 @@ install_qtc_vim_syntax_highlighting() {
 	mkdir -p "$HOME/.vim/syntax" || return_error
 	mkdir -p "$HOME/.vim/ftdetect" || return_error
 
-	cp "$QUICKTEST_PATH/vim/syntax/qtc.vim" "$HOME/.vim/syntax/" || return_error
-	cp "$QUICKTEST_PATH/vim/ftdetect/qtc.vim" "$HOME/.vim/ftdetect/" || return_error
+	cp "$CLIUM_PATH/vim/syntax/qtc.vim" "$HOME/.vim/syntax/" || return_error
+	cp "$CLIUM_PATH/vim/ftdetect/qtc.vim" "$HOME/.vim/ftdetect/" || return_error
 	report_done "Successfully added vim syntax files"
 }
 

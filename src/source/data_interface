@@ -4,9 +4,9 @@
 readonly __DATA_INTERFACE__=1
 
 set -e
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/utility_funcs
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/utility_funcs
 set +e
 
 current_defaults_new_tty_init() {
@@ -15,7 +15,7 @@ current_defaults_new_tty_init() {
 	if [ ! -e "$current_defaults_full_path" ]
 	then
 		# remove all existing files of current tty
-		find "$CURRENT_DEFAULTS_DIR" -name "*_${QT_TTY_NAME}.qtc" -type f -exec rm {} \;
+		find "$CURRENT_DEFAULTS_DIR" -name "*_${CLIUM_TTY_NAME}.qtc" -type f -exec rm {} \;
 		latest_cdf="$( get_by_relative_cnt "$CURRENT_DEFAULTS_DIR" '1' 2> /dev/null )"
 
 		if [ -n "$latest_cdf" ]
@@ -36,7 +36,7 @@ get_from_current_defaults() {
 	local current_defaults_name
 	local current_defaults_full_path
 
-	current_defaults_name="${QT_TTY_DATE}_${QT_TTY_NAME}.qtc"
+	current_defaults_name="${CLIUM_TTY_DATE}_${CLIUM_TTY_NAME}.qtc"
 	current_defaults_full_path="$CURRENT_DEFAULTS_DIR/$current_defaults_name"
 
 	current_defaults_new_tty_init "$current_defaults_full_path" || return_error
@@ -87,7 +87,7 @@ set_in_current_defaults() {
 	local current_defaults_name
 	local current_defaults_full_path
 
-	current_defaults_name="${QT_TTY_DATE}_${QT_TTY_NAME}.qtc"
+	current_defaults_name="${CLIUM_TTY_DATE}_${CLIUM_TTY_NAME}.qtc"
 	current_defaults_full_path="$CURRENT_DEFAULTS_DIR/$current_defaults_name"
 
 	current_defaults_new_tty_init "$current_defaults_full_path" || return_error

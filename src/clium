@@ -1,18 +1,18 @@
 #! /usr/bin/env bash
 
 set -e
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/data_interface
-source "$QT_COMMON_PATH"/option_parser
-source "$QT_COMMON_PATH"/common_options
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/data_interface
+source "$CLIUM_SOURCE_PATH"/option_parser
+source "$CLIUM_SOURCE_PATH"/common_options
 set +e
 
 print_usage() {
 
 	printf_err "%s\n"               \
 	'usage:'                        \
-	'quicktest'                     \
+	'clium'                         \
 	'    [--config-file]'           \
 	'    [-h|--help]'               \
 	'    [action [<args>]]'         \
@@ -25,24 +25,24 @@ print_usage() {
 
 }
 
-parse_quicktest_options() {
+parse_clium_options() {
 
 	local option_parser_retval
 
 	parse_options \
-		'quicktest'                              '0'     \
-		'action'      , 'a'                      'S'     \
-		'boilerplate' , 'b'                      'S'     \
-		'func'        , 'f'                      'S'     \
-		'instance'    , 'i'                      'S'     \
-		'open'        , 'o'                      'S'     \
-		'preprocess'  , 'p'                      'S'     \
-		'user_config' , 'u'                      'S'     \
-		                                                 \
-		'--config-file'                          '0'     \
-		'-h'          , '--help'                 '0'     \
-		                                                 \
-		';'                                              \
+		'clium'                     '0'  \
+		'action'      , 'a'         'S'  \
+		'boilerplate' , 'b'         'S'  \
+		'func'        , 'f'         'S'  \
+		'instance'    , 'i'         'S'  \
+		'open'        , 'o'         'S'  \
+		'preprocess'  , 'p'         'S'  \
+		'user_config' , 'u'         'S'  \
+		                                 \
+		'--config-file'             '0'  \
+		'-h'          , '--help'    '0'  \
+    	                                 \
+		';' \
 		"$@"
 
 	option_parser_retval=$?
@@ -55,7 +55,7 @@ parse_quicktest_options() {
 
 }
 
-quicktest() {
+clium() {
 
 	local shift_count
 	local subcmd
@@ -68,7 +68,7 @@ quicktest() {
 		eval set -- $default_options
 	fi
 
-	parse_quicktest_options "$@" || return_error
+	parse_clium_options "$@" || return_error
 
 	for option in "${!OPTIONS[@]}"
 	do
@@ -97,10 +97,10 @@ quicktest() {
 
 	if [ -n "$subcmd" ]
 	then
-		"$QTBASH" "$SUB_COMMANDS_DIR/$subcmd/$subcmd" "$@" || return_error
+		"$CLIUM_BASH" "$SUB_COMMANDS_DIR/$subcmd/$subcmd" "$@" || return_error
 	fi
 
 	return 0
 }
 
-quicktest "$@"
+clium "$@"

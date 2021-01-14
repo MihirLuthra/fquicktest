@@ -1,9 +1,9 @@
 #! /usr/bin/env bash
 
 set -e
-source "$QT_COMMON_PATH"/constants
-source "$QT_COMMON_PATH"/error_handler
-source "$QT_COMMON_PATH"/option_parser
+source "$CLIUM_SOURCE_PATH"/constants
+source "$CLIUM_SOURCE_PATH"/error_handler
+source "$CLIUM_SOURCE_PATH"/option_parser
 set +e
 
 # ___FUNC_NAME____DIR is for storing files related to this function

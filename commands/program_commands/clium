@@ -1,17 +1,17 @@
 #! /usr/bin/env bash
 
-SRC_PATH="$QUICKTEST_PATH"/src
+SRC_PATH="$CLIUM_PATH"/src
 
 desired_bash_version=4
-bash_version="$( "$QTBASH" -c 'echo -n $BASH_VERSINFO' )"
+bash_version="$( "$CLIUM_BASH" -c 'echo -n $BASH_VERSINFO' )"
 
 if [ "$bash_version" -lt "$desired_bash_version" ]
 then
 	>&2 printf "%s\n"                                              \
 	    "Desired bash version = $desired_bash_version"             \
 	    "Found $bash_version"                                      \
-	    "export QTBASH env var to bashv$desired_bash_version path"
+	    "export CLIUM_BASH env var to bashv$desired_bash_version path"
 	exit 1
 fi
 
-"$QTBASH" "$SRC_PATH"/quicktest "$@"
+"$CLIUM_BASH" "$SRC_PATH"/clium "$@"

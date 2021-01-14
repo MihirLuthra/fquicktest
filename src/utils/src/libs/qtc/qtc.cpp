@@ -3,9 +3,9 @@
 #include <unordered_map>
 
 #include "qtc.hpp"
-#include <quicktest_identifier/quicktest_identifier.hpp>
+#include <clium_identifier/clium_identifier.hpp>
 
-namespace qi = quicktest_identifier;
+namespace qi = clium_identifier;
 
 bool tab_or_space(char ch)
 {

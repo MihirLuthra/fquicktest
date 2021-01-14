@@ -42,7 +42,7 @@ func [<func_name> [<func_args>]]
 [--rename-file]:
 	This opens global rename file.
 	This file is for renaming the existing aliases or funcs.
-	There can be a rare case when a file contains a quicktest
+	There can be a rare case when a file contains a clium
 	func in its text which would get replaced but wasn't intended to
 	be that way. Rename file can be used to give a new name to
 	that func so that preprocessor doesn't process that text in

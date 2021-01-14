@@ -113,7 +113,7 @@ replace_map make_func_replace_map()
 	for (auto func_dir : args.func_dirs) {
 		for (auto func: fs::directory_iterator(func_dir)) {
 			rmap.insert({func.path().filename(), [func](std::string args) -> std::string {
-				std::string cmd = std::string(std::getenv("QTBASH")) + " " + std::string(func.path()) + " \'" + args + "\'";
+				std::string cmd = std::string(std::getenv("CLIUM_BASH")) + " " + std::string(func.path()) + " \'" + args + "\'";
 				return execute(cmd.c_str());
 			}});
 		}
