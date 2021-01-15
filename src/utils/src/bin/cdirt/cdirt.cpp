@@ -8,7 +8,7 @@
 
 namespace fs = std::filesystem;
 
-uintmax_t getctime(const char * path);
+uintmax_t getatime(const char * path);
 
 /*
  * Traverses directory recusively, ignoring
@@ -37,10 +37,10 @@ int main(int argc, char *argv[])
 
 	std::vector<std::string> paths = traverse_dir(".");
 
-	// sort paths by ctime
+	// sort paths by access time
 	std::sort(paths.begin(), paths.end(), [](const auto& lhs, const auto& rhs)
 	{
-		return getctime(lhs.c_str()) > getctime(rhs.c_str());
+		return getatime(lhs.c_str()) > getatime(rhs.c_str());
 	});
 
 	for (auto& path: paths) {
@@ -71,7 +71,7 @@ std::vector<std::string> traverse_dir(const char *dir)
 	return paths;
 }
 
-uintmax_t getctime(const char * path)
+uintmax_t getatime(const char * path)
 {
 	struct stat s;
 
@@ -81,5 +81,5 @@ uintmax_t getctime(const char * path)
 	}
 
 	// tv_sec is guaranteed to be whole number
-	return ((uintmax_t)s.st_ctime);
+	return ((uintmax_t)s.st_atime);
 }
