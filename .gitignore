@@ -42,5 +42,5 @@ src/utils/libs/*
 !src/utils/bin/.keep
 !src/utils/libs/.keep
 
-src/quicktest.qtc
+src/*.qtc
 src/sub_commands/*/*.qtc
