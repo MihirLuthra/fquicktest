@@ -8,7 +8,7 @@
 
 namespace fs = std::filesystem;
 
-uintmax_t getatime(const char * path);
+uintmax_t get_access_time(const char * path);
 
 /*
  * Traverses directory recusively, ignoring
@@ -33,6 +33,12 @@ int main(int argc, char *argv[])
 
 	std::string path = argv[1];
 
+	// if input path is not a directory, return error
+	if (!fs::is_directory(path)) {
+		P_ERR("%s: No such directory", path.c_str());
+		return 2;
+	}
+
 	fs::current_path(path);
 
 	std::vector<std::string> paths = traverse_dir(".");
@@ -40,7 +46,7 @@ int main(int argc, char *argv[])
 	// sort paths by access time
 	std::sort(paths.begin(), paths.end(), [](const auto& lhs, const auto& rhs)
 	{
-		return getatime(lhs.c_str()) > getatime(rhs.c_str());
+		return get_access_time(lhs.c_str()) > get_access_time(rhs.c_str());
 	});
 
 	for (auto& path: paths) {
@@ -71,13 +77,13 @@ std::vector<std::string> traverse_dir(const char *dir)
 	return paths;
 }
 
-uintmax_t getatime(const char * path)
+uintmax_t get_access_time(const char * path)
 {
 	struct stat s;
 
 	if (stat(path, &s) == -1) {
 		P_ERR("stat(2) failed for %s", path);
-		exit(1);
+		exit(3);
 	}
 
 	// tv_sec is guaranteed to be whole number
