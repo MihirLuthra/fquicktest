@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
 # don't source the script twice
-[ -n "$__UTILITY_FUNCS__" ] && return 0
-readonly __UTILITY_FUNCS__=1
+[ -n "$__UTILS__" ] && return 0
+readonly __UTILS__=1
 
 set -e
 source "$CLIUM_SOURCE_PATH"/error_handler
@@ -282,7 +282,7 @@ open_file() {
 
 #
 # in a list of files sorted in order of
-# inode modification time, it prints the n^th
+# access time, it prints the n^th
 # newest file where n is param2.
 #
 # param1: directory
@@ -317,3 +317,8 @@ get_by_relative_cnt() {
 
 	printf "%s" "$nth_file"
 }
+
+# Returns full path of script's directory in which it is called
+alias script_dir='(cur_dir="$(dirname $BASH_SOURCE)"; cd "$cur_dir" && pwd)' 
+
+shopt -s expand_aliases

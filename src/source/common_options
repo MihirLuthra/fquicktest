@@ -6,7 +6,7 @@ readonly __SUB_COMMANDS_COMMON__=1
 set -e
 source "$CLIUM_SOURCE_PATH"/error_handler
 source "$CLIUM_SOURCE_PATH"/constants
-source "$CLIUM_SOURCE_PATH"/utility_funcs
+source "$CLIUM_SOURCE_PATH"/utils
 source "$CLIUM_SOURCE_PATH"/data_interface
 set +e
 

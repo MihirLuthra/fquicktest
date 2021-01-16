@@ -6,7 +6,7 @@ readonly __DATA_INTERFACE__=1
 set -e
 source "$CLIUM_SOURCE_PATH"/constants
 source "$CLIUM_SOURCE_PATH"/error_handler
-source "$CLIUM_SOURCE_PATH"/utility_funcs
+source "$CLIUM_SOURCE_PATH"/utils
 set +e
 
 current_defaults_new_tty_init() {
