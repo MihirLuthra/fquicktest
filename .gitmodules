@@ -1,0 +1,3 @@
+[submodule "src/source/bash_option_parser"]
+	path = src/source/bash_option_parser
+	url = https://github.com/MihirLuthra/bash_option_parser.git
