@@ -1,5 +1,6 @@
 #include <sys/stat.h>
 
+#include <algorithm>
 #include <error/error.h>
 #include <filesystem>
 #include <iostream>
